@@ -21,4 +21,4 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-This also uses [Chakra UI](https://chakra-ui.com/docs/getting-started) as a component library, but it also supports vanilla CSS, and other CSS frameworks if needed.
+This project also uses [Chakra UI](https://chakra-ui.com/docs/getting-started) as a component library, but it also supports vanilla CSS, and other CSS frameworks if needed.
