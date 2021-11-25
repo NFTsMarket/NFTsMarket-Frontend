@@ -1,6 +1,13 @@
 {
   "name": "nftsmarket-frontend",
+  "version": "1.0.0",
   "private": true,
+  "description": "Next.js frontend of the NFTs market app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NFTsMarket/NFTsMarket-Frontend"
+  },
+  "homepage": "https://nftsmarket.netlify.app/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,6 +17,7 @@
     "cypress": "cypress open",
     "cypress:headless": "cypress run"
   },
+  "license": "MIT",
   "dependencies": {
     "@chakra-ui/react": "^1.7.2",
     "@emotion/react": "^11.6.0",
