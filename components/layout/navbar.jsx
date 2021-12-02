@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import {
   Box,
   Stack,
@@ -31,9 +29,11 @@ export default function Navbar(props) {
       {...props}
     >
       <Flex align="center" mr={5}>
-        <Heading as="h1" size="lg" letterSpacing={"tighter"}>
-          NFTs Market
-        </Heading>
+        <Link href="/">
+          <Heading as="h1" size="lg" letterSpacing={"tighter"}>
+            NFTs Market
+          </Heading>
+        </Link>
       </Flex>
 
       <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
@@ -50,9 +50,21 @@ export default function Navbar(props) {
         mt={{ base: 4, md: 0 }}
         spacing="32px"
       >
-        <Text>Catalog</Text>
-        <Text>My Assets</Text>
-        <Text>Pending sales</Text>
+        <Link href="/">
+          <Text>Catalog</Text>
+        </Link>
+        <Link href="/assets">
+          <Text>My Assets</Text>
+        </Link>
+        <Link href="/sales">
+          <Text>Pending Sales</Text>
+        </Link>
+        <Link href="/purchases">
+          <Text>Purchases</Text>
+        </Link>
+        <Link href="/wallet">
+          <Text>Wallet</Text>
+        </Link>
       </Stack>
 
       <Box
