@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
@@ -10,8 +8,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
@@ -19,6 +15,10 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## CSS
 
-This project also uses [Chakra UI](https://chakra-ui.com/docs/getting-started) as a component library, but it also supports vanilla CSS, and other CSS frameworks if needed.
+This project also uses [Chakra UI](https://chakra-ui.com/docs/getting-started) as a component library, but it also supports vanilla CSS, and other CSS frameworks if needed. Bootstrap 5 was added as a dependency, if you'd like to work with it instead of using Chakra.
+
+## Hosted Site
+
+The site is being hosted with netlify in the following link: [nftsmarket.netlify.app](https://nftsmarket.netlify.app/)
