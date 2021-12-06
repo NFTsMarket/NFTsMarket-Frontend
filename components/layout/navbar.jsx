@@ -1,7 +1,8 @@
+import Link from "next/link";
+
 import {
   Box,
   Stack,
-  Link,
   Heading,
   Flex,
   Text,
@@ -30,7 +31,7 @@ export default function Navbar(props) {
     >
       <Flex align="center" mr={5}>
         <Link href="/">
-          <Heading as="h1" size="lg" letterSpacing={"tighter"}>
+          <Heading as="h1" size="lg" letterSpacing={"tighter"} cursor="pointer">
             NFTs Market
           </Heading>
         </Link>
@@ -51,19 +52,19 @@ export default function Navbar(props) {
         spacing="32px"
       >
         <Link href="/">
-          <Text>Catalog</Text>
+          <Text cursor="pointer">Catalog</Text>
         </Link>
         <Link href="/assets">
-          <Text>My Assets</Text>
+          <Text cursor="pointer">My Assets</Text>
         </Link>
         <Link href="/sales">
-          <Text>Pending Sales</Text>
+          <Text cursor="pointer">Pending Sales</Text>
         </Link>
         <Link href="/purchases">
-          <Text>Purchases</Text>
+          <Text cursor="pointer">Purchases</Text>
         </Link>
         <Link href="/wallet">
-          <Text>Wallet</Text>
+          <Text cursor="pointer">Wallet</Text>
         </Link>
       </Stack>
 
