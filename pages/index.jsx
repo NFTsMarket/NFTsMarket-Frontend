@@ -1,12 +1,18 @@
 import Head from "next/head";
-import Product from './Product.js';
+import Products from './catalogue/Products.js';
 
 export default function Home() {
 
-  const p = {
-    title: "first title",
-    description: "description"
-  }
+  const p = [
+    {
+      title: "first title",
+      description: "second description"
+    },
+    {
+      title: "second title",
+      description: "second description"
+    },
+  ]
 
   return (
     <>
@@ -14,7 +20,7 @@ export default function Home() {
         <title>Dashboard | NFTs Market</title>
       </Head>
       <h1>Catalogue</h1>
-      <Product product={p}/>
+      <Products products={p}/>
     </>
   );
 }
