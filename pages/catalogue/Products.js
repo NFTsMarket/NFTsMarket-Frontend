@@ -10,7 +10,7 @@ function Products(props) {
     }
 
     function onProductEdit(product) {
-        setMessage(product.name);
+        setMessage(product.title);
     }
 
     return (
@@ -27,7 +27,7 @@ function Products(props) {
                 <tbody>
                     {props.products.map((product)=>
                     // TODO: CHANGE KEY TO ID/SLUG
-                        <Product key={product.name} product={product} onEdit={onProductEdit}/>
+                        <Product key={product.title} product={product} onEdit={onProductEdit}/>
                     )}
                 </tbody>
             </table>
