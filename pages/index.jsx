@@ -48,7 +48,7 @@ export default function Home() {
       </Head>
 
       <div className="catalogue-main">
-        <SimpleGrid minChildWidth="400px" spacing={5}>
+        <SimpleGrid minChildWidth="300px" spacing={5}>
           {products.map((p) => (
             <ProductSimple
               key={p.id}

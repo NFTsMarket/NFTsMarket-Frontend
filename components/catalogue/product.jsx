@@ -23,13 +23,13 @@ export default function ProductSimple(props) {
         role={"group"}
         marginTop={"10"}
         p={6}
-        maxW={"330px"}
+        maxW={"264px"}
         w={"full"}
         bg={useColorModeValue("white", "gray.800")}
         boxShadow={"2xl"}
         rounded={"lg"}
         pos={"relative"}
-        zIndex={1}
+        zIndex={1}  
         _hover={{
           transform: "scale(1.03)",
         }}
@@ -38,7 +38,7 @@ export default function ProductSimple(props) {
           rounded={"lg"}
           mt={-12}
           pos={"relative"}
-          height={"230px"}
+          height={"184px"}
           boxShadow={"rgba(0, 0, 0, 0.55) 0px 5px 15px;"}
           _groupHover={{
               boxShadow:"rgba(0, 0, 0, 0.65) 0px 5px 25px",
@@ -46,8 +46,8 @@ export default function ProductSimple(props) {
         >
           <Image
             rounded={"lg"}
-            height={230}
-            width={282}
+            height={184}
+            width={225}
             objectFit={"cover"}
             src={URL}
             alt={""}
