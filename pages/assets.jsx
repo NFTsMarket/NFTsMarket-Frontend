@@ -1,7 +1,6 @@
-import Asset from './upload/asset.jsx';
-import { Fragment, useState } from 'react';
+import Asset from '../components/upload/asset.jsx';
+import { useState } from 'react';
 import { SimpleGrid } from "@chakra-ui/react";
-import Link from "next/link";
 
 function Assets(props) {
 

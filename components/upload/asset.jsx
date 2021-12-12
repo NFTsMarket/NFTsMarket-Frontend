@@ -28,7 +28,6 @@ import {
                 transform: "scale(1.03)",
               }}
               boxShadow={"2xl"}
-              rounded={"lg"}
             />
       </Center>
     );
