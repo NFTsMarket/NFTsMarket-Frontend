@@ -21,4 +21,6 @@ This project also uses [Chakra UI](https://chakra-ui.com/docs/getting-started) a
 
 ## Hosted Site
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9bbb54ff-8ea6-4513-a570-26a8b281a60a/deploy-status)](https://app.netlify.com/sites/nftsmarket/deploys)
+
 The site is being hosted with netlify in the following link: [nftsmarket.netlify.app](https://nftsmarket.netlify.app/)
