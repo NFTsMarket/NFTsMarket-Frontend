@@ -14,9 +14,10 @@ import {
 import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 export default function Navbar(props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const handleToggle = () => (isOpen ? onClose() : onOpen());
   const { colorMode, toggleColorMode } = useColorMode();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleToggle = () => (isOpen ? onClose() : onOpen());
 
   return (
     <Flex
@@ -30,7 +31,7 @@ export default function Navbar(props) {
       {...props}
     >
       <Flex align="center" mr={5}>
-        <Link href="/">
+        <Link href="/" passHref>
           <Heading as="h1" size="lg" letterSpacing={"tighter"} cursor="pointer">
             NFTs Market
           </Heading>
@@ -51,19 +52,19 @@ export default function Navbar(props) {
         mt={{ base: 4, md: 0 }}
         spacing="32px"
       >
-        <Link href="/">
+        <Link href="/" passHref>
           <Text cursor="pointer">Catalog</Text>
         </Link>
-        <Link href="/assets">
+        <Link href="/assets" passHref>
           <Text cursor="pointer">My Assets</Text>
         </Link>
-        <Link href="/sales">
+        <Link href="/sales" passHref>
           <Text cursor="pointer">Pending Sales</Text>
         </Link>
-        <Link href="/purchases">
+        <Link href="/purchases" passHref>
           <Text cursor="pointer">Purchases</Text>
         </Link>
-        <Link href="/wallet">
+        <Link href="/wallet" passHref>
           <Text cursor="pointer">Wallet</Text>
         </Link>
       </Stack>
