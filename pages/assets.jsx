@@ -1,6 +1,7 @@
 import Asset from '../components/upload/asset.jsx';
 import { useState } from 'react';
-import { SimpleGrid } from "@chakra-ui/react";
+import { SimpleGrid, Link as ChakraLink, Container } from "@chakra-ui/react";
+import Link from 'next/link';
 
 function Assets(props) {
 
@@ -44,10 +45,15 @@ function Assets(props) {
     return (
       <div className="upload-main">
       <SimpleGrid minChildWidth="400px" spacing={5}>
-      {assets.map((asset)=>
-        // <Link href="/assets">
-          <Asset key={asset.id} asset={asset}/>
-      // </Link>
+      {assets.map((asset)=>      
+          <Container key={asset.id}>
+            <Link href={`/asset/${asset.id}`} passHref>
+            <ChakraLink  >
+            <Asset  asset={asset} />
+          </ChakraLink>
+          </Link>
+          </Container>
+          
       )}
       </SimpleGrid>
     </div>
