@@ -1,24 +1,27 @@
-import { useForm } from "react-hook-form";
-import Link from "next/link";
-import Head from "next/head";
-import { HiEye, HiEyeOff } from "react-icons/hi";
-
 import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Box,
+  Link as ChakraLink,
+  SimpleGrid,
   Stack,
   Text,
-  Button,
-  IconButton,
-  ButtonGroup,
-  useToast,
-  Heading,
-  Link as ChakraLink,
   useColorModeValue,
   useDisclosure,
+  useToast,
+  VisuallyHidden,
 } from "@chakra-ui/react";
+import Head from "next/head";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 import AlertMessage from "../components/auth/AlertMessage";
 import ThemeButton from "../components/common/ThemeButton";
 
@@ -55,13 +58,14 @@ function SignUp() {
           lg: "8",
         }}
       >
+        <ThemeButton />
         <Box maxW="md" mx="auto">
           <Link href="/" passHref>
             <ChakraLink>
               <Heading
                 textAlign="center"
                 size="lg"
-                color="purple.200"
+                color={useColorModeValue("purple.500", "purple.200")}
                 fontWeight="extrabold"
                 mb={{
                   base: "10",
@@ -78,7 +82,9 @@ function SignUp() {
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
             <Text as="span">Already have an account? </Text>
             <Link href="/login">
-              <ChakraLink color="purple.200">Log In</ChakraLink>
+              <ChakraLink color={useColorModeValue("purple.500", "purple.200")}>
+                Log In
+              </ChakraLink>
             </Link>
           </Text>
           <Box
@@ -155,9 +161,36 @@ function SignUp() {
                 <Button type="submit" colorScheme="purple">
                   Sign Up
                 </Button>
-                <ThemeButton />
               </Stack>
             </form>
+
+            <Flex align="center" color="gray.300" mt="5">
+              <Box flex="1">
+                <Divider borderColor="currentcolor" />
+              </Box>
+              <Text
+                as="span"
+                px="3"
+                color={useColorModeValue("gray.600", "gray.400")}
+                fontWeight="medium"
+              >
+                or continue with
+              </Text>
+              <Box flex="1">
+                <Divider borderColor="currentcolor" />
+              </Box>
+            </Flex>
+
+            <SimpleGrid mt="6" columns={2} spacing="3">
+              <Button color="currentColor" variant="outline">
+                <VisuallyHidden>Login with Facebook</VisuallyHidden>
+                <FaFacebook />
+              </Button>
+              <Button color="currentColor" variant="outline">
+                <VisuallyHidden>Login with Google</VisuallyHidden>
+                <FaGoogle />
+              </Button>
+            </SimpleGrid>
           </Box>
         </Box>
       </Box>
