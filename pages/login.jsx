@@ -69,55 +69,68 @@ function SignUp() {
               <ChakraLink color="purple.500">Sign Up</ChakraLink>
             </Link>
           </Text>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={6}>
-              <InputGroup size="md">
-                <Input
-                  type="email"
-                  placeholder="Enter email"
-                  {...register("email", {
-                    required: "Enter a valid email",
-                    pattern:
-                      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                  })}
-                />
-                {errors.email && (
-                  <AlertMessage message={errors.email.message} />
-                )}
-              </InputGroup>
+          <Box
+            bg={useColorModeValue("white", "gray.700")}
+            py="8"
+            px={{
+              base: "4",
+              md: "10",
+            }}
+            shadow="base"
+            rounded={{
+              sm: "lg",
+            }}
+          >
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Stack spacing={6}>
+                <InputGroup size="md">
+                  <Input
+                    type="email"
+                    placeholder="Enter email"
+                    {...register("email", {
+                      required: "Enter a valid email",
+                      pattern:
+                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    })}
+                  />
+                  {errors.email && (
+                    <AlertMessage message={errors.email.message} />
+                  )}
+                </InputGroup>
 
-              <InputGroup size="md">
-                <Input
-                  pr="4.5rem"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter password"
-                  {...register("password", {
-                    required: "Enter a password",
-                    minLength: {
-                      value: 6,
-                      message:
-                        "Your password should be at least 6 characters long",
-                    },
-                  })}
-                />
-                <InputRightElement>
-                  <Button h="1.75rem" size="sm" onClick={togglePassword}>
-                    {showPassword ? "Hide" : "Show"}
+                <InputGroup size="md">
+                  <Input
+                    pr="4.5rem"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    {...register("password", {
+                      required: "Enter a password",
+                      minLength: {
+                        value: 6,
+                        message:
+                          "Your password should be at least 6 characters long",
+                      },
+                    })}
+                  />
+                  <InputRightElement>
+                    <Button h="1.75rem" size="sm" onClick={togglePassword}>
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                  {errors.password && (
+                    <AlertMessage message={errors.password.message} />
+                  )}
+                </InputGroup>
+
+                <ButtonGroup spacing="6">
+                  <Button type="submit" colorScheme="purple">
+                    Login
                   </Button>
-                </InputRightElement>
-                {errors.password && (
-                  <AlertMessage message={errors.password.message} />
-                )}
-              </InputGroup>
-
-              <ButtonGroup spacing="6">
-                <Button type="submit" colorScheme="purple">
-                  Login
-                </Button>
-                <ThemeButton />
-              </ButtonGroup>
-            </Stack>
-          </form>
+                  <ThemeButton />
+                </ButtonGroup>
+              </Stack>
+            </form>
+          </Box>
         </Box>
       </Box>
     </>
