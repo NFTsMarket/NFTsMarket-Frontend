@@ -42,12 +42,12 @@ function SignUp() {
               type="email"
               placeholder="Enter email"
               {...register("email", {
-                required: "Enter your email",
+                required: "Enter a valid email",
                 pattern:
                   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
               })}
             />
-            {errors.email && <AlertMessage title={errors.email.message} />}
+            {errors.email && <AlertMessage message={errors.email.message} />}
           </InputGroup>
           <Input
             placeholder="Enter name"
@@ -57,7 +57,7 @@ function SignUp() {
               maxLength: 80,
             })}
           />
-          {errors.name && <AlertMessage title={errors.name.message} />}
+          {errors.name && <AlertMessage message={errors.name.message} />}
           <InputGroup size="md">
             <Input
               pr="4.5rem"
@@ -77,7 +77,7 @@ function SignUp() {
               </Button>
             </InputRightElement>
             {errors.password && (
-              <AlertMessage title={errors.password.message} />
+              <AlertMessage message={errors.password.message} />
             )}
           </InputGroup>
 
