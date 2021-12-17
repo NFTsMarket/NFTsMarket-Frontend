@@ -3,6 +3,10 @@ import {
   Button,
   Divider,
   Flex,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
   Heading,
   IconButton,
   Input,
@@ -22,7 +26,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import AlertMessage from "../components/auth/AlertMessage";
 import ThemeButton from "../components/common/ThemeButton";
 
 function SignUp() {
@@ -83,7 +86,7 @@ function SignUp() {
             <Text as="span">Already have an account? </Text>
             <Link href="/login">
               <ChakraLink color={useColorModeValue("purple.500", "purple.200")}>
-                Log In
+                Log In!
               </ChakraLink>
             </Link>
           </Text>
@@ -101,62 +104,78 @@ function SignUp() {
           >
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={6}>
-                <InputGroup size="md">
+                <FormControl id="email">
+                  <FormLabel>Email address</FormLabel>
                   <Input
                     type="email"
-                    placeholder="Enter email"
                     {...register("email", {
                       required: "Enter a valid email",
                       pattern:
                         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                     })}
                   />
+                  <FormHelperText>
+                    We will send you a confirmation email shortly ;)
+                  </FormHelperText>
                   {errors.email && (
-                    <AlertMessage message={errors.email.message} />
+                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                   )}
-                </InputGroup>
+                </FormControl>
 
-                <InputGroup size="md">
+                <FormControl>
+                  <FormLabel>Name</FormLabel>
                   <Input
-                    placeholder="Enter name"
+                    autoComplete="name"
                     {...register("name", {
                       required: "Enter your name",
                       minLength: 3,
                       maxLength: 80,
                     })}
                   />
+                  <FormHelperText>So people know who are you!</FormHelperText>
                   {errors.name && (
-                    <AlertMessage message={errors.name.message} />
+                    <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                   )}
-                </InputGroup>
+                </FormControl>
 
-                <InputGroup size="md">
-                  <Input
-                    pr="4.5rem"
-                    type={isOpen ? "text" : "password"}
-                    placeholder="Enter password"
-                    {...register("password", {
-                      required: "Enter a password",
-                      minLength: {
-                        value: 6,
-                        message:
-                          "Your password should be at least 6 characters long",
-                      },
-                    })}
-                  />
-                  <InputRightElement>
-                    <IconButton
-                      bg="transparent !important"
-                      variant="ghost"
-                      aria-label={isOpen ? "Mask password" : "Reveal password"}
-                      icon={isOpen ? <HiEyeOff /> : <HiEye />}
-                      onClick={onToggle}
+                <FormControl id="password">
+                  <FormLabel>Password</FormLabel>
+                  <InputGroup size="md">
+                    <Input
+                      pr="4.5rem"
+                      type={isOpen ? "text" : "password"}
+                      autoComplete="new-password"
+                      placeholder="Enter password"
+                      {...register("password", {
+                        required: "Enter a password",
+                        minLength: {
+                          value: 6,
+                          message:
+                            "Your password should be at least 6 characters long",
+                        },
+                      })}
                     />
-                  </InputRightElement>
-                </InputGroup>
-                {errors.password && (
-                  <AlertMessage message={errors.password.message} />
-                )}
+                    <InputRightElement>
+                      <IconButton
+                        bg="transparent !important"
+                        variant="ghost"
+                        aria-label={
+                          isOpen ? "Mask password" : "Reveal password"
+                        }
+                        icon={isOpen ? <HiEyeOff /> : <HiEye />}
+                        onClick={onToggle}
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormHelperText>
+                    At least 6 characters long pls
+                  </FormHelperText>
+                  {errors.password && (
+                    <FormErrorMessage>
+                      {errors.password.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
 
                 <Button type="submit" colorScheme="purple">
                   Sign Up
@@ -183,11 +202,11 @@ function SignUp() {
 
             <SimpleGrid mt="6" columns={2} spacing="3">
               <Button color="currentColor" variant="outline">
-                <VisuallyHidden>Login with Facebook</VisuallyHidden>
+                <VisuallyHidden>Sign up with Facebook</VisuallyHidden>
                 <FaFacebook />
               </Button>
               <Button color="currentColor" variant="outline">
-                <VisuallyHidden>Login with Google</VisuallyHidden>
+                <VisuallyHidden>Sign up with Google</VisuallyHidden>
                 <FaGoogle />
               </Button>
             </SimpleGrid>

@@ -1,23 +1,30 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Link from "next/link";
-import Head from "next/head";
-
 import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Box,
+  Link as ChakraLink,
+  SimpleGrid,
   Stack,
   Text,
-  Button,
-  ButtonGroup,
-  useToast,
-  Heading,
   useColorModeValue,
-  Link as ChakraLink,
+  useDisclosure,
+  useToast,
+  VisuallyHidden,
 } from "@chakra-ui/react";
-import AlertMessage from "../components/auth/AlertMessage";
+import Head from "next/head";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 import ThemeButton from "../components/common/ThemeButton";
 
 function SignUp() {
@@ -27,9 +34,7 @@ function SignUp() {
     formState: { errors },
   } = useForm();
   const toast = useToast();
-
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePassword = () => setShowPassword(!showPassword);
+  const { isOpen, onToggle } = useDisclosure();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -44,7 +49,7 @@ function SignUp() {
   return (
     <>
       <Head>
-        <title>Log In | NFTs Market</title>
+        <title>Sign Up | NFTs Market</title>
       </Head>
       <Box
         bg={useColorModeValue("gray.50", "inherit")}
@@ -55,13 +60,14 @@ function SignUp() {
           lg: "8",
         }}
       >
+        <ThemeButton />
         <Box maxW="md" mx="auto">
           <Link href="/" passHref>
             <ChakraLink>
               <Heading
                 textAlign="center"
                 size="lg"
-                color="purple.200"
+                color={useColorModeValue("purple.500", "purple.200")}
                 fontWeight="extrabold"
                 mb={{
                   base: "10",
@@ -78,7 +84,9 @@ function SignUp() {
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
             <Text as="span">Don&apos;t have an account? </Text>
             <Link href="/signup">
-              <ChakraLink color="purple.200">Sign Up</ChakraLink>
+              <ChakraLink color={useColorModeValue("purple.500", "purple.200")}>
+                Sign Up!
+              </ChakraLink>
             </Link>
           </Text>
           <Box
@@ -95,10 +103,10 @@ function SignUp() {
           >
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={6}>
-                <InputGroup size="md">
+                <FormControl id="email">
+                  <FormLabel>Email address</FormLabel>
                   <Input
                     type="email"
-                    placeholder="Enter email"
                     {...register("email", {
                       required: "Enter a valid email",
                       pattern:
@@ -106,40 +114,88 @@ function SignUp() {
                     })}
                   />
                   {errors.email && (
-                    <AlertMessage message={errors.email.message} />
+                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                   )}
-                </InputGroup>
+                </FormControl>
 
-                <InputGroup size="md">
-                  <Input
-                    pr="4.5rem"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter password"
-                    {...register("password", {
-                      required: "Enter a password",
-                      minLength: {
-                        value: 6,
-                        message:
-                          "Your password should be at least 6 characters long",
-                      },
-                    })}
-                  />
-                  <InputRightElement>
-                    <Button h="1.75rem" size="sm" onClick={togglePassword}>
-                      {showPassword ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
+                <FormControl id="password">
+                  <Flex justify="space-between">
+                    <FormLabel>Password</FormLabel>
+                    <ChakraLink
+                      color={useColorModeValue("purple.500", "purple.200")}
+                      fontWeight="semibold"
+                      fontSize="sm"
+                    >
+                      Forgot Password?
+                    </ChakraLink>
+                  </Flex>
+                  <InputGroup size="md">
+                    <Input
+                      pr="4.5rem"
+                      type={isOpen ? "text" : "password"}
+                      autoComplete="new-password"
+                      placeholder="Enter password"
+                      {...register("password", {
+                        required: "Enter a password",
+                        minLength: {
+                          value: 6,
+                          message:
+                            "Your password should be at least 6 characters long",
+                        },
+                      })}
+                    />
+                    <InputRightElement>
+                      <IconButton
+                        bg="transparent !important"
+                        variant="ghost"
+                        aria-label={
+                          isOpen ? "Mask password" : "Reveal password"
+                        }
+                        icon={isOpen ? <HiEyeOff /> : <HiEye />}
+                        onClick={onToggle}
+                      />
+                    </InputRightElement>
+                  </InputGroup>
                   {errors.password && (
-                    <AlertMessage message={errors.password.message} />
+                    <FormErrorMessage>
+                      {errors.password.message}
+                    </FormErrorMessage>
                   )}
-                </InputGroup>
+                </FormControl>
 
                 <Button type="submit" colorScheme="purple">
-                  Login
+                  Log In
                 </Button>
-                <ThemeButton />
               </Stack>
             </form>
+
+            <Flex align="center" color="gray.300" mt="5">
+              <Box flex="1">
+                <Divider borderColor="currentcolor" />
+              </Box>
+              <Text
+                as="span"
+                px="3"
+                color={useColorModeValue("gray.600", "gray.400")}
+                fontWeight="medium"
+              >
+                or continue with
+              </Text>
+              <Box flex="1">
+                <Divider borderColor="currentcolor" />
+              </Box>
+            </Flex>
+
+            <SimpleGrid mt="6" columns={2} spacing="3">
+              <Button color="currentColor" variant="outline">
+                <VisuallyHidden>Login with Facebook</VisuallyHidden>
+                <FaFacebook />
+              </Button>
+              <Button color="currentColor" variant="outline">
+                <VisuallyHidden>Login with Google</VisuallyHidden>
+                <FaGoogle />
+              </Button>
+            </SimpleGrid>
           </Box>
         </Box>
       </Box>
