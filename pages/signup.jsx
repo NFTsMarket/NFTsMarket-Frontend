@@ -1,5 +1,14 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Input, VStack, Button, ButtonGroup, useToast } from "@chakra-ui/react";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  VStack,
+  Button,
+  ButtonGroup,
+  useToast,
+} from "@chakra-ui/react";
 import AlertMessage from "../components/auth/AlertMessage";
 import ThemeButton from "../components/common/ThemeButton";
 
@@ -10,6 +19,9 @@ function SignUp() {
     formState: { errors },
   } = useForm();
   const toast = useToast();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword(!showPassword);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -25,21 +37,21 @@ function SignUp() {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack align="center" spacing={4}>
+          <InputGroup size="md">
+            <Input
+              placeholder="Enter first name"
+              {...register("firstName", {
+                required: "Enter your first name",
+                minLength: 3,
+                maxLength: 80,
+              })}
+            />
+            {errors.firstName && (
+              <AlertMessage title={errors.firstName.message} />
+            )}
+          </InputGroup>
           <Input
-            type="text"
-            placeholder="First Name"
-            {...register("firstName", {
-              required: "Enter your first name",
-              minLength: 3,
-              maxLength: 80,
-            })}
-          />
-          {errors.firstName && (
-            <AlertMessage title={errors.firstName.message} />
-          )}
-          <Input
-            type="text"
-            placeholder="Last Name"
+            placeholder="Enter last name"
             {...register("lastName", {
               required: "Enter your last name",
               minLength: 3,
@@ -47,18 +59,28 @@ function SignUp() {
             })}
           />
           {errors.lastName && <AlertMessage title={errors.lastName.message} />}
-          <Input
-            type="password"
-            placeholder="Password"
-            {...register("password", {
-              required: "Enter a password",
-              minLength: {
-                value: 6,
-                message: "Your password should be at least 6 characters long",
-              },
-            })}
-          />
-          {errors.password && <AlertMessage title={errors.password.message} />}
+          <InputGroup size="md">
+            <Input
+              pr="4.5rem"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter password"
+              {...register("password", {
+                required: "Enter a password",
+                minLength: {
+                  value: 6,
+                  message: "Your password should be at least 6 characters long",
+                },
+              })}
+            />
+            <InputRightElement>
+              <Button h="1.75rem" size="sm" onClick={togglePassword}>
+                {showPassword ? "Hide" : "Show"}
+              </Button>
+            </InputRightElement>
+            {errors.password && (
+              <AlertMessage title={errors.password.message} />
+            )}
+          </InputGroup>
 
           <ButtonGroup spacing="6">
             <Button type="submit" colorScheme="purple">
