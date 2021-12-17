@@ -39,26 +39,25 @@ function SignUp() {
         <VStack align="center" spacing={4}>
           <InputGroup size="md">
             <Input
-              placeholder="Enter first name"
-              {...register("firstName", {
-                required: "Enter your first name",
-                minLength: 3,
-                maxLength: 80,
+              type="email"
+              placeholder="Enter email"
+              {...register("email", {
+                required: "Enter your email",
+                pattern:
+                  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
               })}
             />
-            {errors.firstName && (
-              <AlertMessage title={errors.firstName.message} />
-            )}
+            {errors.email && <AlertMessage title={errors.email.message} />}
           </InputGroup>
           <Input
-            placeholder="Enter last name"
-            {...register("lastName", {
-              required: "Enter your last name",
+            placeholder="Enter name"
+            {...register("name", {
+              required: "Enter your name",
               minLength: 3,
               maxLength: 80,
             })}
           />
-          {errors.lastName && <AlertMessage title={errors.lastName.message} />}
+          {errors.name && <AlertMessage title={errors.name.message} />}
           <InputGroup size="md">
             <Input
               pr="4.5rem"
