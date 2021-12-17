@@ -145,7 +145,6 @@ function SignUp() {
                       pr="4.5rem"
                       type={isOpen ? "text" : "password"}
                       autoComplete="new-password"
-                      placeholder="Enter password"
                       {...register("password", {
                         required: "Enter a password",
                         minLength: {
