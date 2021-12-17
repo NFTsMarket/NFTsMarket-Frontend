@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Input, VStack, Button } from "@chakra-ui/react";
+import { Input, VStack, Button, ButtonGroup, useToast } from "@chakra-ui/react";
 import AlertMessage from "../components/auth/AlertMessage";
+import ThemeButton from "../components/common/ThemeButton";
 
 function SignUp() {
   const {
@@ -9,8 +9,17 @@ function SignUp() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const toast = useToast();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+    toast({
+      title: "Welcome to NFTs Market!",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
 
   return (
     <>
@@ -50,9 +59,13 @@ function SignUp() {
             })}
           />
           {errors.password && <AlertMessage title={errors.password.message} />}
-          <Button type="submit" colorScheme="purple">
-            Sign Up
-          </Button>
+
+          <ButtonGroup spacing="6">
+            <Button type="submit" colorScheme="purple">
+              Sign Up
+            </Button>
+            <ThemeButton />
+          </ButtonGroup>
         </VStack>
       </form>
     </>

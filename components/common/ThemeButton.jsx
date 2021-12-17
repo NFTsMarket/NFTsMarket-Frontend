@@ -5,7 +5,7 @@ function ThemeButton(props) {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Button mx="4" colorScheme="purple" onClick={toggleColorMode} {...props}>
+    <Button colorScheme="purple" onClick={toggleColorMode} {...props}>
       {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
     </Button>
   );

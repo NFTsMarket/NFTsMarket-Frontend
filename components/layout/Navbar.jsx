@@ -5,6 +5,7 @@ import {
   Heading,
   Flex,
   Button,
+  ButtonGroup,
   useDisclosure,
   Link as ChakraLink,
 } from "@chakra-ui/react";
@@ -67,16 +68,16 @@ export default function Navbar(props) {
         </Link>
       </Stack>
 
-      <Box
+      <ButtonGroup
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
+        spacing="4"
       >
         <ThemeButton />
         <Link href="/signup" passHref>
           <Button
             variant="outline"
             _hover={{ color: "purple.500", bg: "white" }}
-            mr={4}
           >
             Sign Up
           </Button>
@@ -84,7 +85,7 @@ export default function Navbar(props) {
         <Link href="/login" passHref>
           <Button colorScheme="purple">Log In</Button>
         </Link>
-      </Box>
+      </ButtonGroup>
     </Flex>
   );
 }
