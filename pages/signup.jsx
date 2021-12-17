@@ -11,12 +11,35 @@ function SignUp() {
   const onSubmit = (data) => console.log(data);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" placeholder="First Name" {...register("firstName")} />
-      <input type="text" placeholder="Last Name" {...register("lastName")} />
-      <input type="password" placeholder="Password" {...register("password")} />
-      <input type="submit" />
-    </form>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          type="text"
+          placeholder="First Name"
+          {...register("firstName", { required: "Enter your first name" })}
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          {...register("lastName", { required: "Enter your last name" })}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          {...register("password", {
+            required: "Enter a password",
+            minLength: {
+              value: 6,
+              message: "Your password should be at least 6 characters long",
+            },
+          })}
+        />
+        <input type="submit" />
+      </form>
+      {errors.firstName && <p>{errors.firstName.message}</p>}
+      {errors.lastName && <p>{errors.lastName.message}</p>}
+      {errors.password && <p>{errors.password.message}</p>}
+    </>
   );
 }
 
