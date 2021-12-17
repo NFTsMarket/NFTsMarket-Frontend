@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Input, VStack, Button } from "@chakra-ui/react";
+import AlertMessage from "../components/auth/AlertMessage";
 
 function SignUp() {
   const {
@@ -13,32 +15,46 @@ function SignUp() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          type="text"
-          placeholder="First Name"
-          {...register("firstName", { required: "Enter your first name" })}
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          {...register("lastName", { required: "Enter your last name" })}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          {...register("password", {
-            required: "Enter a password",
-            minLength: {
-              value: 6,
-              message: "Your password should be at least 6 characters long",
-            },
-          })}
-        />
-        <input type="submit" />
+        <VStack align="center" spacing={4}>
+          <Input
+            type="text"
+            placeholder="First Name"
+            {...register("firstName", {
+              required: "Enter your first name",
+              minLength: 3,
+              maxLength: 80,
+            })}
+          />
+          {errors.firstName && (
+            <AlertMessage title={errors.firstName.message} />
+          )}
+          <Input
+            type="text"
+            placeholder="Last Name"
+            {...register("lastName", {
+              required: "Enter your last name",
+              minLength: 3,
+              maxLength: 80,
+            })}
+          />
+          {errors.lastName && <AlertMessage title={errors.lastName.message} />}
+          <Input
+            type="password"
+            placeholder="Password"
+            {...register("password", {
+              required: "Enter a password",
+              minLength: {
+                value: 6,
+                message: "Your password should be at least 6 characters long",
+              },
+            })}
+          />
+          {errors.password && <AlertMessage title={errors.password.message} />}
+          <Button type="submit" colorScheme="purple">
+            Sign Up
+          </Button>
+        </VStack>
       </form>
-      {errors.firstName && <p>{errors.firstName.message}</p>}
-      {errors.lastName && <p>{errors.lastName.message}</p>}
-      {errors.password && <p>{errors.password.message}</p>}
     </>
   );
 }
