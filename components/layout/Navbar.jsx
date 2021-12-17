@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import {
   Box,
   Stack,
@@ -7,14 +6,13 @@ import {
   Flex,
   Button,
   useDisclosure,
-  useColorMode,
-  useColorModeValue,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { HamburgerIcon } from "@chakra-ui/icons";
+
+import ThemeButton from "../common/ThemeButton";
 
 export default function Navbar(props) {
-  const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleToggle = () => (isOpen ? onClose() : onOpen());
@@ -73,13 +71,7 @@ export default function Navbar(props) {
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
       >
-        <Button
-          onClick={toggleColorMode}
-          mr={4}
-          color={useColorModeValue("purple.500", "white")}
-        >
-          {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        </Button>
+        <ThemeButton />
         <Link href="/signup" passHref>
           <Button
             variant="outline"
