@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Head from "next/head";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 import {
   Input,
@@ -11,11 +11,13 @@ import {
   Stack,
   Text,
   Button,
+  IconButton,
   ButtonGroup,
   useToast,
   Heading,
-  useColorModeValue,
   Link as ChakraLink,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import AlertMessage from "../components/auth/AlertMessage";
 import ThemeButton from "../components/common/ThemeButton";
@@ -27,9 +29,7 @@ function SignUp() {
     formState: { errors },
   } = useForm();
   const toast = useToast();
-
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePassword = () => setShowPassword(!showPassword);
+  const { isOpen, onToggle } = useDisclosure();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -58,15 +58,27 @@ function SignUp() {
         <Box maxW="md" mx="auto">
           <Link href="/" passHref>
             <ChakraLink>
-              <Heading textAlign="center" size="xl" fontWeight="extrabold">
+              <Heading
+                textAlign="center"
+                size="lg"
+                color="purple.200"
+                fontWeight="extrabold"
+                mb={{
+                  base: "10",
+                  md: "20",
+                }}
+              >
                 NFTs Market
               </Heading>
             </ChakraLink>
           </Link>
+          <Heading textAlign="center" size="xl" fontWeight="extrabold">
+            Sign Up
+          </Heading>
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
             <Text as="span">Already have an account? </Text>
             <Link href="/login">
-              <ChakraLink color="purple.500">Log In</ChakraLink>
+              <ChakraLink color="purple.200">Log In</ChakraLink>
             </Link>
           </Text>
           <Box
@@ -115,7 +127,7 @@ function SignUp() {
                 <InputGroup size="md">
                   <Input
                     pr="4.5rem"
-                    type={showPassword ? "text" : "password"}
+                    type={isOpen ? "text" : "password"}
                     placeholder="Enter password"
                     {...register("password", {
                       required: "Enter a password",
@@ -127,21 +139,23 @@ function SignUp() {
                     })}
                   />
                   <InputRightElement>
-                    <Button h="1.75rem" size="sm" onClick={togglePassword}>
-                      {showPassword ? "Hide" : "Show"}
-                    </Button>
+                    <IconButton
+                      bg="transparent !important"
+                      variant="ghost"
+                      aria-label={isOpen ? "Mask password" : "Reveal password"}
+                      icon={isOpen ? <HiEyeOff /> : <HiEye />}
+                      onClick={onToggle}
+                    />
                   </InputRightElement>
-                  {errors.password && (
-                    <AlertMessage message={errors.password.message} />
-                  )}
                 </InputGroup>
+                {errors.password && (
+                  <AlertMessage message={errors.password.message} />
+                )}
 
-                <ButtonGroup spacing="6">
-                  <Button type="submit" colorScheme="purple">
-                    Sign Up
-                  </Button>
-                  <ThemeButton />
-                </ButtonGroup>
+                <Button type="submit" colorScheme="purple">
+                  Sign Up
+                </Button>
+                <ThemeButton />
               </Stack>
             </form>
           </Box>

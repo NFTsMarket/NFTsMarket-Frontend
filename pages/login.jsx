@@ -58,15 +58,27 @@ function SignUp() {
         <Box maxW="md" mx="auto">
           <Link href="/" passHref>
             <ChakraLink>
-              <Heading textAlign="center" size="xl" fontWeight="extrabold">
+              <Heading
+                textAlign="center"
+                size="lg"
+                color="purple.200"
+                fontWeight="extrabold"
+                mb={{
+                  base: "10",
+                  md: "20",
+                }}
+              >
                 NFTs Market
               </Heading>
             </ChakraLink>
           </Link>
+          <Heading textAlign="center" size="xl" fontWeight="extrabold">
+            Log In
+          </Heading>
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
             <Text as="span">Don&apos;t have an account? </Text>
             <Link href="/signup">
-              <ChakraLink color="purple.500">Sign Up</ChakraLink>
+              <ChakraLink color="purple.200">Sign Up</ChakraLink>
             </Link>
           </Text>
           <Box
@@ -122,12 +134,10 @@ function SignUp() {
                   )}
                 </InputGroup>
 
-                <ButtonGroup spacing="6">
-                  <Button type="submit" colorScheme="purple">
-                    Login
-                  </Button>
-                  <ThemeButton />
-                </ButtonGroup>
+                <Button type="submit" colorScheme="purple">
+                  Login
+                </Button>
+                <ThemeButton />
               </Stack>
             </form>
           </Box>
