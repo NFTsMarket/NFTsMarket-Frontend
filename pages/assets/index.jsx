@@ -1,4 +1,4 @@
-import Asset from '../components/upload/asset.jsx';
+import Asset from '../../components/upload/asset.jsx';
 import { useState } from 'react';
 import { SimpleGrid, Link as ChakraLink, Container } from "@chakra-ui/react";
 import Link from 'next/link';
@@ -47,7 +47,7 @@ function Assets(props) {
       <SimpleGrid minChildWidth="400px" spacing={5}>
       {assets.map((asset)=>      
           <Container key={asset.id}>
-            <Link href={`/asset/${asset.id}`} passHref>
+            <Link href={`/assets/${asset.id}`} passHref>
             <ChakraLink  >
             <Asset  asset={asset} />
           </ChakraLink>
