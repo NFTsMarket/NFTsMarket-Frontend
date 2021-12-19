@@ -21,12 +21,27 @@ import {
   useToast,
   VisuallyHidden,
 } from "@chakra-ui/react";
+import { gql, useMutation } from "@apollo/client";
 import Head from "next/head";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import ThemeButton from "../components/common/ThemeButton";
+
+const SIGN_UP = gql`
+  mutation SignUp($email: String!, $name: String!, $password: String!) {
+    signUpUser(input: { email: $email, name: $name, password: $password }) {
+      accessToken
+      user {
+        id
+        email
+        name
+        profilePicture
+      }
+    }
+  }
+`;
 
 function SignUp() {
   const {
@@ -37,12 +52,23 @@ function SignUp() {
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const [signUpUser, { data, loading, error }] = useMutation(SIGN_UP);
+
+  if (loading) return "Submitting...";
+  if (error) return `Submission error! ${error.message}`;
+
+  const onSubmit = ({ email, name, password }) => {
+    signUpUser({
+      variables: {
+        email,
+        name,
+        password,
+      },
+    });
     toast({
-      title: "Welcome to NFTs Market!",
-      status: "success",
-      duration: 3000,
+      title: "We'll send you a confirmation email shortly ;)",
+      status: "info",
+      duration: 5000,
       isClosable: true,
     });
   };
@@ -115,7 +141,7 @@ function SignUp() {
                     })}
                   />
                   <FormHelperText>
-                    We will send you a confirmation email shortly ;)
+                    Enter a valid email address 📧
                   </FormHelperText>
                   {errors.email && (
                     <FormErrorMessage>{errors.email.message}</FormErrorMessage>
@@ -132,7 +158,7 @@ function SignUp() {
                       maxLength: 80,
                     })}
                   />
-                  <FormHelperText>So people know who you are!</FormHelperText>
+                  <FormHelperText>Enter your full name 🙏</FormHelperText>
                   {errors.name && (
                     <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                   )}
