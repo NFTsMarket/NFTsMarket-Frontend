@@ -1,20 +1,19 @@
 import Link from "next/link";
-
 import {
   Box,
   Stack,
   Heading,
   Flex,
-  Text,
   Button,
+  ButtonGroup,
   useDisclosure,
-  useColorMode,
-  useColorModeValue,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
-import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { HamburgerIcon } from "@chakra-ui/icons";
+
+import ThemeButton from "../common/ThemeButton";
 
 export default function Navbar(props) {
-  const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleToggle = () => (isOpen ? onClose() : onOpen());
@@ -53,42 +52,40 @@ export default function Navbar(props) {
         spacing="32px"
       >
         <Link href="/" passHref>
-          <Text cursor="pointer">Catalog</Text>
+          <ChakraLink>Catalog</ChakraLink>
         </Link>
         <Link href="/assets" passHref>
-          <Text cursor="pointer">My Assets</Text>
+          <ChakraLink>My Assets</ChakraLink>
         </Link>
         <Link href="/sales" passHref>
-          <Text cursor="pointer">Pending Sales</Text>
+          <ChakraLink>Pending Sales</ChakraLink>
         </Link>
         <Link href="/purchases" passHref>
-          <Text cursor="pointer">Purchases</Text>
+          <ChakraLink>Purchases</ChakraLink>
         </Link>
         <Link href="/wallet" passHref>
-          <Text cursor="pointer">Wallet</Text>
+          <ChakraLink>Wallet</ChakraLink>
         </Link>
       </Stack>
 
-      <Box
+      <ButtonGroup
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
+        spacing="4"
       >
-        <Button
-          onClick={toggleColorMode}
-          mr={4}
-          color={useColorModeValue("purple.500", "white")}
-        >
-          {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        </Button>
-        <Button
-          variant="outline"
-          _hover={{ color: "purple.500", bg: "white" }}
-          mr={4}
-        >
-          Sign Up
-        </Button>
-        <Button colorScheme="purple">Log In</Button>
-      </Box>
+        <ThemeButton />
+        <Link href="/signup" passHref>
+          <Button
+            variant="outline"
+            _hover={{ color: "purple.500", bg: "white" }}
+          >
+            Sign Up
+          </Button>
+        </Link>
+        <Link href="/login" passHref>
+          <Button colorScheme="purple">Log In</Button>
+        </Link>
+      </ButtonGroup>
     </Flex>
   );
 }
