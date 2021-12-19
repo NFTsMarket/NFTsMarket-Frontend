@@ -132,7 +132,7 @@ function SignUp() {
                       maxLength: 80,
                     })}
                   />
-                  <FormHelperText>So people know who are you!</FormHelperText>
+                  <FormHelperText>So people know who you are!</FormHelperText>
                   {errors.name && (
                     <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                   )}
