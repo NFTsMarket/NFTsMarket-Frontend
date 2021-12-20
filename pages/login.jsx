@@ -19,6 +19,8 @@ import {
   useDisclosure,
   useToast,
   VisuallyHidden,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
@@ -53,38 +55,52 @@ function Login() {
   } = useForm();
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
-  const { setIsLoggedIn, setAuthToken } = useAuth();
-  const [signInUser, { data, loading, error }] = useMutation(LOG_IN_MUTATION);
+  const { setIsLoggedIn, setAuthToken, authToken } = useAuth();
+  const [signInUser, { loading, error }] = useMutation(LOG_IN_MUTATION);
 
-  if (loading) return <MessagePage>Submitting...</MessagePage>;
-  if (error)
-    return <MessagePage>Submission error! {error.message}</MessagePage>;
+  if (loading)
+    return (
+      <Center h="100vh" w="100%">
+        <Spinner size="xl" colorScheme="purple" />
+      </Center>
+    );
 
-  const onSubmit = ({ email, password }) => {
-    signInUser({
-      variables: {
-        email,
-        password,
-      },
-    });
-
-    if (!error && data?.signInUser?.accessToken) {
-      console.log(data.signInUser.accessToken);
-      setAuthToken(data.signInUser.accessToken);
-
-      if (window.localStorage !== undefined) {
-        window.localStorage.setItem("accessToken", authToken);
-      }
-    }
-    setIsLoggedIn(true);
-    router.push(`/`);
-
+  if (error) {
     toast({
-      title: "Welcome to NFTs Market!",
-      status: "success",
+      title: "There was an error",
+      status: "error",
       duration: 3000,
       isClosable: true,
     });
+
+    return <MessagePage>Submission error! {error.message}</MessagePage>;
+  }
+
+  const onSubmit = async ({ email, password }) => {
+    try {
+      const { data } = await signInUser({
+        variables: {
+          email,
+          password,
+        },
+      });
+
+      if (data?.signInUser?.accessToken) {
+        setAuthToken(data.signInUser.accessToken);
+        localStorage.setItem("accessToken", data.signInUser.accessToken);
+        setIsLoggedIn(true);
+        router.push(`/`);
+
+        toast({
+          title: "Welcome to NFTs Market!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.log(`error: ${error}`);
+    }
   };
 
   return (
