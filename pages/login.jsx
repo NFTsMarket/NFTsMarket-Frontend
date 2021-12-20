@@ -86,9 +86,9 @@ function Login() {
       });
 
       if (data?.signInUser?.accessToken) {
+        setIsLoggedIn(true);
         setAuthToken(data.signInUser.accessToken);
         localStorage.setItem("accessToken", data.signInUser.accessToken);
-        setIsLoggedIn(true);
         router.push(`/`);
 
         toast({
