@@ -13,8 +13,11 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 
 import ThemeButton from "../common/ThemeButton";
 
+import { useAuth } from "../../context/AuthContext";
+
 export default function Navbar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoggedIn, signOut } = useAuth();
 
   const handleToggle = () => (isOpen ? onClose() : onOpen());
 
@@ -54,18 +57,23 @@ export default function Navbar(props) {
         <Link href="/" passHref>
           <ChakraLink>Catalog</ChakraLink>
         </Link>
-        <Link href="/assets" passHref>
-          <ChakraLink>My Assets</ChakraLink>
-        </Link>
-        <Link href="/sales" passHref>
-          <ChakraLink>Pending Sales</ChakraLink>
-        </Link>
-        <Link href="/purchases" passHref>
-          <ChakraLink>Purchases</ChakraLink>
-        </Link>
-        <Link href="/wallet" passHref>
-          <ChakraLink>Wallet</ChakraLink>
-        </Link>
+
+        {isLoggedIn && (
+          <>
+            <Link href="/assets" passHref>
+              <ChakraLink>My Assets</ChakraLink>
+            </Link>
+            <Link href="/sales" passHref>
+              <ChakraLink>Pending Sales</ChakraLink>
+            </Link>
+            <Link href="/purchases" passHref>
+              <ChakraLink>Purchases</ChakraLink>
+            </Link>
+            <Link href="/wallet" passHref>
+              <ChakraLink>Wallet</ChakraLink>
+            </Link>
+          </>
+        )}
       </Stack>
 
       <ButtonGroup
@@ -74,17 +82,26 @@ export default function Navbar(props) {
         spacing="4"
       >
         <ThemeButton />
-        <Link href="/signup" passHref>
-          <Button
-            variant="outline"
-            _hover={{ color: "purple.500", bg: "white" }}
-          >
-            Sign Up
+
+        {!isLoggedIn ? (
+          <>
+            <Link href="/signup" passHref>
+              <Button
+                variant="outline"
+                _hover={{ color: "purple.500", bg: "white" }}
+              >
+                Sign Up
+              </Button>
+            </Link>
+            <Link href="/login" passHref>
+              <Button colorScheme="purple">Log In</Button>
+            </Link>
+          </>
+        ) : (
+          <Button colorScheme="purple" onClick={() => signOut()}>
+            Log Out
           </Button>
-        </Link>
-        <Link href="/login" passHref>
-          <Button colorScheme="purple">Log In</Button>
-        </Link>
+        )}
       </ButtonGroup>
     </Flex>
   );
