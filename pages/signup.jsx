@@ -28,22 +28,25 @@ import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import ThemeButton from "../components/common/ThemeButton";
+import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/router";
 
-const SIGN_UP = gql`
-  mutation SignUp($email: String!, $name: String!, $password: String!) {
-    signUpUser(input: { email: $email, name: $name, password: $password }) {
-      accessToken
-      user {
-        id
-        email
-        name
-        profilePicture
-      }
-    }
-  }
-`;
+// const SIGN_UP = gql`
+//   mutation SignUp($email: String!, $name: String!, $password: String!) {
+//     signUpUser(input: { email: $email, name: $name, password: $password }) {
+//       accessToken
+//       user {
+//         id
+//         email
+//         name
+//         profilePicture
+//       }
+//     }
+//   }
+// `;
 
 function SignUp() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -51,20 +54,20 @@ function SignUp() {
   } = useForm();
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
+  const { signUp } = useAuth();
 
-  const [signUpUser, { data, loading, error }] = useMutation(SIGN_UP);
+  // const [signUpUser, { data, loading, error }] = useMutation(SIGN_UP);
 
-  if (loading) return "Submitting...";
-  if (error) return `Submission error! ${error.message}`;
+  // if (loading) return "Submitting...";
+  // if (error) return `Submission error! ${error.message}`;
 
   const onSubmit = ({ email, name, password }) => {
-    signUpUser({
-      variables: {
-        email,
-        name,
-        password,
-      },
+    signUp({
+      email,
+      name,
+      password,
     });
+    router.push("/");
     toast({
       title: "We'll send you a confirmation email shortly ;)",
       status: "info",
