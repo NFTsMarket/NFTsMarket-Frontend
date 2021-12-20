@@ -31,7 +31,7 @@ import ThemeButton from "../components/common/ThemeButton";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
 import { gql, useMutation } from "@apollo/client";
-import MessagePage from "../components/common/CenteredText";
+import CenteredText from "../components/common/CenteredText";
 
 const LOG_IN_MUTATION = gql`
   mutation logIn($email: String!, $password: String!) {
@@ -55,7 +55,7 @@ function Login() {
   } = useForm();
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
-  const { setIsLoggedIn, setAuthToken, authToken } = useAuth();
+  const { setIsLoggedIn, setAuthToken } = useAuth();
   const [signInUser, { loading, error }] = useMutation(LOG_IN_MUTATION);
 
   if (loading)
@@ -73,7 +73,7 @@ function Login() {
       isClosable: true,
     });
 
-    return <MessagePage>Submission error! {error.message}</MessagePage>;
+    return <CenteredText>Submission error! {error.message}</CenteredText>;
   }
 
   const onSubmit = async ({ email, password }) => {

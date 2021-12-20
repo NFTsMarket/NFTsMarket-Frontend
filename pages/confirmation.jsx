@@ -1,7 +1,7 @@
-import MessagePage from "../components/common/MessagePage";
+import CenteredText from "../components/common/CenteredText";
 
 function Confirmation() {
-  return <MessagePage>Please confirm your mail</MessagePage>;
+  return <CenteredText>Please confirm your mail</CenteredText>;
 }
 
 export default Confirmation;
