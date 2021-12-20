@@ -26,8 +26,11 @@ import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import ThemeButton from "../components/common/ThemeButton";
+import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/router";
 
-function SignUp() {
+function Login() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -35,9 +38,11 @@ function SignUp() {
   } = useForm();
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
+  const { signIn } = useAuth();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = ({ email, password }) => {
+    signIn({ email, password });
+    // router.push(`/${authToken}`);
     toast({
       title: "Welcome to NFTs Market!",
       status: "success",
@@ -202,4 +207,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Login;
