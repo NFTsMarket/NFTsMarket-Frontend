@@ -1,6 +1,8 @@
+import { gql, useMutation } from "@apollo/client";
 import {
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   FormControl,
@@ -13,25 +15,23 @@ import {
   InputRightElement,
   Link as ChakraLink,
   SimpleGrid,
+  Spinner,
   Stack,
   Text,
   useColorModeValue,
   useDisclosure,
   useToast,
   VisuallyHidden,
-  Spinner,
-  Center,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
+import CenteredText from "../components/common/CenteredText";
 import ThemeButton from "../components/common/ThemeButton";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "next/router";
-import { gql, useMutation } from "@apollo/client";
-import CenteredText from "../components/common/CenteredText";
 
 const LOG_IN_MUTATION = gql`
   mutation logIn($email: String!, $password: String!) {
