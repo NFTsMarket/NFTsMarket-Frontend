@@ -28,6 +28,20 @@ import { HiEye, HiEyeOff } from "react-icons/hi";
 import ThemeButton from "../components/common/ThemeButton";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
+import { gql, useMutation } from "@apollo/client";
+
+// const LOG_IN_MUTATION = gql`
+//   mutation signIn($email: String!, $password: String!) {
+//     signInUser(input: { email: $email, password: $password }) {
+//       accessToken
+//       user {
+//         id
+//         email
+//         name
+//       }
+//     }
+//   }
+// `;
 
 function Login() {
   const router = useRouter();
@@ -38,11 +52,14 @@ function Login() {
   } = useForm();
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
-  const { signIn } = useAuth();
+  const { signIn, isSignedIn } = useAuth();
+  // const [signInUser, { data, error, loading }] = useMutation(LOG_IN_MUTATION);
 
   const onSubmit = ({ email, password }) => {
-    signIn({ email, password });
+    console.log(signIn({ email, password }));
+    // console.log(signInData.signInUser.accessToken);
     // router.push(`/${authToken}`);
+
     toast({
       title: "Welcome to NFTs Market!",
       status: "success",
