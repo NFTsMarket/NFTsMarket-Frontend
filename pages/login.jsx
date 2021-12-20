@@ -29,19 +29,20 @@ import ThemeButton from "../components/common/ThemeButton";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
 import { gql, useMutation } from "@apollo/client";
+import MessagePage from "../components/common/CenteredText";
 
-// const LOG_IN_MUTATION = gql`
-//   mutation signIn($email: String!, $password: String!) {
-//     signInUser(input: { email: $email, password: $password }) {
-//       accessToken
-//       user {
-//         id
-//         email
-//         name
-//       }
-//     }
-//   }
-// `;
+const LOG_IN_MUTATION = gql`
+  mutation logIn($email: String!, $password: String!) {
+    signInUser(input: { email: $email, password: $password }) {
+      accessToken
+      user {
+        id
+        email
+        name
+      }
+    }
+  }
+`;
 
 function Login() {
   const router = useRouter();
@@ -52,13 +53,31 @@ function Login() {
   } = useForm();
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
-  const { signIn, isSignedIn } = useAuth();
-  // const [signInUser, { data, error, loading }] = useMutation(LOG_IN_MUTATION);
+  const { setIsLoggedIn, setAuthToken } = useAuth();
+  const [signInUser, { data, loading, error }] = useMutation(LOG_IN_MUTATION);
+
+  if (loading) return <MessagePage>Submitting...</MessagePage>;
+  if (error)
+    return <MessagePage>Submission error! {error.message}</MessagePage>;
 
   const onSubmit = ({ email, password }) => {
-    console.log(signIn({ email, password }));
-    // console.log(signInData.signInUser.accessToken);
-    // router.push(`/${authToken}`);
+    signInUser({
+      variables: {
+        email,
+        password,
+      },
+    });
+
+    if (!error && data?.signInUser?.accessToken) {
+      console.log(data.signInUser.accessToken);
+      setAuthToken(data.signInUser.accessToken);
+
+      if (window.localStorage !== undefined) {
+        window.localStorage.setItem("accessToken", authToken);
+      }
+    }
+    setIsLoggedIn(true);
+    router.push(`/`);
 
     toast({
       title: "Welcome to NFTs Market!",
@@ -71,7 +90,7 @@ function Login() {
   return (
     <>
       <Head>
-        <title>Sign Up | NFTs Market</title>
+        <title>Log In | NFTs Market</title>
       </Head>
       <Box
         bg={useColorModeValue("gray.50", "inherit")}
