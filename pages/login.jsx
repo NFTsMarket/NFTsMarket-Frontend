@@ -47,34 +47,29 @@ const LOG_IN_MUTATION = gql`
 `;
 
 function Login() {
+  // next hooks
   const router = useRouter();
+
+  // form hooks
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const toast = useToast();
-  const { isOpen, onToggle } = useDisclosure();
+
+  // auth hooks
   const { setIsLoggedIn, setAuthToken } = useAuth();
   const [signInUser, { loading, error }] = useMutation(LOG_IN_MUTATION);
 
-  if (loading)
-    return (
-      <Center h="100vh" w="100%">
-        <Spinner size="xl" colorScheme="purple" />
-      </Center>
-    );
+  // chakra hooks
+  const toast = useToast();
+  const { isOpen, onToggle } = useDisclosure();
 
-  if (error) {
-    toast({
-      title: "There was an error",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-
-    return <CenteredText>Submission error! {error.message}</CenteredText>;
-  }
+  // chakra colors
+  const textColors = useColorModeValue("purple.500", "purple.200");
+  const bgColor = useColorModeValue("gray.50", "inherit");
+  const boxColor = useColorModeValue("white", "gray.700");
+  const separatorColor = useColorModeValue("gray.600", "gray.400");
 
   const onSubmit = async ({ email, password }) => {
     try {
@@ -103,13 +98,31 @@ function Login() {
     }
   };
 
+  if (loading)
+    return (
+      <Center h="100vh" w="100%">
+        <Spinner size="xl" colorScheme="purple" />
+      </Center>
+    );
+
+  if (error) {
+    toast({
+      title: "There was an error",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+
+    return <CenteredText>Submission error! {error.message}</CenteredText>;
+  }
+
   return (
     <>
       <Head>
         <title>Log In | NFTs Market</title>
       </Head>
       <Box
-        bg={useColorModeValue("gray.50", "inherit")}
+        bg={bgColor}
         minH="100vh"
         py="12"
         px={{
@@ -124,7 +137,7 @@ function Login() {
               <Heading
                 textAlign="center"
                 size="lg"
-                color={useColorModeValue("purple.500", "purple.200")}
+                color={textColors}
                 fontWeight="extrabold"
                 mb={{
                   base: "10",
@@ -141,13 +154,11 @@ function Login() {
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
             <Text as="span">Don&apos;t have an account? </Text>
             <Link href="/signup" passHref>
-              <ChakraLink color={useColorModeValue("purple.500", "purple.200")}>
-                Sign Up!
-              </ChakraLink>
+              <ChakraLink color={textColors}>Sign Up!</ChakraLink>
             </Link>
           </Text>
           <Box
-            bg={useColorModeValue("white", "gray.700")}
+            bg={boxColor}
             py="8"
             px={{
               base: "4",
@@ -179,7 +190,7 @@ function Login() {
                   <Flex justify="space-between">
                     <FormLabel>Password</FormLabel>
                     <ChakraLink
-                      color={useColorModeValue("purple.500", "purple.200")}
+                      color={textColors}
                       fontWeight="semibold"
                       fontSize="sm"
                     >
@@ -229,12 +240,7 @@ function Login() {
               <Box flex="1">
                 <Divider borderColor="currentcolor" />
               </Box>
-              <Text
-                as="span"
-                px="3"
-                color={useColorModeValue("gray.600", "gray.400")}
-                fontWeight="medium"
-              >
+              <Text as="span" px="3" color={separatorColor} fontWeight="medium">
                 or continue with
               </Text>
               <Box flex="1">
