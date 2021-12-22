@@ -104,12 +104,12 @@ export default function Navbar(props) {
               cursor="pointer"
               minW={0}
             >
-              <Avatar size="sm" />
+              <Avatar size="sm" src={userData.profilePicture} />
             </MenuButton>
 
             <MenuList alignItems="center" color={menuTextColor}>
               <VStack spacing="4" my="5">
-                <Avatar size="xl" />
+                <Avatar size="xl" src={userData.profilePicture} />
                 <Text>{userData.name}</Text>
               </VStack>
               <MenuDivider />
