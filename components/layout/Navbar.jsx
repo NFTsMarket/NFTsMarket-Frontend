@@ -96,42 +96,44 @@ export default function Navbar(props) {
             </Link>
           </>
         ) : (
-          <Menu>
-            <MenuButton
-              as={Button}
-              rounded="full"
-              variant="link"
-              cursor="pointer"
-              minW={0}
-            >
-              <Avatar size="sm" src={userData.profilePicture} />
-            </MenuButton>
+          <Box>
+            <Menu>
+              <MenuButton
+                as={Button}
+                rounded="full"
+                variant="link"
+                cursor="pointer"
+                minW={0}
+              >
+                <Avatar size="sm" src={userData.profilePicture} />
+              </MenuButton>
 
-            <MenuList alignItems="center" color={menuTextColor}>
-              <VStack spacing="4" my="5">
-                <Avatar size="xl" src={userData.profilePicture} />
-                <Text>{userData.name}</Text>
-              </VStack>
-              <MenuDivider />
-              <MenuItem>
-                <Link href="/profile" passHref>
-                  My profile
-                </Link>
-              </MenuItem>
-              <MenuItem>
-                <Link href="/wallet" passHref>
-                  My wallet
-                </Link>
-              </MenuItem>
-              <MenuItem>
-                <Link href="/purchases" passHref>
-                  Purchases
-                </Link>
-              </MenuItem>
-              <MenuDivider />
-              <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
-            </MenuList>
-          </Menu>
+              <MenuList alignItems="center" color={menuTextColor}>
+                <VStack spacing="4" my="5">
+                  <Avatar size="xl" src={userData.profilePicture} />
+                  <Text>{userData.name}</Text>
+                </VStack>
+                <MenuDivider />
+                <MenuItem>
+                  <Link href="/profile" passHref>
+                    My profile
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link href="/wallet" passHref>
+                    My wallet
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link href="/purchases" passHref>
+                    Purchases
+                  </Link>
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
+              </MenuList>
+            </Menu>
+          </Box>
         )}
       </HStack>
     </Flex>
