@@ -1,25 +1,34 @@
-import Link from "next/link";
-import {
-  Box,
-  Stack,
-  Heading,
-  Flex,
-  Button,
-  ButtonGroup,
-  useDisclosure,
-  Link as ChakraLink,
-} from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-
-import ThemeButton from "../common/ThemeButton";
-
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Link as ChakraLink,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
+import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
+import ThemeButton from "../common/ThemeButton";
 
 export default function Navbar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoggedIn, signOut } = useAuth();
 
   const handleToggle = () => (isOpen ? onClose() : onOpen());
+
+  const menuTextColor = useColorModeValue("gray.700", "white");
 
   return (
     <Flex
@@ -52,7 +61,7 @@ export default function Navbar(props) {
         flexGrow={1}
         ml={5}
         mt={{ base: 4, md: 0 }}
-        spacing="32px"
+        spacing={10}
       >
         <Link href="/" passHref>
           <ChakraLink>Catalog</ChakraLink>
@@ -66,23 +75,12 @@ export default function Navbar(props) {
             <Link href="/sales" passHref>
               <ChakraLink>Pending Sales</ChakraLink>
             </Link>
-            <Link href="/purchases" passHref>
-              <ChakraLink>Purchases</ChakraLink>
-            </Link>
-            <Link href="/wallet" passHref>
-              <ChakraLink>Wallet</ChakraLink>
-            </Link>
           </>
         )}
       </Stack>
 
-      <ButtonGroup
-        display={{ base: isOpen ? "block" : "none", md: "block" }}
-        mt={{ base: 4, md: 0 }}
-        spacing="4"
-      >
+      <HStack spacing="4">
         <ThemeButton />
-
         {!isLoggedIn ? (
           <>
             <Link href="/signup" passHref>
@@ -98,11 +96,39 @@ export default function Navbar(props) {
             </Link>
           </>
         ) : (
-          <Button colorScheme="purple" onClick={() => signOut()}>
-            Log Out
-          </Button>
+          <Menu>
+            <MenuButton
+              as={Button}
+              rounded="full"
+              variant="link"
+              cursor="pointer"
+              minW={0}
+            >
+              <Avatar size="sm" />
+            </MenuButton>
+
+            <MenuList alignItems="center" color={menuTextColor}>
+              <VStack spacing="4" my="5">
+                <Avatar size="xl" />
+                <Text>placeholder monke</Text>
+              </VStack>
+              <MenuDivider />
+              <MenuItem>
+                <Link href="/wallet" passHref>
+                  My wallet
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link href="/purchases" passHref>
+                  Purchases
+                </Link>
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
+            </MenuList>
+          </Menu>
         )}
-      </ButtonGroup>
+      </HStack>
     </Flex>
   );
 }
