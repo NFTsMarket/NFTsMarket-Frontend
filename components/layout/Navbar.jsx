@@ -79,7 +79,7 @@ export default function Navbar(props) {
         )}
       </Stack>
 
-      <HStack spacing="4">
+      <HStack spacing="5">
         <ThemeButton />
         {!isLoggedIn ? (
           <>
