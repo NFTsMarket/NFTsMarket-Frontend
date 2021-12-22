@@ -24,7 +24,7 @@ import ThemeButton from "../common/ThemeButton";
 
 export default function Navbar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoggedIn, signOut } = useAuth();
+  const { isLoggedIn, signOut, data } = useAuth();
 
   const handleToggle = () => (isOpen ? onClose() : onOpen());
 
@@ -110,7 +110,7 @@ export default function Navbar(props) {
             <MenuList alignItems="center" color={menuTextColor}>
               <VStack spacing="4" my="5">
                 <Avatar size="xl" />
-                <Text>placeholder monke</Text>
+                <Text>{data.self.name}</Text>
               </VStack>
               <MenuDivider />
               <MenuItem>
