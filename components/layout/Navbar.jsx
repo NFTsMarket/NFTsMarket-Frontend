@@ -114,6 +114,11 @@ export default function Navbar(props) {
               </VStack>
               <MenuDivider />
               <MenuItem>
+                <Link href="/profile" passHref>
+                  My profile
+                </Link>
+              </MenuItem>
+              <MenuItem>
                 <Link href="/wallet" passHref>
                   My wallet
                 </Link>
