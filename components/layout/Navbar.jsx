@@ -38,6 +38,24 @@ const ThemedLink = ({ children, ...props }) => (
   </ChakraLink>
 );
 
+const NavLinks = ({ isLoggedIn }) => (
+  <>
+    <Link href="/" passHref>
+      <ThemedLink>Catalog</ThemedLink>
+    </Link>
+    {isLoggedIn && (
+      <>
+        <Link href="/assets" passHref>
+          <ThemedLink>My Assets</ThemedLink>
+        </Link>
+        <Link href="/sales" passHref>
+          <ThemedLink>Pending Sales</ThemedLink>
+        </Link>
+      </>
+    )}
+  </>
+);
+
 export default function Navbar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoggedIn, signOut, userData } = useAuth();
@@ -47,6 +65,14 @@ export default function Navbar(props) {
 
   return (
     <Box as="nav" bg={brandColors} color="white" px="4" {...props}>
+      {isOpen && (
+        <Box pb={4} display={{ md: "none" }}>
+          <Stack spacing={4}>
+            <NavLinks isLoggedIn={isLoggedIn} />
+          </Stack>
+        </Box>
+      )}
+
       <Flex h="14" alignItems="center" justifyContent="space-between">
         <IconButton
           size="md"
@@ -70,19 +96,7 @@ export default function Navbar(props) {
           </Link>
 
           <HStack spacing="10" display={{ base: "none", md: "flex" }}>
-            <Link href="/" passHref>
-              <ThemedLink>Catalog</ThemedLink>
-            </Link>
-            {isLoggedIn && (
-              <>
-                <Link href="/assets" passHref>
-                  <ThemedLink>My Assets</ThemedLink>
-                </Link>
-                <Link href="/sales" passHref>
-                  <ThemedLink>Pending Sales</ThemedLink>
-                </Link>
-              </>
-            )}
+            <NavLinks isLoggedIn={isLoggedIn} />
           </HStack>
         </HStack>
 
@@ -144,26 +158,6 @@ export default function Navbar(props) {
           )}
         </HStack>
       </Flex>
-
-      {isOpen && (
-        <Box pb={4} display={{ md: "none" }}>
-          <Stack spacing={4}>
-            <Link href="/" passHref>
-              <ThemedLink>Catalog</ThemedLink>
-            </Link>
-            {isLoggedIn && (
-              <>
-                <Link href="/assets" passHref>
-                  <ThemedLink>My Assets</ThemedLink>
-                </Link>
-                <Link href="/sales" passHref>
-                  <ThemedLink>Pending Sales</ThemedLink>
-                </Link>
-              </>
-            )}
-          </Stack>
-        </Box>
-      )}
     </Box>
   );
 }
