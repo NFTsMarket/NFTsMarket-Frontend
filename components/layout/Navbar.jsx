@@ -20,38 +20,46 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { forwardRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ThemeButton from "../common/ThemeButton";
 
-const ThemedLink = forwardRef(({ children, ...props }, ref) => (
-  <ChakraLink
-    px="2"
-    py="2"
-    rounded="md"
-    _hover={{
-      textDecoration: "none",
-      bg: useColorModeValue("purple.700", "purple.500"),
-    }}
-    ref={ref}
-    {...props}
-  >
-    {children}
-  </ChakraLink>
-));
+const ActiveThemedLink = forwardRef(({ children, href, ...props }, ref) => {
+  const router = useRouter();
+  const isCurrentPath = router.pathname === href;
+  const bgColor = useColorModeValue("purple.700", "purple.500");
+
+  return (
+    <ChakraLink
+      px="2"
+      py="2"
+      rounded="md"
+      _hover={{
+        textDecoration: "none",
+        bg: bgColor,
+      }}
+      bg={isCurrentPath && bgColor}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </ChakraLink>
+  );
+});
 
 const NavLinks = ({ isLoggedIn }) => (
   <>
     <Link href="/" passHref>
-      <ThemedLink>Catalog</ThemedLink>
+      <ActiveThemedLink>Catalog</ActiveThemedLink>
     </Link>
     {isLoggedIn && (
       <>
         <Link href="/assets" passHref>
-          <ThemedLink>My Assets</ThemedLink>
+          <ActiveThemedLink>My Assets</ActiveThemedLink>
         </Link>
         <Link href="/sales" passHref>
-          <ThemedLink>Pending Sales</ThemedLink>
+          <ActiveThemedLink>Pending Sales</ActiveThemedLink>
         </Link>
       </>
     )}
