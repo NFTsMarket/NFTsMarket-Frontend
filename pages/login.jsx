@@ -1,6 +1,8 @@
+import { gql, useMutation } from "@apollo/client";
 import {
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   FormControl,
@@ -13,6 +15,7 @@ import {
   InputRightElement,
   Link as ChakraLink,
   SimpleGrid,
+  Spinner,
   Stack,
   Text,
   useColorModeValue,
@@ -22,37 +25,104 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
+import CenteredText from "../components/common/CenteredText";
 import ThemeButton from "../components/common/ThemeButton";
+import { useAuth } from "../context/AuthContext";
 
-function SignUp() {
+const LOG_IN_MUTATION = gql`
+  mutation logIn($email: String!, $password: String!) {
+    signInUser(input: { email: $email, password: $password }) {
+      accessToken
+      user {
+        id
+        email
+        name
+      }
+    }
+  }
+`;
+
+function Login() {
+  // next hooks
+  const router = useRouter();
+
+  // form hooks
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  // auth hooks
+  const { setIsLoggedIn, setAuthToken } = useAuth();
+  const [signInUser, { loading, error }] = useMutation(LOG_IN_MUTATION);
+
+  // chakra hooks
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  // chakra colors
+  const textColors = useColorModeValue("purple.500", "purple.200");
+  const bgColor = useColorModeValue("gray.50", "inherit");
+  const boxColor = useColorModeValue("white", "gray.700");
+  const separatorColor = useColorModeValue("gray.600", "gray.400");
+
+  const onSubmit = async ({ email, password }) => {
+    try {
+      const { data } = await signInUser({
+        variables: {
+          email,
+          password,
+        },
+      });
+
+      if (data?.signInUser?.accessToken) {
+        setIsLoggedIn(true);
+        setAuthToken(data.signInUser.accessToken);
+        localStorage.setItem("accessToken", data.signInUser.accessToken);
+        router.push(`/`);
+
+        toast({
+          title: "Welcome to NFTs Market!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.log(`error: ${error}`);
+    }
+  };
+
+  if (loading)
+    return (
+      <Center h="100vh" w="100%">
+        <Spinner size="xl" colorScheme="purple" />
+      </Center>
+    );
+
+  if (error) {
     toast({
-      title: "Welcome to NFTs Market!",
-      status: "success",
+      title: "There was an error",
+      status: "error",
       duration: 3000,
       isClosable: true,
     });
-  };
+
+    return <CenteredText>Submission error! {error.message}</CenteredText>;
+  }
 
   return (
     <>
       <Head>
-        <title>Sign Up | NFTs Market</title>
+        <title>Log In | NFTs Market</title>
       </Head>
       <Box
-        bg={useColorModeValue("gray.50", "inherit")}
+        bg={bgColor}
         minH="100vh"
         py="12"
         px={{
@@ -67,7 +137,7 @@ function SignUp() {
               <Heading
                 textAlign="center"
                 size="lg"
-                color={useColorModeValue("purple.500", "purple.200")}
+                color={textColors}
                 fontWeight="extrabold"
                 mb={{
                   base: "10",
@@ -83,14 +153,12 @@ function SignUp() {
           </Heading>
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
             <Text as="span">Don&apos;t have an account? </Text>
-            <Link href="/signup">
-              <ChakraLink color={useColorModeValue("purple.500", "purple.200")}>
-                Sign Up!
-              </ChakraLink>
+            <Link href="/signup" passHref>
+              <ChakraLink color={textColors}>Sign Up!</ChakraLink>
             </Link>
           </Text>
           <Box
-            bg={useColorModeValue("white", "gray.700")}
+            bg={boxColor}
             py="8"
             px={{
               base: "4",
@@ -122,7 +190,7 @@ function SignUp() {
                   <Flex justify="space-between">
                     <FormLabel>Password</FormLabel>
                     <ChakraLink
-                      color={useColorModeValue("purple.500", "purple.200")}
+                      color={textColors}
                       fontWeight="semibold"
                       fontSize="sm"
                     >
@@ -172,12 +240,7 @@ function SignUp() {
               <Box flex="1">
                 <Divider borderColor="currentcolor" />
               </Box>
-              <Text
-                as="span"
-                px="3"
-                color={useColorModeValue("gray.600", "gray.400")}
-                fontWeight="medium"
-              >
+              <Text as="span" px="3" color={separatorColor} fontWeight="medium">
                 or continue with
               </Text>
               <Box flex="1">
@@ -202,4 +265,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Login;

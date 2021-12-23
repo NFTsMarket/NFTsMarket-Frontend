@@ -1,91 +1,175 @@
-import Link from "next/link";
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
-  Stack,
-  Heading,
-  Flex,
   Button,
-  ButtonGroup,
-  useDisclosure,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
   Link as ChakraLink,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
-
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { forwardRef } from "react";
+import { useAuth } from "../../context/AuthContext";
 import ThemeButton from "../common/ThemeButton";
+
+const ActiveThemedLink = forwardRef(({ children, href, ...props }, ref) => {
+  const router = useRouter();
+  const isCurrentPath = router.pathname === href;
+
+  const bgColor = useColorModeValue("purple.700", "purple.500");
+
+  return (
+    <ChakraLink
+      px="2"
+      py="2"
+      rounded="md"
+      _hover={{
+        textDecoration: "none",
+        bg: bgColor,
+      }}
+      bg={isCurrentPath && bgColor}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </ChakraLink>
+  );
+});
+ActiveThemedLink.displayName = "ActiveThemedLink";
+
+const NavLinks = ({ isLoggedIn }) => (
+  <>
+    <Link href="/" passHref>
+      <ActiveThemedLink>Catalog</ActiveThemedLink>
+    </Link>
+    {isLoggedIn && (
+      <>
+        <Link href="/assets" passHref>
+          <ActiveThemedLink>My Assets</ActiveThemedLink>
+        </Link>
+        <Link href="/sales" passHref>
+          <ActiveThemedLink>Pending Sales</ActiveThemedLink>
+        </Link>
+      </>
+    )}
+  </>
+);
 
 export default function Navbar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoggedIn, signOut, userData } = useAuth();
 
-  const handleToggle = () => (isOpen ? onClose() : onOpen());
+  const menuTextColor = useColorModeValue("gray.700", "white");
+  const brandColors = useColorModeValue("purple.500", "purple.700");
 
   return (
-    <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      padding={4}
-      bg="purple.500"
-      color="white"
-      {...props}
-    >
-      <Flex align="center" mr={5}>
-        <Link href="/" passHref>
-          <Heading as="h1" size="lg" letterSpacing={"tighter"} cursor="pointer">
-            NFTs Market
-          </Heading>
-        </Link>
+    <Box as="nav" bg={brandColors} color="white" px="4" {...props}>
+      {isOpen && (
+        <Box pb={4} display={{ md: "none" }}>
+          <Stack spacing={4}>
+            <NavLinks isLoggedIn={isLoggedIn} />
+          </Stack>
+        </Box>
+      )}
+
+      <Flex h="14" alignItems="center" justifyContent="space-between">
+        <IconButton
+          size="md"
+          bg={brandColors}
+          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          aria-label={isOpen ? "opened menu" : "closed menu"}
+          display={{ md: "none" }}
+          onClick={isOpen ? onClose : onOpen}
+        />
+
+        <HStack spacing="12" alignItems="center">
+          <Link href="/" passHref>
+            <Heading
+              as="h1"
+              fontSize={{ base: "18px", md: "26px" }}
+              letterSpacing={"tighter"}
+              cursor="pointer"
+            >
+              NFTs Market
+            </Heading>
+          </Link>
+
+          <HStack spacing="10" display={{ base: "none", md: "flex" }}>
+            <NavLinks isLoggedIn={isLoggedIn} />
+          </HStack>
+        </HStack>
+
+        <HStack spacing="5">
+          <ThemeButton />
+          {isLoggedIn ? (
+            <Box>
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rounded="full"
+                  variant="link"
+                  cursor="pointer"
+                  minW={0}
+                >
+                  <Avatar size="sm" src={userData.profilePicture} />
+                </MenuButton>
+
+                <MenuList alignItems="center" color={menuTextColor}>
+                  <VStack spacing="4" my="5">
+                    <Avatar size="xl" src={userData.profilePicture} />
+                    <Text>{userData.name}</Text>
+                  </VStack>
+                  <MenuDivider />
+                  <MenuItem>
+                    <Link href="/profile" passHref>
+                      My profile
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/wallet" passHref>
+                      My wallet
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/purchases" passHref>
+                      Purchases
+                    </Link>
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+          ) : (
+            <>
+              <Link href="/signup" passHref>
+                <Button
+                  variant="outline"
+                  _hover={{ color: "purple.500", bg: "white" }}
+                >
+                  Sign Up
+                </Button>
+              </Link>
+              <Link href="/login" passHref>
+                <Button colorScheme="purple">Log In</Button>
+              </Link>
+            </>
+          )}
+        </HStack>
       </Flex>
-
-      <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
-        <HamburgerIcon />
-      </Box>
-
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        display={{ base: isOpen ? "block" : "none", md: "flex" }}
-        width={{ base: "full", md: "auto" }}
-        alignItems="center"
-        flexGrow={1}
-        ml={5}
-        mt={{ base: 4, md: 0 }}
-        spacing="32px"
-      >
-        <Link href="/" passHref>
-          <ChakraLink>Catalog</ChakraLink>
-        </Link>
-        <Link href="/assets" passHref>
-          <ChakraLink>My Assets</ChakraLink>
-        </Link>
-        <Link href="/sales" passHref>
-          <ChakraLink>Pending Sales</ChakraLink>
-        </Link>
-        <Link href="/purchases" passHref>
-          <ChakraLink>Purchases</ChakraLink>
-        </Link>
-        <Link href="/wallet" passHref>
-          <ChakraLink>Wallet</ChakraLink>
-        </Link>
-      </Stack>
-
-      <ButtonGroup
-        display={{ base: isOpen ? "block" : "none", md: "block" }}
-        mt={{ base: 4, md: 0 }}
-        spacing="4"
-      >
-        <ThemeButton />
-        <Link href="/signup" passHref>
-          <Button
-            variant="outline"
-            _hover={{ color: "purple.500", bg: "white" }}
-          >
-            Sign Up
-          </Button>
-        </Link>
-        <Link href="/login" passHref>
-          <Button colorScheme="purple">Log In</Button>
-        </Link>
-      </ButtonGroup>
-    </Flex>
+    </Box>
   );
 }
