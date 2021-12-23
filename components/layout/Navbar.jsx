@@ -20,10 +20,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { forwardRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ThemeButton from "../common/ThemeButton";
 
-const ThemedLink = ({ children, ...props }) => (
+const ThemedLink = forwardRef(({ children, ...props }, ref) => (
   <ChakraLink
     px="2"
     py="2"
@@ -32,11 +33,12 @@ const ThemedLink = ({ children, ...props }) => (
       textDecoration: "none",
       bg: useColorModeValue("purple.700", "purple.500"),
     }}
+    ref={ref}
     {...props}
   >
     {children}
   </ChakraLink>
-);
+));
 
 const NavLinks = ({ isLoggedIn }) => (
   <>
