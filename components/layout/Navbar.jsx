@@ -28,6 +28,7 @@ import ThemeButton from "../common/ThemeButton";
 const ActiveThemedLink = forwardRef(({ children, href, ...props }, ref) => {
   const router = useRouter();
   const isCurrentPath = router.pathname === href;
+
   const bgColor = useColorModeValue("purple.700", "purple.500");
 
   return (
@@ -47,6 +48,7 @@ const ActiveThemedLink = forwardRef(({ children, href, ...props }, ref) => {
     </ChakraLink>
   );
 });
+ActiveThemedLink.displayName = "ActiveThemedLink";
 
 const NavLinks = ({ isLoggedIn }) => (
   <>
