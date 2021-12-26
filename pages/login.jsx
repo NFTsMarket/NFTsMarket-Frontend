@@ -156,7 +156,7 @@ function Login() {
             Log In
           </Heading>
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
-            <Text as="span">Don&apos;t have an account? </Text>
+            <Text as="span">Don't have an account? </Text>
             <Link href="/signup" passHref>
               <ChakraLink color={textColors}>Sign Up!</ChakraLink>
             </Link>
