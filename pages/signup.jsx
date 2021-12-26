@@ -126,8 +126,13 @@ function SignUp() {
           lg: "8",
         }}
       >
-        <ThemeButton />
-        <Box maxW="md" mx="auto">
+        <Flex
+          justify="space-between"
+          mb={{
+            base: "10",
+            md: "20",
+          }}
+        >
           <Link href="/" passHref>
             <ChakraLink>
               <Heading
@@ -135,15 +140,14 @@ function SignUp() {
                 size="lg"
                 color={textColors}
                 fontWeight="extrabold"
-                mb={{
-                  base: "10",
-                  md: "20",
-                }}
               >
                 NFTs Market
               </Heading>
             </ChakraLink>
           </Link>
+          <ThemeButton />
+        </Flex>
+        <Box maxW="md" mx="auto">
           <Heading textAlign="center" size="xl" fontWeight="extrabold">
             Sign Up
           </Heading>
@@ -167,41 +171,42 @@ function SignUp() {
           >
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={6}>
-                <FormControl id="email">
+                <FormControl id="email" isInvalid={!!errors.email}>
                   <FormLabel>Email address</FormLabel>
                   <Input
                     type="email"
                     {...register("email", {
-                      required: "Enter a valid email",
-                      pattern:
-                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                      required: "Please enter a valid email address",
+                      pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     })}
                   />
-                  <FormHelperText>
-                    Enter a valid email address 📧
-                  </FormHelperText>
-                  {errors.email && (
-                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+                  {!errors.email ? (
+                    <FormHelperText>
+                      Enter a valid email address 📧
+                    </FormHelperText>
+                  ) : (
+                    <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
                   )}
                 </FormControl>
 
-                <FormControl>
+                <FormControl id="name" isInvalid={!!errors.name}>
                   <FormLabel>Name</FormLabel>
                   <Input
                     autoComplete="name"
                     {...register("name", {
-                      required: "Enter your name",
+                      required: "Please enter your name",
                       minLength: 3,
                       maxLength: 80,
                     })}
                   />
-                  <FormHelperText>Enter your full name 🙏</FormHelperText>
-                  {errors.name && (
-                    <FormErrorMessage>{errors.name.message}</FormErrorMessage>
+                  {!errors.name ? (
+                    <FormHelperText>Enter your full name 🙏</FormHelperText>
+                  ) : (
+                    <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                   )}
                 </FormControl>
 
-                <FormControl id="password">
+                <FormControl id="password" isInvalid={!!errors.password}>
                   <FormLabel>Password</FormLabel>
                   <InputGroup size="md">
                     <Input
@@ -209,7 +214,7 @@ function SignUp() {
                       type={isOpen ? "text" : "password"}
                       autoComplete="new-password"
                       {...register("password", {
-                        required: "Enter a password",
+                        required: "Please enter a password",
                         minLength: {
                           value: 6,
                           message:
@@ -229,12 +234,13 @@ function SignUp() {
                       />
                     </InputRightElement>
                   </InputGroup>
-                  <FormHelperText>
-                    At least 6 characters long pls
-                  </FormHelperText>
-                  {errors.password && (
+                  {!errors.password ? (
+                    <FormHelperText>
+                      At least 6 characters long pls
+                    </FormHelperText>
+                  ) : (
                     <FormErrorMessage>
-                      {errors.password.message}
+                      {errors.password?.message}
                     </FormErrorMessage>
                   )}
                 </FormControl>
