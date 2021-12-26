@@ -180,9 +180,8 @@ function Login() {
                   <Input
                     type="email"
                     {...register("email", {
-                      required: "Please enter a valid email",
-                      pattern:
-                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                      required: "Please enter a valid email address",
+                      pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     })}
                   />
                   <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
