@@ -82,7 +82,7 @@ function Login() {
         isClosable: true,
       });
     }
-  }, [authToken]);
+  }, [authToken, setIsLoggedIn, toast]);
 
   const onSubmit = async ({ email, password }) => {
     try {
