@@ -26,10 +26,10 @@ import {
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import CenteredText from "../components/common/CenteredText";
 import ThemeButton from "../components/common/ThemeButton";
 import { useAuth } from "../context/AuthContext";
 
@@ -58,8 +58,8 @@ function Login() {
   } = useForm();
 
   // auth hooks
-  const { setIsLoggedIn, setAuthToken } = useAuth();
-  const [signInUser, { loading, error }] = useMutation(LOG_IN_MUTATION);
+  const { setIsLoggedIn, authToken, setAuthToken, getUser } = useAuth();
+  const [signInUser, { loading }] = useMutation(LOG_IN_MUTATION);
 
   // chakra hooks
   const toast = useToast();
@@ -71,6 +71,19 @@ function Login() {
   const boxColor = useColorModeValue("white", "gray.700");
   const separatorColor = useColorModeValue("gray.600", "gray.400");
 
+  useEffect(() => {
+    if (authToken) {
+      setIsLoggedIn(true);
+      router.push(`/`);
+      toast({
+        title: "Welcome to NFTs Market!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [authToken, setIsLoggedIn, toast]);
+
   const onSubmit = async ({ email, password }) => {
     try {
       const { data } = await signInUser({
@@ -81,20 +94,18 @@ function Login() {
       });
 
       if (data?.signInUser?.accessToken) {
-        setIsLoggedIn(true);
         setAuthToken(data.signInUser.accessToken);
         localStorage.setItem("accessToken", data.signInUser.accessToken);
-        router.push(`/`);
-
-        toast({
-          title: "Welcome to NFTs Market!",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
       }
+
+      getUser();
     } catch (error) {
-      console.log(`error: ${error}`);
+      toast({
+        title: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -104,17 +115,6 @@ function Login() {
         <Spinner size="xl" colorScheme="purple" />
       </Center>
     );
-
-  if (error) {
-    toast({
-      title: "There was an error",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-
-    return <CenteredText>Submission error! {error.message}</CenteredText>;
-  }
 
   return (
     <>
@@ -130,8 +130,13 @@ function Login() {
           lg: "8",
         }}
       >
-        <ThemeButton />
-        <Box maxW="md" mx="auto">
+        <Flex
+          justify="space-between"
+          mb={{
+            base: "10",
+            md: "20",
+          }}
+        >
           <Link href="/" passHref>
             <ChakraLink>
               <Heading
@@ -139,15 +144,14 @@ function Login() {
                 size="lg"
                 color={textColors}
                 fontWeight="extrabold"
-                mb={{
-                  base: "10",
-                  md: "20",
-                }}
               >
                 NFTs Market
               </Heading>
             </ChakraLink>
           </Link>
+          <ThemeButton />
+        </Flex>
+        <Box maxW="md" mx="auto">
           <Heading textAlign="center" size="xl" fontWeight="extrabold">
             Log In
           </Heading>
@@ -171,22 +175,19 @@ function Login() {
           >
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={6}>
-                <FormControl id="email">
+                <FormControl id="email" isInvalid={!!errors.email}>
                   <FormLabel>Email address</FormLabel>
                   <Input
                     type="email"
                     {...register("email", {
-                      required: "Enter a valid email",
-                      pattern:
-                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                      required: "Please enter a valid email address",
+                      pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     })}
                   />
-                  {errors.email && (
-                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-                  )}
+                  <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
                 </FormControl>
 
-                <FormControl id="password">
+                <FormControl id="password" isInvalid={!!errors.password}>
                   <Flex justify="space-between">
                     <FormLabel>Password</FormLabel>
                     <ChakraLink
@@ -201,14 +202,9 @@ function Login() {
                     <Input
                       pr="4.5rem"
                       type={isOpen ? "text" : "password"}
-                      autoComplete="new-password"
+                      autoComplete="current-password"
                       {...register("password", {
-                        required: "Enter a password",
-                        minLength: {
-                          value: 6,
-                          message:
-                            "Your password should be at least 6 characters long",
-                        },
+                        required: "Please enter a password",
                       })}
                     />
                     <InputRightElement>
@@ -223,11 +219,9 @@ function Login() {
                       />
                     </InputRightElement>
                   </InputGroup>
-                  {errors.password && (
-                    <FormErrorMessage>
-                      {errors.password.message}
-                    </FormErrorMessage>
-                  )}
+                  <FormErrorMessage>
+                    {errors?.password?.message}
+                  </FormErrorMessage>
                 </FormControl>
 
                 <Button type="submit" colorScheme="purple">
