@@ -130,8 +130,13 @@ function Login() {
           lg: "8",
         }}
       >
-        <ThemeButton />
-        <Box maxW="md" mx="auto">
+        <Flex
+          justify="space-between"
+          mb={{
+            base: "10",
+            md: "20",
+          }}
+        >
           <Link href="/" passHref>
             <ChakraLink>
               <Heading
@@ -139,15 +144,14 @@ function Login() {
                 size="lg"
                 color={textColors}
                 fontWeight="extrabold"
-                mb={{
-                  base: "10",
-                  md: "20",
-                }}
               >
                 NFTs Market
               </Heading>
             </ChakraLink>
           </Link>
+          <ThemeButton />
+        </Flex>
+        <Box maxW="md" mx="auto">
           <Heading textAlign="center" size="xl" fontWeight="extrabold">
             Log In
           </Heading>
