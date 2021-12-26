@@ -203,7 +203,7 @@ function Login() {
                     <Input
                       pr="4.5rem"
                       type={isOpen ? "text" : "password"}
-                      autoComplete="new-password"
+                      autoComplete="current-password"
                       {...register("password", {
                         required: "Please enter a password",
                       })}
