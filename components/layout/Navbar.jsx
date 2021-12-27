@@ -151,10 +151,11 @@ export default function Navbar(props) {
                   </MenuItem>
                   <MenuDivider />
                   <MenuItem
-                    onClick={() => {
-                      dispatch({ type: "LOGOUT" });
-                      router.replace("/");
-                    }}
+                    onClick={() =>
+                      router
+                        .replace("/")
+                        .then(() => dispatch({ type: "LOGOUT" }))
+                    }
                   >
                     Log Out
                   </MenuItem>
