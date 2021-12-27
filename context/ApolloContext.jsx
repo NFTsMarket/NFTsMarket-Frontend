@@ -11,11 +11,12 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const accessToken = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("token");
+
   return {
     headers: {
       ...headers,
-      authorization: accessToken ? `Bearer ${accessToken}` : "",
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
