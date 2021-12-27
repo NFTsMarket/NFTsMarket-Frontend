@@ -26,7 +26,6 @@ import {
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
@@ -41,6 +40,7 @@ const LOG_IN_MUTATION = gql`
         id
         email
         name
+        profilePicture
       }
     }
   }
@@ -58,7 +58,7 @@ function Login() {
   } = useForm();
 
   // auth hooks
-  const { setIsLoggedIn, authToken, setAuthToken, getUser } = useAuth();
+  const { dispatch } = useAuth();
   const [signInUser, { loading }] = useMutation(LOG_IN_MUTATION);
 
   // chakra hooks
@@ -71,19 +71,6 @@ function Login() {
   const boxColor = useColorModeValue("white", "gray.700");
   const separatorColor = useColorModeValue("gray.600", "gray.400");
 
-  useEffect(() => {
-    if (authToken) {
-      setIsLoggedIn(true);
-      router.push(`/`);
-      toast({
-        title: "Welcome to NFTs Market!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }, [authToken, setIsLoggedIn, toast]);
-
   const onSubmit = async ({ email, password }) => {
     try {
       const { data } = await signInUser({
@@ -93,12 +80,15 @@ function Login() {
         },
       });
 
-      if (data?.signInUser?.accessToken) {
-        setAuthToken(data.signInUser.accessToken);
-        localStorage.setItem("accessToken", data.signInUser.accessToken);
-      }
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          token: data.signInUser.accessToken,
+          user: data.signInUser.user,
+        },
+      });
 
-      getUser();
+      router.push("/");
     } catch (error) {
       toast({
         title: error.message,

@@ -1,20 +1,18 @@
 import { useAuth } from "../context/AuthContext";
 
-function Profile() {
-  const {
-    userData: { email, name, profilePicture },
-  } = useAuth();
+export default function Profile() {
+  const { user } = useAuth();
 
   return (
     <div>
-      <h1>Welcome to your profile</h1>
-      <div>
-        <p>{email}</p>
-        <p>{name}</p>
-        <p>{profilePicture}</p>
-      </div>
+      {user && (
+        <div>
+          <h1>Welcome to your profile</h1>
+          <p>{user.email}</p>
+          <p>{user.name}</p>
+          <img src={user.profilePicture} alt={user.name} />
+        </div>
+      )}
     </div>
   );
 }
-
-export default Profile;

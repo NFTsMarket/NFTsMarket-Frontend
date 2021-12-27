@@ -70,7 +70,8 @@ const NavLinks = ({ isLoggedIn }) => (
 
 export default function Navbar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoggedIn, signOut, userData } = useAuth();
+  const { isAuthenticated, user, dispatch } = useAuth();
+  const router = useRouter();
 
   const menuTextColor = useColorModeValue("gray.700", "white");
   const brandColors = useColorModeValue("purple.500", "purple.700");
@@ -80,7 +81,7 @@ export default function Navbar(props) {
       {isOpen && (
         <Box pb={4} display={{ md: "none" }}>
           <Stack spacing={4}>
-            <NavLinks isLoggedIn={isLoggedIn} />
+            <NavLinks isLoggedIn={isAuthenticated} />
           </Stack>
         </Box>
       )}
@@ -108,13 +109,13 @@ export default function Navbar(props) {
           </Link>
 
           <HStack spacing="10" display={{ base: "none", md: "flex" }}>
-            <NavLinks isLoggedIn={isLoggedIn} />
+            <NavLinks isLoggedIn={isAuthenticated} />
           </HStack>
         </HStack>
 
         <HStack spacing="5">
           <ThemeButton />
-          {isLoggedIn ? (
+          {isAuthenticated ? (
             <Box>
               <Menu>
                 <MenuButton
@@ -124,13 +125,13 @@ export default function Navbar(props) {
                   cursor="pointer"
                   minW={0}
                 >
-                  <Avatar size="sm" src={userData.profilePicture} />
+                  <Avatar size="sm" src={user?.profilePicture} />
                 </MenuButton>
 
                 <MenuList alignItems="center" color={menuTextColor}>
                   <VStack spacing="4" my="5">
-                    <Avatar size="xl" src={userData.profilePicture} />
-                    <Text>{userData.name}</Text>
+                    <Avatar size="xl" src={user?.profilePicture} />
+                    <Text>{user.name}</Text>
                   </VStack>
                   <MenuDivider />
                   <MenuItem>
@@ -149,7 +150,15 @@ export default function Navbar(props) {
                     </Link>
                   </MenuItem>
                   <MenuDivider />
-                  <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      router
+                        .replace("/")
+                        .then(() => dispatch({ type: "LOGOUT" }))
+                    }
+                  >
+                    Log Out
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Box>
