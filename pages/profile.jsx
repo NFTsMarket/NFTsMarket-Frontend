@@ -2,7 +2,7 @@ import { useAuth } from "../context/AuthContext";
 
 function Profile() {
   const {
-    userData: { email, name, profilePicture },
+    user: { email, name, profilePicture },
   } = useAuth();
 
   return (
