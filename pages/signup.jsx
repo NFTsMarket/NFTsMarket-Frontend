@@ -60,8 +60,8 @@ function SignUp() {
   } = useForm();
 
   // auth hooks
-  const { setIsLoggedIn, setAuthToken } = useAuth();
-  const [signUpUser, { loading, error }] = useMutation(SIGN_UP_MUTATION);
+  const { dispatch } = useAuth();
+  const [signUpUser, { loading }] = useMutation(SIGN_UP_MUTATION);
 
   // chakra hooks
   const toast = useToast();
@@ -82,7 +82,8 @@ function SignUp() {
           password,
         },
       });
-      router.push("/confirmation");
+      console.log(data);
+      router.push("/confirm");
       toast({
         title: "We'll send you a confirmation email shortly ;)",
         status: "info",
@@ -90,7 +91,12 @@ function SignUp() {
         isClosable: true,
       });
     } catch (error) {
-      console.log(`error: ${error}`);
+      toast({
+        title: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -100,17 +106,6 @@ function SignUp() {
         <Spinner size="xl" colorScheme="purple" />
       </Center>
     );
-
-  if (error) {
-    toast({
-      title: "There was an error",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-
-    return <CenteredText>Submission error! {error.message}</CenteredText>;
-  }
 
   return (
     <>
