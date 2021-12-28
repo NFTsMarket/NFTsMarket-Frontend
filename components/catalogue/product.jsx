@@ -9,13 +9,33 @@ import {
   Image,
   Button,
 } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { InfoIcon } from "@chakra-ui/icons";
+import Link from 'next/link';
 
 export default function ProductSimple(props) {
-  const ID = props.id,
-    TITLE = props.title,
-    URL = props.url,
-    PRICE = props.price;
+  const ID = props.product.id,
+    TITLE = props.product.title,
+    URL = props.product.picture,
+    PRICE = props.product.price;
+
+  let button = null;
+  if(props.displayButton) {
+    button = (
+      <div>
+        <Divider h="4" borderColor="#d1d1e0" />
+        <Stack spacing={2} direction="row" pt={5} align={"center"}>
+            <Link href={`/products/${ID}`} passHref>
+                    <Button
+                      leftIcon={<InfoIcon />}
+                      colorScheme="purple"
+                    >
+                      View details
+                    </Button>
+            </Link>
+        </Stack>  
+      </div>
+    );
+  }
 
   return (
     <Center py={12}>
@@ -54,38 +74,17 @@ export default function ProductSimple(props) {
           />
         </Box>
         <Stack pt={8} align={"center"}>
-          {/* <Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>
-            Brand
-          </Text> */}
           <Heading fontSize={"2xl"} fontFamily={"body"} fontWeight={500}>
             {TITLE}
           </Heading>
           <Stack direction={"row"} align={"center"}>
             <Text fontWeight={800} fontSize={"xl"}>
-              {PRICE}
+              {PRICE} $
             </Text>
-            {/* <Text textDecoration={'line-through'} color={'gray.600'}>
-                $199
-              </Text>  */}
           </Stack>
-          <Divider h="4" borderColor="#d1d1e0" />
-          <Stack spacing={4} direction="row" pt={5} align={"center"}>
-            <Button
-              leftIcon={<EditIcon />}
-              colorScheme="purple"
-              onClick={() => console.log("editar pulsado")}
-            >
-              Editar
-            </Button>
-            <Button
-              leftIcon={<DeleteIcon />}
-              colorScheme="purple"
-              variant="outline"
-              onClick={() => console.log("borrar pulsado")}
-            >
-              Borrar
-            </Button>
-          </Stack>
+        
+          {button}
+         
         </Stack>
       </Box>
     </Center>
