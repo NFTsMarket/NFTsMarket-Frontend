@@ -14,10 +14,6 @@ import Link from "next/link";
 
 export default function Product(props) {
   const { id, title, picture, price } = props.product;
-  // const ID = props.product.id,
-  //   TITLE = props.product.title,
-  //   URL = props.product.picture,
-  //   PRICE = props.product.price;
 
   return (
     <Center py={12}>
