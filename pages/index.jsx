@@ -1,9 +1,11 @@
 import Head from "next/head";
 import { SimpleGrid } from "@chakra-ui/react";
+import { useState } from "react";
 import Product from "../components/catalogue/Product.jsx";
+import NewProduct from "../components/catalogue/NewProduct.jsx";
 
 export default function Home() {
-  const products = [
+  const [products, setProducts] = useState([
     {
       id: "01",
       title: "first title",
@@ -38,13 +40,31 @@ export default function Home() {
         "https://hakaimagazine.com/wp-content/uploads/header-proboscis-monkeys.jpg",
       price: 50.34,
     },
-  ];
+  ]);
+
+  function onAddProduct(product) {
+    if (
+      product.title === "" ||
+      product.description === "" ||
+      product.price === "" ||
+      product.categories === "" ||
+      product.picture === ""
+    ) {
+      return false;
+    }
+
+    setProducts((prevProducts) => {
+      return [...prevProducts, product];
+    });
+  }
 
   return (
     <>
       <Head>
         <title>Dashboard | NFTs Market</title>
       </Head>
+
+      <NewProduct onAddProduct={onAddProduct} />
 
       <div mx="2em">
         <SimpleGrid minChildWidth="300px" spacing={2}>
