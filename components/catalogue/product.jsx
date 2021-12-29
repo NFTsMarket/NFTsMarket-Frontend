@@ -13,10 +13,11 @@ import { InfoIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 
 export default function Product(props) {
-  const ID = props.product.id,
-    TITLE = props.product.title,
-    URL = props.product.picture,
-    PRICE = props.product.price;
+  const { id, title, picture, price } = props.product;
+  // const ID = props.product.id,
+  //   TITLE = props.product.title,
+  //   URL = props.product.picture,
+  //   PRICE = props.product.price;
 
   return (
     <Center py={12}>
@@ -50,26 +51,25 @@ export default function Product(props) {
             height={184}
             width={225}
             objectFit={"cover"}
-            src={URL}
+            src={picture}
             alt={""}
           />
         </Box>
         <Stack pt={8} align={"center"}>
           <Heading fontSize={"2xl"} fontFamily={"body"} fontWeight={500}>
-            {TITLE}
+            {title}
           </Heading>
           <Stack direction={"row"} align={"center"}>
             <Text fontWeight={800} fontSize={"xl"}>
-              {PRICE} $
+              {price} $
             </Text>
           </Stack>
 
-          {/* {button} */}
           {props.displayButton && (
             <div>
               <Divider h="4" borderColor="#d1d1e0" />
               <Stack spacing={2} direction="row" pt={5} align={"center"}>
-                <Link href={`/products/${ID}`} passHref>
+                <Link href={`/products/${id}`} passHref>
                   <Button leftIcon={<InfoIcon />} colorScheme="purple">
                     View details
                   </Button>
