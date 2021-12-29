@@ -11,9 +11,16 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { EditIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import { useState } from "react";
 
 export default function EditProduct(props) {
   const product = props.product;
+
+  const [title, setTitle] = useState(product.title);
+  const [description, setDescription] = useState(product.description);
+  const [price, setPrice] = useState(product.price);
+  const [categories, setCategories] = useState(product.categories);
+  const [picture, setPicture] = useState(product.picture);
 
   return (
     <div className="upload-show">
@@ -58,7 +65,7 @@ export default function EditProduct(props) {
                 <Input
                   placeholder="Title"
                   name="title"
-                  value={product.title}
+                  value={title}
                   onChange={(event) => setTitle(event.target.value)}
                 />
               </Heading>
@@ -67,7 +74,7 @@ export default function EditProduct(props) {
                   <Input
                     placeholder="Price"
                     name="price"
-                    value={product.price}
+                    value={price}
                     onChange={(event) => setPrice(event.target.value)}
                   />
                   $
@@ -76,7 +83,6 @@ export default function EditProduct(props) {
             </Stack>
           </Box>
         </Center>
-        {/* <Product product={product} displayButton={false} /> */}
 
         <Text
           center
@@ -96,7 +102,7 @@ export default function EditProduct(props) {
           <Input
             placeholder="Description"
             name="description"
-            value={product.description}
+            value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
           <br />
@@ -104,7 +110,7 @@ export default function EditProduct(props) {
           <Input
             placeholder="Categories"
             name="categories"
-            value={product.categories}
+            value={categories}
             onChange={(event) => setCategories(event.target.value)}
           />
           <br />
@@ -116,7 +122,7 @@ export default function EditProduct(props) {
           <Input
             placeholder="Picture"
             name="picture"
-            value={product.picture}
+            value={picture}
             onChange={(event) => setPicture(event.target.value)}
           />
           <br />
@@ -125,7 +131,15 @@ export default function EditProduct(props) {
               style={{ marginRight: "20px" }}
               leftIcon={<EditIcon />}
               colorScheme="purple"
-              onClick={() => props.onSave(props.product)}
+              onClick={() =>
+                props.onSave({
+                  picture: picture,
+                  title: title,
+                  price: price,
+                  categories: categories,
+                  description: description,
+                })
+              }
             >
               Save
             </Button>
@@ -134,7 +148,7 @@ export default function EditProduct(props) {
               leftIcon={<ArrowBackIcon />}
               colorScheme="purple"
               variant="outline"
-              onClick={() => props.onCancel(props.product)}
+              onClick={() => props.onCancel()}
             >
               Cancel
             </Button>

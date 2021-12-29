@@ -15,30 +15,7 @@ function ShowProduct(props) {
     createdAt: Date(),
   };
 
-  // TODO: Update and redirect to index
-  function onProductDelete(product) {
-    setProducts((prevProducts) => {
-      return prevProducts.filter((p) => {
-        p.id !== product.id;
-      });
-    });
-  }
-
-  // TODO: Validation (in common function)
-  function onProductEdit(newProduct, oldProduct) {
-    if (newProduct.id !== oldProduct.id) {
-      // TODO: TEST THIS PART
-      return false;
-    }
-
-    // Return the new list
-    setProducts((prevProducts) => {
-      prevProducts.map([...prevProducts, newProduct]);
-    });
-  }
-
   return <EditableProduct product={product} />;
-  // return <ProductDetails product={product} displayButton={false} />;
 }
 
 export default ShowProduct;

@@ -40,7 +40,6 @@ export default function ProductDetails(props) {
               leftIcon={<EditIcon />}
               colorScheme="purple"
               onClick={() => props.onEdit(props.product)}
-              //   onClick={(newProduct) => onProductEdit(newProduct, product)}
             >
               Edit
             </Button>
@@ -49,7 +48,6 @@ export default function ProductDetails(props) {
               leftIcon={<DeleteIcon />}
               colorScheme="purple"
               variant="outline"
-              //   onClick={onProductDelete}
             >
               Delete
             </Button>
