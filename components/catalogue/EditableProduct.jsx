@@ -24,27 +24,20 @@ function EditableProduct(props) {
     setIsEditing(false);
   }
 
-  var productRender;
-
-  if (isEditing) {
-    productRender = (
-      <EditProduct
-        product={product}
-        onSave={(newProduct) => saveProduct(newProduct)}
-        onCancel={() => setIsEditing(false)}
-      />
-    );
-  } else {
-    productRender = (
-      <ProductDetails
-        product={product}
-        displayButton={false}
-        onDelete={props.onDelete}
-        onEdit={() => setIsEditing(true)}
-      />
-    );
-  }
-  return productRender;
+  return isEditing ? (
+    <EditProduct
+      product={product}
+      onSave={(newProduct) => saveProduct(newProduct)}
+      onCancel={() => setIsEditing(false)}
+    />
+  ) : (
+    <ProductDetails
+      product={product}
+      displayButton={false}
+      onDelete={props.onDelete}
+      onEdit={() => setIsEditing(true)}
+    />
+  );
 }
 
 export default EditableProduct;
