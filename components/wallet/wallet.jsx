@@ -80,7 +80,6 @@ return (
                     </Box>
                 </VStack>
             </Box>
-                //Last transactions:
             <Box
                 w={500}
                 h={350}
@@ -104,7 +103,7 @@ return (
                     }>
                     {lastTransactions.map((transaction, index) =>
                     
-                        <SimpleGrid columns={2} spacing={10}>
+                        <SimpleGrid columns={2} spacing={10} key={index}>
                             <Text fontSize="2xl" pr='10'>
                                 {transaction.toFixed(2)}€
                             </Text>
