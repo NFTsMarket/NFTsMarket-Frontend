@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { gql, useMutation } from "@apollo/client";
 import { useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
 
 const CONFIRM_MAIL_MUTATION = gql`
   mutation confirmAccount($origin: String!, $token: String!) {
@@ -10,27 +11,38 @@ const CONFIRM_MAIL_MUTATION = gql`
 
 function Token() {
   const router = useRouter();
+  const toast = useToast();
   const [confirmAccount, { loading }] = useMutation(CONFIRM_MAIL_MUTATION);
 
   useEffect(() => {
     async function getData() {
-      try {
-        const {
-          data: { validateToken },
-        } = await confirmAccount({
-          variables: {
-            origin: "web",
-            token: router.query.token,
-          },
-        });
+      let data = await confirmAccount({
+        variables: {
+          origin: "web",
+          token: router.query.token,
+        },
+      });
 
-        if (validateToken) {
-          console.log(`Thank you for confirming your mail ${validateToken}`);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      toast({
+        title: data.validateToken
+          ? "Thank you for confirming your mail!"
+          : "Your email is already confirmed!",
+        status: "info",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      router.push("/login");
     }
+
+    getData().catch((error) =>
+      toast({
+        title: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
+    );
   }, [router, confirmAccount]);
 
   if (loading) return <div>Loading...</div>;
