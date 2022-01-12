@@ -120,7 +120,11 @@ export default function Navbar(props) {
                   <Avatar size="sm" src={user?.profilePicture} />
                 </MenuButton>
 
-                <MenuList alignItems="center" color={menuTextColor}>
+                <MenuList
+                  zIndex="popover"
+                  alignItems="center"
+                  color={menuTextColor}
+                >
                   <VStack spacing="4" my="5">
                     <Avatar size="xl" src={user?.profilePicture} />
                     <Text>{user.name}</Text>
