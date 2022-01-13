@@ -4,4 +4,4 @@ function addFunds(amount, idWallet) {
     return fetch(uri + "/wallet/" + idWallet + "/" + amount, {method:"PUT"})
 }
 
-export default {addFunds}
+export default addFunds;

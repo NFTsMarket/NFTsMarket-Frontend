@@ -1,5 +1,6 @@
-import addFunds from "../../services/walletService"
+import addFunds from "./walletService"
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'
 import {
     Box,
     Stack,
@@ -22,7 +23,8 @@ import {
 } from "@paypal/react-paypal-js";
 
 export default function AddFund(props) {
-
+    const addFunds2 = addFunds;
+    const router = useRouter();
     const [amount, setAmount] = useState(0)
     const updateAmount = (amount) => {setAmount(amount); 
         console.log(amount)
