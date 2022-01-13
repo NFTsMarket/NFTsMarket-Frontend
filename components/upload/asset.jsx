@@ -1,19 +1,11 @@
 import {
-    Box,
     Center,
-    useColorModeValue,
-    Heading,
-    Text,
-    Stack,
-    Divider,
     Image,
-    Button,
   } from "@chakra-ui/react";
-  import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
   
   export default function Asset(props) {
-    const ID = props.asset.id,
-      URL = props.asset.url;
+    const ID = props.asset?._id,
+      URL = props.asset?.image?.baseUrl;
   
     return (
       <Center py={12}>

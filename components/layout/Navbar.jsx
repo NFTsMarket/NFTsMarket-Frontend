@@ -1,94 +1,184 @@
-import Link from "next/link";
-
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
-  Stack,
-  Heading,
-  Flex,
-  Text,
   Button,
-  useDisclosure,
-  useColorMode,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
+  Link as ChakraLink,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
   useColorModeValue,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { forwardRef } from "react";
+import { useAuth } from "../../context/AuthContext";
+import ThemeButton from "../common/ThemeButton";
 
-export default function Navbar(props) {
-  const { colorMode, toggleColorMode } = useColorMode();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const ActiveThemedLink = forwardRef(({ children, href, ...props }, ref) => {
+  const router = useRouter();
+  const isCurrentPath = router.pathname === href;
 
-  const handleToggle = () => (isOpen ? onClose() : onOpen());
+  const bgColor = useColorModeValue("purple.700", "purple.500");
 
   return (
-    <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      padding={4}
-      bg="purple.500"
-      color="white"
+    <ChakraLink
+      px="2"
+      py="2"
+      rounded="md"
+      _hover={{
+        textDecoration: "none",
+        bg: bgColor,
+      }}
+      bg={isCurrentPath && bgColor}
+      ref={ref}
       {...props}
     >
-      <Flex align="center" mr={5}>
-        <Link href="/" passHref>
-          <Heading as="h1" size="lg" letterSpacing={"tighter"} cursor="pointer">
-            NFTs Market
-          </Heading>
-        </Link>
-      </Flex>
+      {children}
+    </ChakraLink>
+  );
+});
+ActiveThemedLink.displayName = "ActiveThemedLink";
 
-      <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
-        <HamburgerIcon />
-      </Box>
-
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        display={{ base: isOpen ? "block" : "none", md: "flex" }}
-        width={{ base: "full", md: "auto" }}
-        alignItems="center"
-        flexGrow={1}
-        ml={5}
-        mt={{ base: 4, md: 0 }}
-        spacing="32px"
-      >
-        <Link href="/" passHref>
-          <Text cursor="pointer">Catalog</Text>
-        </Link>
+const NavLinks = ({ isLoggedIn }) => (
+  <>
+    <Link href="/" passHref>
+      <ActiveThemedLink>Catalog</ActiveThemedLink>
+    </Link>
+    {isLoggedIn && (
+      <>
         <Link href="/assets" passHref>
-          <Text cursor="pointer">My Assets</Text>
+          <ActiveThemedLink>My Assets</ActiveThemedLink>
         </Link>
         <Link href="/sales" passHref>
-          <Text cursor="pointer">Pending Sales</Text>
+          <ActiveThemedLink>Pending Sales</ActiveThemedLink>
         </Link>
-        <Link href="/purchases" passHref>
-          <Text cursor="pointer">Purchases</Text>
-        </Link>
-        <Link href="/wallet" passHref>
-          <Text cursor="pointer">Wallet</Text>
-        </Link>
-      </Stack>
+      </>
+    )}
+  </>
+);
 
-      <Box
-        display={{ base: isOpen ? "block" : "none", md: "block" }}
-        mt={{ base: 4, md: 0 }}
-      >
-        <Button
-          onClick={toggleColorMode}
-          mr={4}
-          color={useColorModeValue("purple.500", "white")}
-        >
-          {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        </Button>
-        <Button
-          variant="outline"
-          _hover={{ color: "purple.500", bg: "white" }}
-          mr={4}
-        >
-          Sign Up
-        </Button>
-        <Button colorScheme="purple">Log In</Button>
-      </Box>
-    </Flex>
+export default function Navbar(props) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isAuthenticated, user, dispatch } = useAuth();
+  const router = useRouter();
+
+  const menuTextColor = useColorModeValue("gray.700", "white");
+  const brandColors = useColorModeValue("purple.500", "purple.700");
+
+  return (
+    <Box as="nav" bg={brandColors} color="white" px="4" {...props}>
+      {isOpen && (
+        <Box pb={4} display={{ md: "none" }}>
+          <Stack spacing={4}>
+            <NavLinks isLoggedIn={isAuthenticated} />
+          </Stack>
+        </Box>
+      )}
+
+      <Flex h="14" alignItems="center" justifyContent="space-between">
+        <IconButton
+          size="md"
+          bg={brandColors}
+          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          aria-label={isOpen ? "opened menu" : "closed menu"}
+          display={{ md: "none" }}
+          onClick={isOpen ? onClose : onOpen}
+        />
+
+        <HStack spacing="12" alignItems="center">
+          <Link href="/" passHref>
+            <Heading
+              as="h1"
+              fontSize={{ base: "18px", md: "26px" }}
+              letterSpacing={"tighter"}
+              cursor="pointer"
+            >
+              NFTs Market
+            </Heading>
+          </Link>
+
+          <HStack spacing="10" display={{ base: "none", md: "flex" }}>
+            <NavLinks isLoggedIn={isAuthenticated} />
+          </HStack>
+        </HStack>
+
+        <HStack spacing="5">
+          <ThemeButton />
+          {isAuthenticated ? (
+            <Box>
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rounded="full"
+                  variant="link"
+                  cursor="pointer"
+                  minW={0}
+                >
+                  <Avatar size="sm" src={user?.profilePicture} />
+                </MenuButton>
+
+                <MenuList alignItems="center" color={menuTextColor}>
+                  <VStack spacing="4" my="5">
+                    <Avatar size="xl" src={user?.profilePicture} />
+                    <Text>{user.name}</Text>
+                  </VStack>
+                  <MenuDivider />
+                  <MenuItem>
+                    <Link href="/profile" passHref>
+                      My profile
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/wallet" passHref>
+                      My wallet
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/purchases" passHref>
+                      Purchases
+                    </Link>
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem
+                    onClick={() =>
+                      router
+                        .replace("/")
+                        .then(() => dispatch({ type: "LOGOUT" }))
+                    }
+                  >
+                    Log Out
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+          ) : (
+            <>
+              <Link href="/signup" passHref>
+                <Button
+                  variant="outline"
+                  _hover={{ color: "purple.500", bg: "white" }}
+                >
+                  Sign Up
+                </Button>
+              </Link>
+              <Link href="/login" passHref>
+                <Button colorScheme="purple">Log In</Button>
+              </Link>
+            </>
+          )}
+        </HStack>
+      </Flex>
+    </Box>
   );
 }
