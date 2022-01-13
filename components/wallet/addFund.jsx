@@ -152,7 +152,9 @@ export default function AddFund(props) {
                                         <NumberDecrementStepper />
                                     </NumberInputStepper>
                                 </NumberInput>
-                                <InputRightAddon children='€' />
+                                <InputRightAddon>
+                                    <span>€</span>
+                                </InputRightAddon>
                             </InputGroup>
                         </Box>
                         <Box h="120" w="60%" pt={14}>
