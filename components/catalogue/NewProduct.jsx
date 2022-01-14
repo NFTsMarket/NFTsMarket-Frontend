@@ -50,7 +50,6 @@ function NewProduct(props) {
     };
 
     const result = props.onAddProduct(newProduct);
-    console.log(newProduct);
 
     if (result) {
       setTitle("");
