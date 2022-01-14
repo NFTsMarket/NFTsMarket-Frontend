@@ -17,7 +17,7 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -146,7 +146,7 @@ export default function Navbar(props) {
                   </MenuItem>
                   <MenuItem>
                     <Link href="/purchases" passHref>
-                      Purchases
+                      Purchases history
                     </Link>
                   </MenuItem>
                   <MenuDivider />
