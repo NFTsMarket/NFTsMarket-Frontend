@@ -42,6 +42,23 @@ class UploadApi {
 
         return response.json();
     }
+
+    static async updateAsset(id,file,name,userId){
+        const headers= this.requestHeaders();
+        const user=JSON.parse(localStorage.getItem("user"));
+        const request= new Request(this.API_BASE_URL+"/"+id,{
+            method:"PUT",
+            headers:headers,
+            body: new Blob([JSON.stringify({ "file": file, "name": name, "user":userId })], { type: "application/json" })
+        })
+
+        const response= await fetch(request);
+
+        if(!response.ok){
+            throw Error("Response not valid:"+ response.status);
+        }
+        return response.json();
+    }
 }
 
 export default UploadApi;
