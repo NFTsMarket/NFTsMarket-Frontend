@@ -2,7 +2,6 @@ import { gql, useMutation } from "@apollo/client";
 import {
   Box,
   Button,
-  Center,
   Divider,
   Flex,
   FormControl,
@@ -16,7 +15,6 @@ import {
   InputRightElement,
   Link as ChakraLink,
   SimpleGrid,
-  Spinner,
   Stack,
   Text,
   useColorModeValue,
@@ -31,6 +29,7 @@ import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import CenteredText from "../components/common/CenteredText";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 import ThemeButton from "../components/common/ThemeButton";
 import { useAuth } from "../context/AuthContext";
 
@@ -100,12 +99,7 @@ function SignUp() {
     }
   };
 
-  if (loading)
-    return (
-      <Center h="100vh" w="100%">
-        <Spinner size="xl" colorScheme="purple" />
-      </Center>
-    );
+  if (loading) return <LoadingSpinner />;
 
   return (
     <>
