@@ -4,8 +4,8 @@ import {
   } from "@chakra-ui/react";
   
   export default function Asset(props) {
-    const ID = props.asset.id,
-      URL = props.asset.url;
+    const ID = props.asset?._id,
+      URL = props.asset?.image?.baseUrl;
   
     return (
       <Center py={12}>

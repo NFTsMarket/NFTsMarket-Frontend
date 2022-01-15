@@ -142,7 +142,7 @@ export default function Navbar(props) {
                   </MenuItem>
                   <MenuItem>
                     <Link href="/purchases" passHref>
-                      Purchases
+                      Purchases history
                     </Link>
                   </MenuItem>
                   <MenuDivider />

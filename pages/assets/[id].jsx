@@ -1,45 +1,189 @@
 import Asset from '../../components/upload/asset.jsx';
-import { useState } from 'react';
-import { Text, SimpleGrid, Link, Button, Container } from "@chakra-ui/react";
+import { useState, useEffect } from 'react';
+import { Text, SimpleGrid, Link, Button, Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton, 
+  useDisclosure,
+  Alert,
+  AlertIcon,} from "@chakra-ui/react";
 import {Link as ReachLink} from 'next/link';
+import { useRouter} from 'next/router';
+import React from 'react';
+import UploadApi from '../../components/upload/UploadApi.js';
+import Router from 'next/router';
+import { useAuth } from "../../context/AuthContext";
 
 function ShowAsset(props) {
+    const {isAuthenticated} = useAuth();
     const [message, setMessage] = useState(null);
-    const timestamp = Date.now();
-    const asset = 
-      {
-        id: "01",
-        name: "first name",
-        url: "https://i.natgeofe.com/n/82fddbcc-4cbb-4373-bf72-dbc30068be60/drill-monkey-01.jpg",
-        user: "01",
-        created_at: timestamp,
-        updated_at: timestamp
+
+    const [asset,setAsset] = useState(null);
+    const [assetName, setAssetName] = useState(null);
+    const [assetFile, setAssetFile] = useState(null);
+    const [assetUser, setAssetUser] = useState(null);
+    const [editMode,setEditMode] = useState(false);
+    const router = useRouter();
+    const { id } = router.query?router.query:undefined;
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const initialRef = React.useRef()
+    const finalRef = React.useRef()
+
+    async function handleDelete(){
+      try{
+        if(id!=undefined){
+          const deletedAsset = await UploadApi.deleteAsset(id);
+        }
+      }catch(error){
+        setMessage("Could not contact with the server");
       }
-    const user =
-    {
-        name: "MonkeMan"
     }
+
+    async function handleUpdate(){
+      try{
+        if(id!=undefined){
+          const update = await UploadApi.updateAsset(id,assetFile,assetName,assetUser);
+          const asset = await UploadApi.getAsset(id);
+          setAsset(asset);
+          setEditMode(false);
+        }
+      }catch(error){
+        setMessage("Could not contact with the server");
+      }
+    }
+    function toggleEditMode(){
+      setEditMode(!editMode)
+    }
+    useEffect(()=> {
+      
+      async function getAsset(){
+        if(isAuthenticated || localStorage.getItem("user")!=undefined){
+        try{
+          if(id!=undefined){
+            const asset = await UploadApi.getAsset(id);
+            setAsset(asset);
+            setAssetFile(asset.file);
+            setAssetUser(asset.user.id);
+            setAssetName(asset.name);
+          }
+        }catch(error){
+          setMessage("Could not contact with the server");
+        }
+      }else{
+        Router.push('/');
+      }
+      }
+
+      getAsset();
+    },[router.query, id,isAuthenticated])
     
- return <div className="upload-show">
+ return !editMode?(<div className="upload-show">
  <SimpleGrid columns={3}>
     <Asset asset={asset}/>
     
-    <Text center py={12} width={700} style={{display:'block', verticalAlign: 'middle', marginTop: "25%"}} > <b>URL:</b> <Link as= {ReachLink} href={`${asset.url}`} isExternal>
-    {asset.url}
+    <Text py={12} width={700} style={{display:'block', verticalAlign: 'middle', marginTop: "25%"}} > <b>URL:</b> <Link as= {ReachLink} href={`${asset?.image?.baseUrl}`} isExternal>
+    Image Link
     </Link>
     <br/>
-    <b>User:</b> {user.name}
+    <b>User:</b> {asset?.user?.name}
     <br/>
-    <b>Created at:</b> {new Intl.DateTimeFormat('es-ES',{year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(user.created_at)}
+    <b>Name:</b> {asset?.name}
     <br/>
-    <b>Updated at:</b> {new Intl.DateTimeFormat('es-ES',{year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(user.updated_at)}
+    <b>Created at:</b> {asset?.createdAt}
+    <br/>
+    <b>Updated at:</b> {asset?.updatedAt}
     <br/>
     <br/>
-    <Button colorScheme='red' style={{display: "block", marginLeft: "auto", marginRight: "auto"}}>Delete asset</Button>
+    <div className="buttons" style={{display: "inline", margin: "0 auto"}}>
+    <Button onClick={onOpen} colorScheme='red'>Delete asset</Button>
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Delete Asset</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <Text>Are you sure you want to delete this asset?</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='purple' onClick={handleDelete} mr={3}>
+              Yes
+            </Button>
+            <Button colorScheme='red' onClick={onClose}>No</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    <div className="buttonUpdate" style={{display: "inline",marginLeft: "10%"}}>
+    <Button colorScheme='purple' onClick={toggleEditMode}>Update asset</Button>
+    </div>
+    </div>
     </Text>
     
  </SimpleGrid>
-</div>;
+</div>):(assetName.match(/^ *$/) !== null?(<div className="upload-show">
+ <SimpleGrid columns={3}>
+    <Asset asset={asset}/>
+    <form>
+    <Text py={12} width={700} style={{display:'block', verticalAlign: 'middle', marginTop: "25%"}} > <b>URL:</b> <Link as= {ReachLink} href={`${asset?.image?.baseUrl}`} isExternal>
+    Image Link
+    </Link>
+    <br/>
+    <b>User:</b> {asset?.user?.name}
+    <br/>
+    <b>Name:</b> <input type="text" style={{color:"black"}} defaultValue={asset?.name} onChange={event => setAssetName(event.target.value)} required/>
+    <br/>
+    <Alert status='error'>
+      <AlertIcon/>
+      The asset name can´t be empty
+    </Alert>
+    <b>Created at:</b> {asset?.createdAt}
+    <br/>
+    <b>Updated at:</b> {asset?.updatedAt}
+    <br/>
+    <br/>
+    <div className="buttons" style={{display: "inline", margin: "0 auto"}}>
+    <Button colorScheme='red' onClick={toggleEditMode}>Cancel</Button>
+    <div className="buttonUpdate" style={{display: "inline",marginLeft: "10%"}}>
+    <Button colorScheme='purple' onClick={handleUpdate} disabled>Save</Button>
+    </div>
+    </div>
+    </Text>
+    </form>
+ </SimpleGrid>
+</div>):(<div className="upload-show">
+ <SimpleGrid columns={3}>
+    <Asset asset={asset}/>
+    <form>
+    <Text py={12} width={700} style={{display:'block', verticalAlign: 'middle', marginTop: "25%"}} > <b>URL:</b> <Link as= {ReachLink} href={`${asset?.image?.baseUrl}`} isExternal>
+    Image Link
+    </Link>
+    <br/>
+    <b>User:</b> {asset?.user?.name}
+    <br/>
+    <b>Name:</b> <input type="text" style={{color:"black"}} defaultValue={asset?.name} onChange={event => setAssetName(event.target.value)} required/>
+    <br/>
+    <b>Created at:</b> {asset?.createdAt}
+    <br/>
+    <b>Updated at:</b> {asset?.updatedAt}
+    <br/>
+    <br/>
+    <div className="buttons" style={{display: "inline", margin: "0 auto"}}>
+    <Button colorScheme='red' onClick={toggleEditMode}>Cancel</Button>
+    <div className="buttonUpdate" style={{display: "inline",marginLeft: "10%"}}>
+    <Button colorScheme='purple' onClick={handleUpdate}>Save</Button>
+    </div>
+    </div>
+    </Text>
+    </form>
+ </SimpleGrid>
+</div>));
 }
 
 export default ShowAsset;
