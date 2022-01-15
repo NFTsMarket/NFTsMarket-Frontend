@@ -67,6 +67,7 @@ function ShowAsset(props) {
             setAsset(asset);
             setAssetFile(asset.file);
             setAssetUser(asset.user.id);
+            setAssetName(asset.name);
           }
         }catch(error){
           setMessage("Could not contact with the server");
