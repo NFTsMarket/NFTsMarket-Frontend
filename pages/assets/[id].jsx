@@ -7,7 +7,9 @@ import { Text, SimpleGrid, Link, Button, Modal,
   ModalFooter,
   ModalBody,
   ModalCloseButton, 
-  useDisclosure,} from "@chakra-ui/react";
+  useDisclosure,
+  Alert,
+  AlertIcon,} from "@chakra-ui/react";
 import {Link as ReachLink} from 'next/link';
 import { useRouter} from 'next/router';
 import React from 'react';
@@ -124,6 +126,36 @@ function ShowAsset(props) {
     </Text>
     
  </SimpleGrid>
+</div>):(assetName.match(/^ *$/) !== null?(<div className="upload-show">
+ <SimpleGrid columns={3}>
+    <Asset asset={asset}/>
+    <form>
+    <Text py={12} width={700} style={{display:'block', verticalAlign: 'middle', marginTop: "25%"}} > <b>URL:</b> <Link as= {ReachLink} href={`${asset?.image?.baseUrl}`} isExternal>
+    Image Link
+    </Link>
+    <br/>
+    <b>User:</b> {asset?.user?.name}
+    <br/>
+    <b>Name:</b> <input type="text" style={{color:"black"}} defaultValue={asset?.name} onChange={event => setAssetName(event.target.value)} required/>
+    <br/>
+    <Alert status='error'>
+      <AlertIcon/>
+      The asset name can´t be empty
+    </Alert>
+    <b>Created at:</b> {asset?.createdAt}
+    <br/>
+    <b>Updated at:</b> {asset?.updatedAt}
+    <br/>
+    <br/>
+    <div className="buttons" style={{display: "inline", margin: "0 auto"}}>
+    <Button colorScheme='red' onClick={toggleEditMode}>Cancel</Button>
+    <div className="buttonUpdate" style={{display: "inline",marginLeft: "10%"}}>
+    <Button colorScheme='purple' onClick={handleUpdate} disabled>Save</Button>
+    </div>
+    </div>
+    </Text>
+    </form>
+ </SimpleGrid>
 </div>):(<div className="upload-show">
  <SimpleGrid columns={3}>
     <Asset asset={asset}/>
@@ -134,7 +166,7 @@ function ShowAsset(props) {
     <br/>
     <b>User:</b> {asset?.user?.name}
     <br/>
-    <b>Name:</b> <input type="text" style={{color:"black"}} defaultValue={asset?.name} onChange={event => setAssetName(event.target.value)}/>
+    <b>Name:</b> <input type="text" style={{color:"black"}} defaultValue={asset?.name} onChange={event => setAssetName(event.target.value)} required/>
     <br/>
     <b>Created at:</b> {asset?.createdAt}
     <br/>
@@ -150,7 +182,7 @@ function ShowAsset(props) {
     </Text>
     </form>
  </SimpleGrid>
-</div>);
+</div>));
 }
 
 export default ShowAsset;
