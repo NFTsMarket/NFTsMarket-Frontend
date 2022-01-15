@@ -85,57 +85,62 @@ function LoginForm() {
     }
   };
 
-  if (loading) return <LoadingSpinner loading={loading} />;
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={6}>
-        <FormControl id="email" isInvalid={!!errors.email}>
-          <FormLabel>Email address</FormLabel>
-          <Input
-            type="email"
-            {...register("email", {
-              required: "Please enter a valid email address",
-              pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            })}
-          />
-          <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl id="password" isInvalid={!!errors.password}>
-          <Flex justify="space-between">
-            <FormLabel>Password</FormLabel>
-            <ChakraLink color={textColors} fontWeight="semibold" fontSize="sm">
-              Forgot Password?
-            </ChakraLink>
-          </Flex>
-          <InputGroup size="md">
+    <>
+      {loading && <LoadingSpinner loading={loading} />}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={6}>
+          <FormControl id="email" isInvalid={!!errors.email}>
+            <FormLabel>Email address</FormLabel>
             <Input
-              pr="4.5rem"
-              type={isOpen ? "text" : "password"}
-              autoComplete="current-password"
-              {...register("password", {
-                required: "Please enter a password",
+              type="email"
+              {...register("email", {
+                required: "Please enter a valid email address",
+                pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               })}
             />
-            <InputRightElement>
-              <IconButton
-                bg="transparent !important"
-                variant="ghost"
-                aria-label={isOpen ? "Mask password" : "Reveal password"}
-                icon={isOpen ? <HiEyeOff /> : <HiEye />}
-                onClick={onToggle}
-              />
-            </InputRightElement>
-          </InputGroup>
-          <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
-        </FormControl>
+            <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+          </FormControl>
 
-        <Button type="submit" colorScheme="purple">
-          Log In
-        </Button>
-      </Stack>
-    </form>
+          <FormControl id="password" isInvalid={!!errors.password}>
+            <Flex justify="space-between">
+              <FormLabel>Password</FormLabel>
+              <ChakraLink
+                color={textColors}
+                fontWeight="semibold"
+                fontSize="sm"
+              >
+                Forgot Password?
+              </ChakraLink>
+            </Flex>
+            <InputGroup size="md">
+              <Input
+                pr="4.5rem"
+                type={isOpen ? "text" : "password"}
+                autoComplete="current-password"
+                {...register("password", {
+                  required: "Please enter a password",
+                })}
+              />
+              <InputRightElement>
+                <IconButton
+                  bg="transparent !important"
+                  variant="ghost"
+                  aria-label={isOpen ? "Mask password" : "Reveal password"}
+                  icon={isOpen ? <HiEyeOff /> : <HiEye />}
+                  onClick={onToggle}
+                />
+              </InputRightElement>
+            </InputGroup>
+            <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
+          </FormControl>
+
+          <Button type="submit" colorScheme="purple">
+            Log In
+          </Button>
+        </Stack>
+      </form>
+    </>
   );
 }
 

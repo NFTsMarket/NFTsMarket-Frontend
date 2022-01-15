@@ -76,81 +76,83 @@ function SignupForm() {
     }
   };
 
-  if (loading) return <LoadingSpinner loading={loading} />;
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={6}>
-        <FormControl id="email" isInvalid={!!errors.email}>
-          <FormLabel>Email address</FormLabel>
-          <Input
-            type="email"
-            {...register("email", {
-              required: "Please enter a valid email address",
-              pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            })}
-          />
-          {!errors.email ? (
-            <FormHelperText>Enter a valid email address 📧</FormHelperText>
-          ) : (
-            <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-          )}
-        </FormControl>
-
-        <FormControl id="name" isInvalid={!!errors.name}>
-          <FormLabel>Name</FormLabel>
-          <Input
-            autoComplete="name"
-            {...register("name", {
-              required: "Please enter your name",
-              minLength: 3,
-              maxLength: 80,
-            })}
-          />
-          {!errors.name ? (
-            <FormHelperText>Enter your full name 🙏</FormHelperText>
-          ) : (
-            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-          )}
-        </FormControl>
-
-        <FormControl id="password" isInvalid={!!errors.password}>
-          <FormLabel>Password</FormLabel>
-          <InputGroup size="md">
+    <>
+      {loading && <LoadingSpinner loading={loading} />}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={6}>
+          <FormControl id="email" isInvalid={!!errors.email}>
+            <FormLabel>Email address</FormLabel>
             <Input
-              pr="4.5rem"
-              type={isOpen ? "text" : "password"}
-              autoComplete="new-password"
-              {...register("password", {
-                required: "Please enter a password",
-                minLength: {
-                  value: 6,
-                  message: "Your password should be at least 6 characters long",
-                },
+              type="email"
+              {...register("email", {
+                required: "Please enter a valid email address",
+                pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               })}
             />
-            <InputRightElement>
-              <IconButton
-                bg="transparent !important"
-                variant="ghost"
-                aria-label={isOpen ? "Mask password" : "Reveal password"}
-                icon={isOpen ? <HiEyeOff /> : <HiEye />}
-                onClick={onToggle}
-              />
-            </InputRightElement>
-          </InputGroup>
-          {!errors.password ? (
-            <FormHelperText>At least 6 characters long pls</FormHelperText>
-          ) : (
-            <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-          )}
-        </FormControl>
+            {!errors.email ? (
+              <FormHelperText>Enter a valid email address 📧</FormHelperText>
+            ) : (
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+            )}
+          </FormControl>
 
-        <Button type="submit" colorScheme="purple">
-          Sign Up
-        </Button>
-      </Stack>
-    </form>
+          <FormControl id="name" isInvalid={!!errors.name}>
+            <FormLabel>Name</FormLabel>
+            <Input
+              autoComplete="name"
+              {...register("name", {
+                required: "Please enter your name",
+                minLength: 3,
+                maxLength: 80,
+              })}
+            />
+            {!errors.name ? (
+              <FormHelperText>Enter your full name 🙏</FormHelperText>
+            ) : (
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+            )}
+          </FormControl>
+
+          <FormControl id="password" isInvalid={!!errors.password}>
+            <FormLabel>Password</FormLabel>
+            <InputGroup size="md">
+              <Input
+                pr="4.5rem"
+                type={isOpen ? "text" : "password"}
+                autoComplete="new-password"
+                {...register("password", {
+                  required: "Please enter a password",
+                  minLength: {
+                    value: 6,
+                    message:
+                      "Your password should be at least 6 characters long",
+                  },
+                })}
+              />
+              <InputRightElement>
+                <IconButton
+                  bg="transparent !important"
+                  variant="ghost"
+                  aria-label={isOpen ? "Mask password" : "Reveal password"}
+                  icon={isOpen ? <HiEyeOff /> : <HiEye />}
+                  onClick={onToggle}
+                />
+              </InputRightElement>
+            </InputGroup>
+            {!errors.password ? (
+              <FormHelperText>At least 6 characters long pls</FormHelperText>
+            ) : (
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            )}
+          </FormControl>
+
+          <Button type="submit" colorScheme="purple">
+            Sign Up
+          </Button>
+        </Stack>
+      </form>
+    </>
   );
 }
 
