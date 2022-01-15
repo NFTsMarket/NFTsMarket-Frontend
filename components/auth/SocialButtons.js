@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { auth, provider } from "../../lib/firebase";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 const SOCIAL_SIGN_IN_MUTATION = gql`
   mutation socialSignIn($token: String!) {
@@ -24,7 +25,7 @@ function SocialButtons() {
   const router = useRouter();
   const toast = useToast();
   const { dispatch } = useAuth();
-  const [socialSignIn] = useMutation(SOCIAL_SIGN_IN_MUTATION);
+  const [socialSignIn, { loading }] = useMutation(SOCIAL_SIGN_IN_MUTATION);
 
   const handleSocial = () => {
     signInWithPopup(auth, provider)
@@ -58,12 +59,15 @@ function SocialButtons() {
   };
 
   return (
-    <SimpleGrid mt="6" columns={1} spacing="3">
-      <Button color="currentColor" variant="outline" onClick={handleSocial}>
-        <VisuallyHidden>Sign up with Google</VisuallyHidden>
-        <FaGoogle />
-      </Button>
-    </SimpleGrid>
+    <>
+      {loading && <LoadingSpinner loading={loading} />}
+      <SimpleGrid mt="6" columns={1} spacing="3">
+        <Button color="currentColor" variant="outline" onClick={handleSocial}>
+          <VisuallyHidden>Sign up with Google</VisuallyHidden>
+          <FaGoogle />
+        </Button>
+      </SimpleGrid>
+    </>
   );
 }
 
