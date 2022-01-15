@@ -53,7 +53,7 @@ function Token() {
     getData();
   }, [router, confirmAccount, toast]);
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <LoadingSpinner loading={loading} />;
 
   return <CenteredText>Please confirm your mail!</CenteredText>;
 }
