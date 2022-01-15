@@ -15,6 +15,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
@@ -105,13 +106,15 @@ function LoginForm() {
           <FormControl id="password" isInvalid={!!errors.password}>
             <Flex justify="space-between">
               <FormLabel>Password</FormLabel>
-              <ChakraLink
-                color={textColors}
-                fontWeight="semibold"
-                fontSize="sm"
-              >
-                Forgot Password?
-              </ChakraLink>
+              <Link href="/reset-password" passHref>
+                <ChakraLink
+                  color={textColors}
+                  fontWeight="semibold"
+                  fontSize="sm"
+                >
+                  Forgot Password?
+                </ChakraLink>
+              </Link>
             </Flex>
             <InputGroup size="md">
               <Input
