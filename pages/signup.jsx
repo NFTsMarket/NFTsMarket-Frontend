@@ -36,12 +36,8 @@ import { useAuth } from "../context/AuthContext";
 const SIGN_UP_MUTATION = gql`
   mutation signUp($email: String!, $name: String!, $password: String!) {
     signUpUser(input: { email: $email, name: $name, password: $password }) {
-      accessToken
       user {
-        id
-        email
         name
-        profilePicture
       }
     }
   }
@@ -59,7 +55,6 @@ function SignUp() {
   } = useForm();
 
   // auth hooks
-  const { dispatch } = useAuth();
   const [signUpUser, { loading }] = useMutation(SIGN_UP_MUTATION);
 
   // chakra hooks
@@ -81,12 +76,13 @@ function SignUp() {
           password,
         },
       });
-      console.log(data);
+
       router.push("/confirm");
+
       toast({
-        title: "We'll send you a confirmation email shortly ;)",
+        title: `Hey ${data.signUpUser.user.name}! We'll send you a confirmation email shortly ;)`,
         status: "info",
-        duration: 5000,
+        duration: 6000,
         isClosable: true,
       });
     } catch (error) {
