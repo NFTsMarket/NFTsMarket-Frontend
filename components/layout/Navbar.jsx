@@ -131,7 +131,7 @@ export default function Navbar(props) {
                 <MenuList alignItems="center" color={menuTextColor}>
                   <VStack spacing="4" my="5">
                     <Avatar size="xl" src={user?.profilePicture} />
-                    <Text>{user.name}</Text>
+                    <Text>{user?.name}</Text>
                   </VStack>
                   <MenuDivider />
                   <MenuItem>
