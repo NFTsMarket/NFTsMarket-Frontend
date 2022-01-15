@@ -12,8 +12,8 @@ import {
 import { InfoIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 
-export default function Product(props) {
-  const { id, title, picture, price } = props.product;
+export default function Product({product, displayButton}) {
+  const { id, title, picture, price } = product;
 
   return (
     <Center py={12}>
@@ -61,7 +61,7 @@ export default function Product(props) {
             </Text>
           </Stack>
 
-          {props.displayButton && (
+          {displayButton && (
             <div>
               <Divider h="4" borderColor="#d1d1e0" />
               <Stack spacing={2} direction="row" pt={5} align={"center"}>

@@ -1,5 +1,12 @@
-
-import { Text, Button, Center, Flex, Box, SimpleGrid, Divider } from "@chakra-ui/react";
+import {
+  Text,
+  Button,
+  Center,
+  Flex,
+  Box,
+  SimpleGrid,
+  Divider,
+} from "@chakra-ui/react";
 import {
   DeleteIcon,
   EditIcon,
@@ -11,6 +18,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Product from "./Product.jsx";
 import ProductText from "./ProductText.jsx";
+import LoadingCircle from "../common/LoadingCircle.jsx";
+import DeleteAlert from "./deleteAlert.jsx";
 
 export default function ProductDetails(props) {
   const product = props.product;
@@ -36,7 +45,7 @@ export default function ProductDetails(props) {
   }
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
     setIsPending(user == null || user.id == product.owner);
     setIsOwner(user == null || user.id == product.owner);
   }, []);
@@ -75,7 +84,7 @@ export default function ProductDetails(props) {
                 ></ProductText>
                 <ProductText
                   title="Categories"
-                  text={product.categories}
+                  text={product.categories ? product.categories[0].name : ""}
                 ></ProductText>
                 <ProductText
                   title="Creation date"
@@ -97,18 +106,19 @@ export default function ProductDetails(props) {
             >
               Edit
             </Button>
-            <Button
+            <DeleteAlert id={product.id} />
+            {/* <Button
               style={{ marginRight: "20px" }}
               leftIcon={<DeleteIcon />}
               colorScheme="purple"
               variant="outline"
             >
               Delete
-            </Button>
+            </Button> */}
 
-            {!isOwner &&
+            {!isOwner && (
               <Button
-                style={{ marginRight: "20px" }}
+                style={{ marginLeft:"20px", marginRight: "20px" }}
                 colorScheme="purple"
                 variant="outline"
                 isDisabled={isPending}
@@ -116,7 +126,7 @@ export default function ProductDetails(props) {
               >
                 Buy
               </Button>
-            }
+            )}
 
             <Link href={"/"} passHref>
               <Button

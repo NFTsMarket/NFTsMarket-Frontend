@@ -4,120 +4,140 @@ var BASE_API_PATH = "http://localhost:4000/api/v1";
 
 // PRODUCTS CRUD
 const getAllProducts = async () => {
+  return await fetch(`${BASE_API_PATH}/products`)
+    .then((response) => {
+      if (!response.ok) throw Error(response.status);
+
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
+};
+
+const getProductByID = async (id) => {
+  return await fetch(`${BASE_API_PATH}/products/${id}`)
+    .then((response) => {
+      if (!response.ok) throw Error(response.status);
+
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
+};
+
+const getProductByCategory = async (id) => {
+  try {
+    const data = await fetch(`${BASE_API_PATH}/products-category/${id}`);
+    return response.json();
+  } catch (error) {
+    return [];
+  }
+};
+
+const postProduct = async (product) => {
   const token = localStorage.getItem("token");
-  console.log(token);
-  const data = await fetch(`${BASE_API_PATH}/products`, {
-    method: "GET",
+  const response = await fetch(`${BASE_API_PATH}/products`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      authorization: token ? `Bearer ${token}` : "",
+    },
+    body: JSON.stringify(product),
+  });
+
+  return response;
+};
+
+const putProduct = async (id, product) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_API_PATH}/products/${id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      authorization: token ? `Bearer ${token}` : "",
+    },
+    body: JSON.stringify(product),
+  });
+
+  return response;
+};
+
+const deleteProduct = async (id) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_API_PATH}/products/${id}`, {
+    method: "DELETE",
     headers: {
       authorization: token ? `Bearer ${token}` : "",
     },
   });
-  const json = await data.json();
 
-  return json;
-};
-
-const getProductByID = async (id) => {
-  const data = await fetch(`${BASE_API_PATH}/products/${id}`);
-  const json = await data.json();
-
-  return json;
-};
-
-const getProductByCategory = async (id) => {
-  const data = await fetch(`${BASE_API_PATH}/products-category/${id}`);
-  const json = await data.json();
-
-  return json;
-};
-
-const postProduct = async (product) => {
-  const data = await fetch(`${BASE_API_PATH}/products`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(product),
-  });
-  const json = await data.json();
-
-  return json;
-};
-
-const putProduct = async (id, product) => {
-  const data = await fetch(`${BASE_API_PATH}/products/${id}`, {
-    method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(product),
-  });
-  const json = await data.json();
-
-  return json;
-};
-
-const deleteProduct = async (id) => {
-  const data = await fetch(`${BASE_API_PATH}/products/${id}`, {
-    method: "DELETE",
-  });
-  const json = await data.json();
-
-  return json;
+  return response;
 };
 
 // CATEGORIES CRUD
 const getCategories = async () => {
-  const data = await fetch(`${BASE_API_PATH}/categories`);
-  const json = await data.json();
-
-  return json;
+  try {
+    const response = await fetch(`${BASE_API_PATH}/categories`);
+    return response.json();
+  } catch (error) {
+    return [];
+  }
 };
 
 const getCategoryByID = async (id) => {
-  const data = await fetch(`${BASE_API_PATH}/categories/${id}`);
-  const json = await data.json();
-
-  return json;
+  try {
+    const response = await fetch(`${BASE_API_PATH}/categories/${id}`);
+    return response.json();
+  } catch (error) {
+    return [];
+  }
 };
 
 const postCategory = async (category) => {
-  const data = await fetch(`${BASE_API_PATH}/categories`, {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_API_PATH}/categories`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token ? `Bearer ${token}` : "",
     },
     body: JSON.stringify(category),
   });
-  const json = await data.json();
 
-  return json;
+  return response;
 };
 
 const putCategory = async (id, category) => {
-  const data = await fetch(`${BASE_API_PATH}/categories/${id}`, {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_API_PATH}/categories/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token ? `Bearer ${token}` : "",
     },
     body: JSON.stringify(category),
   });
-  const json = await data.json();
-
-  return json;
+  return response;
 };
 
 const deleteCategory = async (id) => {
-  const data = await fetch(`${BASE_API_PATH}/categories/${id}`, {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_API_PATH}/categories/${id}`, {
     method: "DELETE",
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    },
   });
-  const json = await data.json();
 
-  return json;
+  return response;
 };
 
 const exportedFunctions = {

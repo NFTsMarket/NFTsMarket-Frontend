@@ -16,6 +16,7 @@ import ProductText from "./ProductText";
 
 export default function EditProduct(props) {
   const product = props.product;
+  console.log(product.categories);
 
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description);

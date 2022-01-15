@@ -13,7 +13,7 @@ function EditableProduct(props) {
       res.title = newProduct.title;
       res.price = newProduct.price;
       res.description = newProduct.description;
-      res.categories = newProduct.categories;
+      res.categories = newProduct.categories.name;
       res.picture = newProduct.picture;
       res.updatedAt = Date();
 
