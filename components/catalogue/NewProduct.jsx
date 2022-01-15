@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -22,26 +22,61 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
+  useToast,
   FormHelperText,
 } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
+import { getCategories, postProduct } from "./catalogueResource.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 function NewProduct(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isAuthenticated, user, dispatch } = useAuth();
+  const toast = useToast();
+  const [allCategories, setAllCategories] = useState([]);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0.00);
+  const [price, setPrice] = useState(0.0);
   const [categories, setCategories] = useState([]);
   const [picture, setPicture] = useState("");
 
   const titleError = title === "";
   const descriptionError = description === "";
-  const priceError = price <= 0.00;
+  const priceError = price <= 0.0;
   const categoriesError = categories.length === 0;
   const pictureError = picture === "";
 
+  useEffect(() => {
+    getCategories()
+      .then((data) => {
+        setAllCategories(data);
+      })
+      .catch((error) => {
+        toast({
+          title: "There was some error.",
+          description: "Couldn't load categories.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+  }, [isOpen]);
+
   function onClick() {
+    if (title === "" || description === "" || price <= 0 || picture === "") {
+      toast({
+        title: "There was some error.",
+        description: "Please, fill all required parameters.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    }
+
     const newProduct = {
+      creator: "creator1",
       title: title,
       description: description,
       price: price,
@@ -49,25 +84,46 @@ function NewProduct(props) {
       picture: picture,
     };
 
-    const result = props.onAddProduct(newProduct);
-
-    if (result) {
-      setTitle("");
-      setDescription("");
-      setPrice("");
-      setCategories("");
-      setPicture("");
-      onClose();
-    }
+    postProduct(newProduct)
+      .then((status) => {
+        const result = props.onAddProduct(newProduct);
+        if (result) {
+          setTitle("");
+          setDescription("");
+          setPrice("");
+          setCategories("");
+          setPicture("");
+          onClose();
+        }
+        toast({
+          title: "Product created succesfully.",
+          description: "We've created your product.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        onClose();
+      })
+      .catch((error) => {
+        toast({
+          title: "There was some error.",
+          description: "Couldn't create product.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
   }
 
   return (
     <>
       <Center h="100px">
         <Button
+          mx={"10px"}
           onClick={onOpen}
           leftIcon={<SmallAddIcon />}
           colorScheme="purple"
+          disabled={!isAuthenticated}
         >
           Create Product
         </Button>
@@ -137,7 +193,7 @@ function NewProduct(props) {
               )}
             </FormControl>
             <br></br>
-            <FormControl isInvalid={categoriesError}>
+            <FormControl>
               <FormLabel>Categories</FormLabel>
               <CheckboxGroup
                 colorScheme="purple"
@@ -148,20 +204,15 @@ function NewProduct(props) {
                 }}
               >
                 <Stack spacing={[1, 5]} direction={["column", "row"]}>
-                  <Checkbox value="funny">Funny</Checkbox>
-                  <Checkbox value="classic">Classic</Checkbox>
-                  <Checkbox value="retro">Retro</Checkbox>
+                  {allCategories.map((c) => (
+                    <Checkbox key={c.id} value={c.id}>
+                      {c.name}
+                    </Checkbox>
+                  ))}
                 </Stack>
               </CheckboxGroup>
-              {!categoriesError ? (
-                <FormHelperText>
-                  Choose between these categories.
-                </FormHelperText>
-              ) : (
-                <FormErrorMessage>
-                  At least one category is required.
-                </FormErrorMessage>
-              )}
+
+              <FormHelperText>Choose between these categories.</FormHelperText>
             </FormControl>
             <br></br>
             <FormControl isInvalid={pictureError}>

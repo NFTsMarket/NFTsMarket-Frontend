@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getProductByID } from "../../components/catalogue/catalogueResource.js";
-import EditableProduct from "../../components/catalogue/EditableProduct.jsx";
 import { useRouter } from "next/router";
 import ProductDetails from "../../components/catalogue/ProductDetails.jsx";
 import BuyProduct from "../../components/catalogue/BuyProduct.jsx";

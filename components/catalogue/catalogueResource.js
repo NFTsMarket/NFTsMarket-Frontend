@@ -82,12 +82,16 @@ const deleteProduct = async (id) => {
 
 // CATEGORIES CRUD
 const getCategories = async () => {
-  try {
-    const response = await fetch(`${BASE_API_PATH}/categories`);
-    return response.json();
-  } catch (error) {
-    return [];
-  }
+  return await fetch(`${BASE_API_PATH}/categories`)
+    .then((response) => {
+      if (!response.ok) throw Error(response.status);
+
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 const getCategoryByID = async (id) => {

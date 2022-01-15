@@ -1,11 +1,12 @@
 import Head from "next/head";
-import { SimpleGrid } from "@chakra-ui/react";
+import { Center, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Product from "../components/catalogue/Product.jsx";
 import NewProduct from "../components/catalogue/NewProduct.jsx";
 import { getAllProducts } from "../components/catalogue/catalogueResource.js";
 import ErrorAlert from "../components/catalogue/errorAlert.jsx";
 import LoadingCircle from "../components/common/LoadingCircle.jsx";
+import NewCategory from "../components/catalogue/NewCategory.jsx";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -22,16 +23,6 @@ export default function Home() {
   }, []);
 
   function onAddProduct(product) {
-    if (
-      product.title === "" ||
-      product.description === "" ||
-      product.price === "" ||
-      product.categories === "" ||
-      product.picture === ""
-    ) {
-      return false;
-    }
-
     setProducts((prevProducts) => {
       return [...prevProducts, product];
     });
@@ -45,7 +36,10 @@ export default function Home() {
       {message !== "" ? (
         <ErrorAlert text="Error!" description={message.toString()} />
       ) : null}
-      <NewProduct onAddProduct={onAddProduct} />
+      <Center>
+        <NewProduct onAddProduct={onAddProduct} />
+        <NewCategory />
+      </Center>
 
       {loading ? <LoadingCircle /> : null}
 
