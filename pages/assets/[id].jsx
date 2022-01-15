@@ -54,6 +54,7 @@ function ShowAsset(props) {
         setMessage("Could not contact with the server");
       }
     }
+    
     function toggleEditMode(){
       setEditMode(!editMode)
     }
