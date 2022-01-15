@@ -1,8 +1,7 @@
 import Router from 'next/router';
 class UploadApi {
 
-    // static API_BASE_URL="https://api-juaferfer11.cloud.okteto.net/api/v1/asset";
-    static API_BASE_URL="http://localhost:8000/api/v1/asset";
+    static API_BASE_URL="https://api-reyblacua.cloud.okteto.net/api/v1/asset";
 
     static requestHeaders(){
         return {
@@ -36,7 +35,6 @@ class UploadApi {
         })
 
         const response= await fetch(request);
-        console.log(response);
 
         if(!response.ok){
             if(response.status==404){
@@ -46,6 +44,24 @@ class UploadApi {
             }
         }
 
+        return response.json();
+    }
+
+    static async postAsset(file,name){
+        const headers= this.requestHeaders();
+        const user=JSON.parse(localStorage.getItem("user"));
+        const body=new Blob([JSON.stringify({ "file": file, "name": name, "user":user.id })], { type: "application/json" })
+        const request= new Request(this.API_BASE_URL,{
+            method:"POST",
+            headers:headers,
+            body: body
+        })
+
+        const response= await fetch(request);
+
+        if(!response.ok){
+            throw Error("Response not valid:"+ response.status);
+        }
         return response.json();
     }
 
