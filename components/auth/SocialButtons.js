@@ -47,7 +47,9 @@ function SocialButtons() {
       })
       .catch((error) => {
         toast({
-          title: error.message,
+          title: error.graphQLErrors
+            ? error.graphQLErrors[0].message
+            : error.message,
           status: "error",
           duration: 3000,
           isClosable: true,
