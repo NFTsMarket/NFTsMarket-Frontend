@@ -1,4 +1,4 @@
-import addFunds from "./walletService"
+import { addFunds } from "./walletService"
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import {
@@ -23,12 +23,8 @@ import {
 } from "@paypal/react-paypal-js";
 
 export default function AddFund(props) {
-    const addFunds2 = addFunds;
     const router = useRouter();
     const [amount, setAmount] = useState(0)
-    const updateAmount = (amount) => {setAmount(amount); 
-        console.log(amount)
-    }
     const currency = "EUR";
     const style = { "layout": "vertical" };
 
@@ -45,12 +41,11 @@ export default function AddFund(props) {
             });
         }, [currency, showSpinner]);
 
-
         return (<>
             {(showSpinner && isPending) && <div className="spinner" />}
             <PayPalButtons
                 style={style}
-                disabled={false}
+                disabled={amount <= 0}
                 forceReRender={[amount, currency, style]}
                 fundingSource={"paypal"}
                 createOrder={(data, actions) => {
@@ -72,7 +67,8 @@ export default function AddFund(props) {
                 onApprove={function (data, actions) {
                     return actions.order.capture().then(function () {
                         addFunds(amount, props.wallet._id).then((response) => {
-                            console.log("RESPUESTA", response);
+                            router.reload()
+
                         }).catch((err) => {
                             console.log("ERROR", err);
                         });
@@ -83,7 +79,7 @@ export default function AddFund(props) {
         );
     }
 
-    var fund = props.wallet.funds;
+    var fund = props.wallet.fund;
 
     return (
         <Box py={12}>
@@ -145,7 +141,7 @@ export default function AddFund(props) {
                         borderBottomRadius={'xl'}>
                         <Box w="60%" pt={14}>
                             <InputGroup>
-                                <NumberInput defaultValue={0} min={0} step={1.00} precision={2} bg="white" rounded='md' onChange={updateAmount}>
+                                <NumberInput defaultValue={0} min={0} step={1.00} precision={2} bg="white" rounded='md' onChange={setAmount}>
                                     <NumberInputField />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />

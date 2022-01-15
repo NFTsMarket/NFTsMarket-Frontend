@@ -1,23 +1,20 @@
 import Fund from '../../../components/wallet/addFund.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getWalletByUser } from '../../../components/wallet/walletService.js' 
 import { Center, VStack, Heading, Text, SimpleGrid, Link, Button, Container } from "@chakra-ui/react";
-import { Link as ReachLink } from 'next/link';
 
 function MyFunds(props) {
-    const [message, setMessage] = useState(null);
-    const timestamp = Date.now();
-    const wallet =
-    {
-        user: "Gideon",
-        funds: 237.3,
-        lastTransactions: [-10.2, -48, 27, 10.2],
-        deleted: false,
-        created_at: timestamp,
-        updated_at: timestamp
-    }
-    const transactionsCorrected = wallet.lastTransactions.reverse();
-    wallet.lastTransactions = transactionsCorrected;
+    const [wallet, setWallet] = useState(null)
 
+    useEffect(() => {
+        async function getWallet() {
+            let response = await getWalletByUser()
+            response = await response.json()
+            setWallet(response)
+        }
+
+        getWallet()
+    }, [])
 
     return <div className="my-wallet">
         <Center>
@@ -27,7 +24,7 @@ function MyFunds(props) {
                 </Heading>
             </VStack>
         </Center>
-            <Fund wallet={wallet} />
+        {wallet && <Fund wallet={wallet} />}
     </div>;
 }
 
