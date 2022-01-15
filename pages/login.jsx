@@ -10,6 +10,7 @@ import Head from "next/head";
 import Link from "next/link";
 import AuthCard from "../components/auth/AuthCard";
 import AuthContainer from "../components/auth/AuthContainer";
+import AuthHeader from "../components/auth/AuthHeader";
 import DividerWithText from "../components/auth/DividerWithText";
 import LoginForm from "../components/auth/LoginForm";
 import SocialButtons from "../components/auth/SocialButtons";
@@ -24,27 +25,7 @@ function Login() {
         <title>Log In | NFTs Market</title>
       </Head>
       <AuthContainer>
-        <Flex
-          justify="space-between"
-          mb={{
-            base: "10",
-            md: "20",
-          }}
-        >
-          <Link href="/" passHref>
-            <ChakraLink>
-              <Heading
-                textAlign="center"
-                size="lg"
-                color={textColors}
-                fontWeight="extrabold"
-              >
-                NFTs Market
-              </Heading>
-            </ChakraLink>
-          </Link>
-          <ThemeButton />
-        </Flex>
+        <AuthHeader />
         <Box maxW="md" mx="auto">
           <Heading textAlign="center" size="xl" fontWeight="extrabold">
             Log In
