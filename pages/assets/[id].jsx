@@ -9,11 +9,14 @@ import { Text, SimpleGrid, Link, Button, Modal,
   ModalCloseButton, 
   useDisclosure,} from "@chakra-ui/react";
 import {Link as ReachLink} from 'next/link';
-import { useRouter, Router } from 'next/router';
+import { useRouter} from 'next/router';
 import React from 'react';
 import UploadApi from '../../components/upload/UploadApi.js';
+import Router from 'next/router';
+import { useAuth } from "../../context/AuthContext";
 
 function ShowAsset(props) {
+    const {isAuthenticated} = useAuth();
     const [message, setMessage] = useState(null);
 
     const [asset,setAsset] = useState(null);
@@ -55,6 +58,7 @@ function ShowAsset(props) {
     useEffect(()=> {
       
       async function getAsset(){
+        if(isAuthenticated || localStorage.getItem("user")!=undefined){
         try{
           if(id!=undefined){
             const asset = await UploadApi.getAsset(id);
@@ -65,10 +69,13 @@ function ShowAsset(props) {
         }catch(error){
           setMessage("Could not contact with the server");
         }
+      }else{
+        Router.push('/');
+      }
       }
 
       getAsset();
-    },[router.query, id])
+    },[router.query, id,isAuthenticated])
     
  return !editMode?(<div className="upload-show">
  <SimpleGrid columns={3}>
