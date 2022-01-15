@@ -17,7 +17,7 @@ To learn more about Next.js, take a look at the following resources:
 
 ## CSS
 
-This project also uses [Chakra UI](https://chakra-ui.com/docs/getting-started) as a component library, but it also supports vanilla CSS, and other CSS frameworks if needed. Bootstrap 5 was added as a dependency, if you'd like to work with it instead of using Chakra.
+This project also uses [Chakra UI](https://chakra-ui.com/docs/getting-started) as a component library, but it also supports vanilla CSS, and other CSS frameworks if needed.
 
 ## Hosted Site
 
