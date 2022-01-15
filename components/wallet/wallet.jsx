@@ -23,12 +23,12 @@ import { useRouter } from 'next/router'
 import { FaCheckCircle } from 'react-icons/fa';
 
 export default function Wallet(props) {
-    var fund = props.wallet.funds;
+    var fund = props.wallet.fund;
     const lastTransactions = props.wallet.lastTransactions;
     var temporalFund = [fund];
     const router = useRouter();
-    console.log(lastTransactions);
-    for (var i = 0; i < 3; i++) {
+
+    for (var i = 0; i < Math.min(3, lastTransactions.length); i++) {
         if (lastTransactions[i] >= 0) {
             temporalFund = [...temporalFund, temporalFund[i] +- lastTransactions[i]];
         }
@@ -36,9 +36,6 @@ export default function Wallet(props) {
             temporalFund = [...temporalFund, temporalFund[i] - lastTransactions[i]];
         }
     }
-
-    console.log(temporalFund);
-    console.log(lastTransactions);
 
 return (
     <Box py={12}>
