@@ -1,6 +1,5 @@
 import {
   Box,
-  Flex,
   Heading,
   Link as ChakraLink,
   Text,
@@ -14,7 +13,6 @@ import AuthHeader from "../components/auth/AuthHeader";
 import DividerWithText from "../components/auth/DividerWithText";
 import LoginForm from "../components/auth/LoginForm";
 import SocialButtons from "../components/auth/SocialButtons";
-import ThemeButton from "../components/common/ThemeButton";
 
 function Login() {
   const textColors = useColorModeValue("purple.500", "purple.200");
