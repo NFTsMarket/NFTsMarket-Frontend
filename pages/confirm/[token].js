@@ -42,7 +42,7 @@ function Token() {
         setTimeout(() => router.push("/login"), 5000);
       } catch (error) {
         toast({
-          title: error.message,
+          title: error.graphQLErrors[0].message,
           status: "error",
           duration: 3000,
           isClosable: true,
