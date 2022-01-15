@@ -79,6 +79,8 @@ function Login() {
         },
       });
 
+      router.push("/");
+
       dispatch({
         type: "LOGIN",
         payload: {
@@ -86,8 +88,6 @@ function Login() {
           user: data.signInUser.user,
         },
       });
-
-      router.push("/");
     } catch (error) {
       toast({
         title: error.message,
