@@ -1,11 +1,13 @@
-import { useRouter } from "next/router";
 import { gql, useMutation } from "@apollo/client";
-import { useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import CenteredText from "../../components/common/CenteredText";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const CONFIRM_MAIL_MUTATION = gql`
-  mutation confirmAccount($origin: String!, $token: String!) {
-    validateToken(input: { origin: $origin, token: $token })
+  mutation confirmAccount($token: String!) {
+    validateToken(input: { origin: "web", token: $token })
   }
 `;
 
@@ -15,39 +17,45 @@ function Token() {
   const [confirmAccount, { loading }] = useMutation(CONFIRM_MAIL_MUTATION);
 
   useEffect(() => {
+    if (!router.isReady) return;
+
     async function getData() {
-      let data = await confirmAccount({
-        variables: {
-          origin: "web",
-          token: router.query.token,
-        },
-      });
+      try {
+        const {
+          data: { validateToken },
+        } = await confirmAccount({
+          variables: {
+            token: router.query.token,
+          },
+        });
 
-      toast({
-        title: data.validateToken
-          ? "Thank you for confirming your mail!"
-          : "Your email is already confirmed!",
-        status: "info",
-        duration: 5000,
-        isClosable: true,
-      });
+        toast({
+          title: validateToken
+            ? "Thank you for confirming your mail!"
+            : "Your email is already confirmed!",
+          description: "Redirecting you to the login page...",
+          status: validateToken ? "success" : "warning",
+          duration: 6000,
+          isClosable: true,
+        });
 
-      router.push("/login");
+        setTimeout(() => router.push("/login"), 5000);
+      } catch (error) {
+        toast({
+          title: error.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        console.error(error);
+      }
     }
+    getData();
+  }, [router, confirmAccount, toast]);
 
-    getData().catch((error) =>
-      toast({
-        title: error.message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      })
-    );
-  }, [router, confirmAccount]);
+  if (loading) return <LoadingSpinner />;
 
-  if (loading) return <div>Loading...</div>;
-
-  return <div>Please confirm your mail</div>;
+  return <CenteredText>Please confirm your mail!</CenteredText>;
 }
 
 export default Token;
