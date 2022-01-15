@@ -1,3 +1,5 @@
+import Router from 'next/router';
+
 class UploadApi {
 
     // static API_BASE_URL="https://api-juaferfer11.cloud.okteto.net/api/v1/asset";
@@ -35,9 +37,14 @@ class UploadApi {
         })
 
         const response= await fetch(request);
+        console.log(response);
 
         if(!response.ok){
-            throw Error("Response not valid:"+ response.status);
+            if(response.status==404){
+                Router.push('/');
+            }else{
+                throw Error("Response not valid:"+ response.status);
+            }
         }
 
         return response.json();
