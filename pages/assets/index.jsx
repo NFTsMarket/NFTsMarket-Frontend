@@ -19,8 +19,11 @@ import Link from 'next/link';
 import { useDisclosure } from '@chakra-ui/react'
 import UploadApi from '../../components/upload/UploadApi.js';
 import Alert from '../../components/upload/Alert.js';
+import { useAuth } from "../../context/AuthContext";
+import Router from 'next/router';
 
 function Assets(props) {
+    const {isAuthenticated} = useAuth();
 
     const [message, setMessage] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,17 +39,20 @@ function Assets(props) {
 
     useEffect(()=> {
       async function getAssets(){
-        try{
-          const assets = await UploadApi.getAllAssets();
-          setAssets(assets);
-        }catch(error){
-          console.log(error);
-          setMessage("Could not contact with the server");
+        if(isAuthenticated || localStorage.getItem("user")!=undefined){
+          try{
+            const assets = await UploadApi.getAllAssets();
+            setAssets(assets);
+          }catch(error){
+            console.log(error);
+            setMessage("Could not contact with the server");
+          }
+        }else{
+          Router.push('/');
         }
       }
-
       getAssets();
-    },[])
+    },[isAuthenticated])
 
     return (
       <div className="upload-main">

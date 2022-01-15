@@ -78,14 +78,6 @@ export default function Navbar(props) {
 
   return (
     <Box as="nav" bg={brandColors} color="white" px="4" {...props}>
-      {isOpen && (
-        <Box pb={4} display={{ md: "none" }}>
-          <Stack spacing={4}>
-            <NavLinks isLoggedIn={isAuthenticated} />
-          </Stack>
-        </Box>
-      )}
-
       <Flex h="14" alignItems="center" justifyContent="space-between">
         <IconButton
           size="md"
@@ -128,7 +120,11 @@ export default function Navbar(props) {
                   <Avatar size="sm" src={user?.profilePicture} />
                 </MenuButton>
 
-                <MenuList alignItems="center" color={menuTextColor}>
+                <MenuList
+                  zIndex="popover"
+                  alignItems="center"
+                  color={menuTextColor}
+                >
                   <VStack spacing="4" my="5">
                     <Avatar size="xl" src={user?.profilePicture} />
                     <Text>{user.name}</Text>
@@ -146,7 +142,7 @@ export default function Navbar(props) {
                   </MenuItem>
                   <MenuItem>
                     <Link href="/purchases" passHref>
-                      Purchases
+                      Purchases history
                     </Link>
                   </MenuItem>
                   <MenuDivider />
@@ -179,6 +175,14 @@ export default function Navbar(props) {
           )}
         </HStack>
       </Flex>
+
+      {isOpen && (
+        <Box pb={4} display={{ md: "none" }}>
+          <Stack spacing={4}>
+            <NavLinks isLoggedIn={isAuthenticated} />
+          </Stack>
+        </Box>
+      )}
     </Box>
   );
 }
