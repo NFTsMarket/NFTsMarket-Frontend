@@ -3,9 +3,9 @@ import Head from "next/head";
 import AuthCard from "../../components/auth/AuthCard";
 import AuthContainer from "../../components/auth/AuthContainer";
 import AuthHeader from "../../components/auth/AuthHeader";
-import PasswordResetForm from "../../components/auth/PasswordResetForm";
+import EmailForm from "../../components/auth/EmailForm";
 
-function ResetPassword() {
+function SendEmail() {
   return (
     <>
       <Head>
@@ -21,7 +21,7 @@ function ResetPassword() {
             We'll send you an email to reset your password
           </Text>
           <AuthCard>
-            <PasswordResetForm />
+            <EmailForm />
           </AuthCard>
         </Box>
       </AuthContainer>
@@ -29,4 +29,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default SendEmail;
