@@ -51,7 +51,11 @@ export const RESET_USER_PASSWORD_MUTATION = gql`
 `;
 
 export const RESET_SELF_PASSWORD_MUTATION = gql`
-  mutation updatePassword($oldPassword: String!, $oldPassword: String!) {
-    updateSelfPassword(input: { origin: "web", token: $token })
+  mutation updatePassword($newPassword: String!, $oldPassword: String!) {
+    updateSelfPassword(
+      input: { newPassword: $newPassword, oldPassword: $oldPassword }
+    ) {
+      passwordUpdated
+    }
   }
 `;
