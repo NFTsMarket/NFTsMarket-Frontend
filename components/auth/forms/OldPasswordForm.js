@@ -12,11 +12,10 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import LoadingSpinner from "../../common/LoadingSpinner";
 import { RESET_SELF_PASSWORD_MUTATION } from "../../../utils/gqlMutations";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
 function OldPasswordForm() {
   const { isOpen: isOpenOldPW, onToggle: onToggleOldPW } = useDisclosure();
