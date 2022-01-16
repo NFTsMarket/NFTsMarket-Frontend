@@ -145,6 +145,11 @@ export default function Navbar(props) {
                       Purchases history
                     </Link>
                   </MenuItem>
+                  <MenuItem>
+                    <Link href="/salesHistory" passHref>
+                      Sales history
+                    </Link>
+                  </MenuItem>
                   <MenuDivider />
                   <MenuItem
                     onClick={() =>
