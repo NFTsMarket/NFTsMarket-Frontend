@@ -30,6 +30,40 @@ function Assets(props) {
 
     const initialRef = React.useRef()
     const finalRef = React.useRef()
+    const [assetName, setAssetName] = useState(null);
+    const [image, setImage] = useState(null);
+    const [imageBase64, setImageBase64] = useState(null);
+    const [imageUrl, setImageUrl]=useState(null);
+
+    useEffect(()=>{
+      if(image==null) return;
+      var newImageURL=URL.createObjectURL(image);
+      var reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = function () {
+        setImageBase64(reader.result);
+      };
+      reader.onerror = function (error) {
+        console.log('Error: ', error);
+      };
+      setImageUrl(newImageURL);
+    }, [image]);
+
+    async function handleCreate(){
+      try{
+          const create = await UploadApi.postAsset(imageBase64,assetName);
+          console.log(create)
+          if(create){
+            Router.push('/assets/'+create._id);
+          }
+      }catch(error){
+        setMessage("Could not contact with the server");
+      }
+    }
+
+    function onImageChange(e){
+      setImage(e.target.files[0])
+    }
 
     const [assets,setAssets] = useState([]);
 
@@ -70,10 +104,12 @@ function Assets(props) {
           <ModalHeader>Create new Asset</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <UploadAndDisplayImage></UploadAndDisplayImage>
+            <b>Name:</b> <input type="text" style={{color:"black"}} defaultValue="" onChange={event => setAssetName(event.target.value)} required/>
+            <input type="file" accept='image/*' onChange={onImageChange} required/>
+            <img src={imageUrl} required alt="Image upload"/>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3}>
+            <Button colorScheme='blue' mr={3}  onClick={handleCreate} disabled={imageUrl==null || assetName==null}>
               Save
             </Button>
             <Button onClick={onClose}>Cancel</Button>
