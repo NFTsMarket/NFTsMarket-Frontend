@@ -6,6 +6,8 @@ import {
   Box,
   SimpleGrid,
   Divider,
+  UnorderedList,
+  ListItem,
 } from "@chakra-ui/react";
 import {
   DeleteIcon,
@@ -20,29 +22,15 @@ import Product from "./Product.jsx";
 import ProductText from "./ProductText.jsx";
 import LoadingCircle from "../common/LoadingCircle.jsx";
 import DeleteAlert from "./deleteAlert.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
-export default function ProductDetails(props) {
-  const product = props.product;
+export default function ProductDetails({ product, onBuy, onEdit }) {
+  const { isAuthenticated, user, dispatch } = useAuth();
+  const userName = user ? user.name : null;
+  product.categories =
+    product.categories === undefined ? [] : product.categories;
   const [isPending, setIsPending] = useState(true);
   const [isOwner, setIsOwner] = useState(true);
-
-  function saveProduct(newProduct) {
-    setProduct((prevProduct) => {
-      let res = Object.assign({}, prevProduct);
-      res.title = newProduct.title;
-      res.price = newProduct.price;
-      res.description = newProduct.description;
-      res.categories = newProduct.categories;
-      res.picture = newProduct.picture;
-      res.updatedAt = Date();
-
-      return res;
-    });
-
-    // TODO: Check that the user can edit the product used as parameter
-    // TODO: If "validation" is true
-    setIsEditing(false);
-  }
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -82,10 +70,18 @@ export default function ProductDetails(props) {
                   title="Description"
                   text={product.description}
                 ></ProductText>
-                <ProductText
-                  title="Categories"
-                  text={product.categories ? product.categories[0].name : ""}
-                ></ProductText>
+                <Text lineHeight={8} fontSize="lg">
+                  <b>Categories</b>
+                </Text>
+                <UnorderedList ml={10}>
+                  {product.categories.length !== 0 ? (
+                    product.categories.map((c) => (
+                      <ListItem key={c._id}>{c.name}</ListItem>
+                    ))
+                  ) : (
+                    <ListItem>This product has no categories</ListItem>
+                  )}
+                </UnorderedList>
                 <ProductText
                   title="Creation date"
                   text={product.createdAt}
@@ -102,27 +98,25 @@ export default function ProductDetails(props) {
               style={{ marginRight: "20px" }}
               leftIcon={<EditIcon />}
               colorScheme="purple"
-              onClick={() => props.onEdit(props.product)}
+              onClick={() => {
+                console.log("envio", product);
+                onEdit(product);
+              }}
+              disabled={userName !== product.owner}
             >
               Edit
             </Button>
-            <DeleteAlert id={product.id} />
-            {/* <Button
-              style={{ marginRight: "20px" }}
-              leftIcon={<DeleteIcon />}
-              colorScheme="purple"
-              variant="outline"
-            >
-              Delete
-            </Button> */}
+
+            <DeleteAlert id={product.id} owner={product.owner} />
 
             {!isOwner && (
               <Button
-                style={{ marginLeft:"20px", marginRight: "20px" }}
+                style={{ marginLeft: "20px", marginRight: "20px" }}
                 colorScheme="purple"
                 variant="outline"
-                isDisabled={isPending}
-                onClick={() => props.onBuy(props.product)}
+                // isDisabled={isPending}
+                disabled={!isAuthenticated}
+                onClick={() => onBuy(product)}
               >
                 Buy
               </Button>

@@ -8,7 +8,6 @@ import LoadingCircle from "../../components/common/LoadingCircle.jsx";
 
 
 function ShowProduct(props) {
-  console.log(props);
   const [loading, setloading] = useState(true);
   const [status, setStatus] = useState("details");
   const [product, setProduct] = useState({});
@@ -22,7 +21,6 @@ function ShowProduct(props) {
         .then((data) => setProduct(data))
         .catch((error) => {
           console.log(error);
-          console.log("error");
         });
     }
   }, [router.query, id]);
@@ -43,23 +41,6 @@ function ShowProduct(props) {
     // TODO: Check that the user can edit the product used as parameter
     // TODO: If "validation" is true
     setStatus("details");
-  }
-
-  function deleteProduct(productDeleted) {
-    useEffect(() => {
-      const id = productDeleted.id;
-      if (id != undefined) {
-        try {
-          deleteProduct(id).then((response) => {
-            if (response.ok) {
-              window.location.href = "http://localhost:3000";
-            } else {
-              throw Error("Response not valid:" + response.status);
-            }
-          });
-        } catch (error) {}
-      }
-    }, [router.query, id]);
   }
 
   switch (status) {

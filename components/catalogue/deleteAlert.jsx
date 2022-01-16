@@ -12,9 +12,12 @@ import {
 import { DeleteIcon } from "@chakra-ui/icons";
 import { deleteProduct } from "./catalogueResource";
 import { useRouter } from "next/router";
+import { useAuth } from "../../context/AuthContext";
 
-const DeleteAlert = ({ id }) => {
+const DeleteAlert = ({ id, owner }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { isAuthenticated, user, dispatch } = useAuth();
+  const userName = user ? user.name : null;
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef();
   const toast = useToast();
@@ -53,6 +56,7 @@ const DeleteAlert = ({ id }) => {
         colorScheme="purple"
         variant="outline"
         onClick={() => setIsOpen(true)}
+        disabled={userName!==owner}
       >
         Delete
       </Button>

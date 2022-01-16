@@ -44,7 +44,6 @@ function NewProduct(props) {
   const titleError = title === "";
   const descriptionError = description === "";
   const priceError = price <= 0.0;
-  const categoriesError = categories.length === 0;
   const pictureError = picture === "";
 
   useEffect(() => {
