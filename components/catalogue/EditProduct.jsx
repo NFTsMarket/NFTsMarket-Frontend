@@ -9,20 +9,86 @@ import {
   useColorModeValue,
   Input,
   Flex,
+  CheckboxGroup,
+  Checkbox,
+  useToast,
 } from "@chakra-ui/react";
 import { CheckIcon, ArrowBackIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductText from "./ProductText";
+import { getCategories, putProduct } from "./catalogueResource";
 
-export default function EditProduct(props) {
-  const product = props.product;
-  console.log(product.categories);
+export default function EditProduct({ product, onCancel, onSave }) {
+  const [allCategories, setAllCategories] = useState([]);
+  const toast = useToast();
 
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description);
   const [price, setPrice] = useState(product.price);
-  const [categories, setCategories] = useState(product.categories);
+  const [categoriesId, setCategoriesId] = useState(
+    product.categories.length !== 0
+      ? "_id" in product.categories[0]
+        ? product.categories.map((data) => data._id)
+        : product.categories.map((data) => data.id)
+      : []
+  );
+
   const [picture, setPicture] = useState(product.picture);
+
+  useEffect(() => {
+    getCategories()
+      .then((data) => {
+        setAllCategories(data);
+      })
+      .catch((error) => {
+        toast({
+          title: "There was some error.",
+          description: "Couldn't load categories.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+  }, [product]);
+
+  function updateProduct() {
+    const newProduct = {
+      picture: picture,
+      title: title,
+      price: price,
+      categories: categoriesId,
+      description: description,
+    };
+
+    putProduct(product.id, newProduct)
+      .then((response) => {
+        if (response.ok) {
+          toast({
+            title: "Product updated succesfully.",
+            description: "We've updated your product.",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+          newProduct.categories = allCategories.filter((c) =>
+            categoriesId.some((v) => v === c.id)
+          );
+          onSave(newProduct);
+        } else {
+          throw Error("Couldn't update product.", response.status);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          title: "There was some error.",
+          description: "Couldn't update product.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+  }
 
   return (
     <div className="upload-show">
@@ -124,12 +190,22 @@ export default function EditProduct(props) {
                 <Text lineHeight={8} fontSize="lg">
                   <b>Categories</b>
                 </Text>
-                <Input
-                  placeholder="Categories"
+                <CheckboxGroup
+                  colorScheme="purple"
                   name="categories"
-                  value={categories}
-                  onChange={(event) => setCategories(event.target.value)}
-                />
+                  value={categoriesId}
+                  onChange={(items) => {
+                    setCategoriesId(items);
+                  }}
+                >
+                  <Stack spacing={[1, 5]} direction={["column", "row"]}>
+                    {allCategories.map((c) => (
+                      <Checkbox key={c.id} value={c.id}>
+                        {c.name}
+                      </Checkbox>
+                    ))}
+                  </Stack>
+                </CheckboxGroup>
                 <ProductText
                   title="Creation date"
                   text={product.createdAt}
@@ -156,15 +232,7 @@ export default function EditProduct(props) {
               style={{ marginRight: "20px" }}
               leftIcon={<CheckIcon />}
               colorScheme="purple"
-              onClick={() =>
-                props.onSave({
-                  picture: picture,
-                  title: title,
-                  price: price,
-                  categories: categories,
-                  description: description,
-                })
-              }
+              onClick={() => updateProduct()}
             >
               Save
             </Button>
@@ -173,7 +241,7 @@ export default function EditProduct(props) {
               leftIcon={<ArrowBackIcon />}
               colorScheme="purple"
               variant="outline"
-              onClick={() => props.onCancel()}
+              onClick={() => onCancel()}
             >
               Cancel
             </Button>
