@@ -40,6 +40,25 @@ class BuyApi {
 
         return response.ok;
     }
+
+    static async accceptPurchase(purchaseId) {
+        const response = await fetch(new Request(this.API_BASE_URL + purchaseId, {
+            method: "PUT",
+            headers: this.requestHeaders(),
+        }));
+
+        return response.ok;
+    }
+
+    static async deletePurchase(purchaseId) {
+        const response = await fetch(new Request(this.API_BASE_URL + purchaseId, {
+            method: "DELETE",
+            headers: this.requestHeaders()
+        }));
+
+        return response.ok;
+    }
+
 }
 
 export default BuyApi;
