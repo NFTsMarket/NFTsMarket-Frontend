@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Button,
   Flex,
@@ -20,21 +20,8 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useAuth } from "../../context/AuthContext";
+import { LOG_IN_MUTATION } from "../../utils/gqlMutations";
 import LoadingSpinner from "../common/LoadingSpinner";
-
-const LOG_IN_MUTATION = gql`
-  mutation logIn($email: String!, $password: String!) {
-    signInUser(input: { email: $email, password: $password }) {
-      accessToken
-      user {
-        id
-        email
-        name
-        profilePicture
-      }
-    }
-  }
-`;
 
 function LoginForm() {
   // next hooks

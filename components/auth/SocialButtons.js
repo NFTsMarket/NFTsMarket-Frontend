@@ -1,25 +1,12 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Button, SimpleGrid, useToast, VisuallyHidden } from "@chakra-ui/react";
 import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { auth, provider } from "../../lib/firebase";
+import { SOCIAL_SIGN_IN_MUTATION } from "../../utils/gqlMutations";
 import LoadingSpinner from "../common/LoadingSpinner";
-
-const SOCIAL_SIGN_IN_MUTATION = gql`
-  mutation socialSignIn($token: String!) {
-    socialSignIn(input: { token: $token }) {
-      accessToken
-      user {
-        id
-        email
-        name
-        profilePicture
-      }
-    }
-  }
-`;
 
 function SocialButtons() {
   const router = useRouter();
