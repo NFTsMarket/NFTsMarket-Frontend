@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Button,
-  Checkbox,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  Stack,
-  CheckboxGroup,
   useDisclosure,
   Modal,
   ModalOverlay,
@@ -23,14 +15,9 @@ import {
   FormErrorMessage,
   Input,
   useToast,
-  FormHelperText,
 } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
-import {
-  getCategories,
-  postCategory,
-  postCateogry,
-} from "./catalogueResource.js";
+import { postCategory } from "./catalogueResource.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 function NewCategory(props) {
@@ -60,16 +47,23 @@ function NewCategory(props) {
 
     postCategory(newCategory)
       .then((status) => {
-        toast({
-          name: "Category created succesfully.",
-          description: "We've created your category.",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-        onClose();
+        const result = props.onAddCategory(newCategory);
+        if (result) {
+          setName("");
+          toast({
+            name: "Category created succesfully.",
+            description: "We've created your category.",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+          onClose();
+        } else {
+          throw Error("Couldn't create category on fron-end.");
+        }
       })
       .catch((error) => {
+        console.log(error);
         toast({
           name: "There was some error.",
           description: "Couldn't create category.",
@@ -90,7 +84,7 @@ function NewCategory(props) {
           colorScheme="purple"
           disabled={!isAuthenticated}
         >
-          Create Cateogry
+          Create Category
         </Button>
       </Center>
 
@@ -103,7 +97,7 @@ function NewCategory(props) {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create Cateogry</ModalHeader>
+          <ModalHeader>Create Category</ModalHeader>
           <ModalCloseButton />
 
           <ModalBody>
@@ -131,7 +125,7 @@ function NewCategory(props) {
               onClick={onClick}
               leftIcon={<SmallAddIcon />}
             >
-              Create Cateogry
+              Create Category
             </Button>
             <Button variant="ghost" onClick={onClose}>
               Close

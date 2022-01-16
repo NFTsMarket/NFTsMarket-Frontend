@@ -33,7 +33,7 @@ function NewProduct(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isAuthenticated, user, dispatch } = useAuth();
   const toast = useToast();
-  const [allCategories, setAllCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState(props.categories);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -47,20 +47,8 @@ function NewProduct(props) {
   const pictureError = picture === "";
 
   useEffect(() => {
-    getCategories()
-      .then((data) => {
-        setAllCategories(data);
-      })
-      .catch((error) => {
-        toast({
-          title: "There was some error.",
-          description: "Couldn't load categories.",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      });
-  }, [isOpen]);
+    setAllCategories(props.categories);
+  }, [isOpen, props.categories]);
 
   function onClick() {
     if (title === "" || description === "" || price <= 0 || picture === "") {
@@ -92,18 +80,22 @@ function NewProduct(props) {
           setPrice("");
           setCategories("");
           setPicture("");
+
+          toast({
+            title: "Product created succesfully.",
+            description: "We've created your product.",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+
           onClose();
+        } else {
+          throw Error("Couldn't create product on fron-end.");
         }
-        toast({
-          title: "Product created succesfully.",
-          description: "We've created your product.",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-        onClose();
       })
       .catch((error) => {
+        console.log(error);
         toast({
           title: "There was some error.",
           description: "Couldn't create product.",

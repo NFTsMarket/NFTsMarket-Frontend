@@ -6,7 +6,8 @@ var BASE_API_PATH = "http://localhost:4000/api/v1";
 const getAllProducts = async () => {
   return await fetch(`${BASE_API_PATH}/products`)
     .then((response) => {
-      if (!response.ok) throw Error(response.status);
+      if (!response.ok)
+        throw Error(`${response.status}: ${response.statusText}`);
 
       return response;
     })
@@ -19,7 +20,9 @@ const getAllProducts = async () => {
 const getProductByID = async (id) => {
   return await fetch(`${BASE_API_PATH}/products/${id}`)
     .then((response) => {
-      if (!response.ok) throw Error(response.status);
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
 
       return response;
     })
@@ -30,12 +33,18 @@ const getProductByID = async (id) => {
 };
 
 const getProductByCategory = async (id) => {
-  try {
-    const data = await fetch(`${BASE_API_PATH}/products-category/${id}`);
-    return response.json();
-  } catch (error) {
-    return [];
-  }
+  return await fetch(`${BASE_API_PATH}/products-category/${id}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
+
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 const postProduct = async (product) => {
@@ -84,7 +93,8 @@ const deleteProduct = async (id) => {
 const getCategories = async () => {
   return await fetch(`${BASE_API_PATH}/categories`)
     .then((response) => {
-      if (!response.ok) throw Error(response.status);
+      if (!response.ok)
+        throw Error(`${response.status}: ${response.statusText}`);
 
       return response;
     })
@@ -95,12 +105,18 @@ const getCategories = async () => {
 };
 
 const getCategoryByID = async (id) => {
-  try {
-    const response = await fetch(`${BASE_API_PATH}/categories/${id}`);
-    return response.json();
-  } catch (error) {
-    return [];
-  }
+  return await fetch(`${BASE_API_PATH}/categories/${id}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
+
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 const postCategory = async (category) => {

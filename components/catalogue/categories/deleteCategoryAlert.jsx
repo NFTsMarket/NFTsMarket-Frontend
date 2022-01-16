@@ -10,26 +10,25 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { deleteProduct } from "./catalogueResource";
+import { deleteCategory } from "../catalogueResource";
 import { useRouter } from "next/router";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 
-const DeleteAlert = ({ id, owner }) => {
+const DeleteCategoryAlert = ({ id }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const { isAuthenticated, user, dispatch } = useAuth();
-  const userName = user ? user.name : null;
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef();
   const toast = useToast();
   const router = useRouter();
 
   function onDelete() {
-    deleteProduct(id).then((response) => {
+    deleteCategory(id).then((response) => {
       if (response.ok) {
         onClose();
         toast({
-          title: "Product deleted succesfully.",
-          description: "We've deleted your product for you.",
+          title: "Category deleted succesfully.",
+          description: "We've deleted your category for you.",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -38,7 +37,7 @@ const DeleteAlert = ({ id, owner }) => {
       } else {
         toast({
           title: "There was some error.",
-          description: "Couldn't delete the product.",
+          description: "Couldn't delete the category.",
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -56,7 +55,7 @@ const DeleteAlert = ({ id, owner }) => {
         colorScheme="purple"
         variant="outline"
         onClick={() => setIsOpen(true)}
-        disabled={userName!==owner}
+        disabled={!isAuthenticated}
       >
         Delete
       </Button>
@@ -91,4 +90,4 @@ const DeleteAlert = ({ id, owner }) => {
   );
 };
 
-export default DeleteAlert;
+export default DeleteCategoryAlert;
