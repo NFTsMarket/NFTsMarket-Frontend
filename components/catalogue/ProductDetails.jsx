@@ -1,16 +1,14 @@
 
-import { Text, Button, Center, Flex, Box, SimpleGrid, Divider } from "@chakra-ui/react";
 import {
-  DeleteIcon,
-  EditIcon,
-  ArrowBackIcon,
-  MdCheckCircle,
+  ArrowBackIcon, DeleteIcon,
+  EditIcon
 } from "@chakra-ui/icons";
-
+import { Box, Button, Center, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Product from "./Product.jsx";
 import ProductText from "./ProductText.jsx";
+
 
 export default function ProductDetails(props) {
   const product = props.product;
@@ -35,9 +33,9 @@ export default function ProductDetails(props) {
     setIsEditing(false);
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    setIsPending(user == null || user.id == product.owner);
+    setIsPending(await BuyApi.existsPurchases({ state: 'Pending', product: product.id }));
     setIsOwner(user == null || user.id == product.owner);
   }, []);
 

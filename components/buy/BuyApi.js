@@ -40,6 +40,10 @@ class BuyApi {
         }));
     }
 
+    static async existsPurchases(filters) {
+        return await this.getAllPurchases(filters).length > 0;
+    }
+
     static async createPurchase(productId, recaptcha) {
         const response = await fetch(new Request(this.API_BASE_URL, {
             method: "POST",
