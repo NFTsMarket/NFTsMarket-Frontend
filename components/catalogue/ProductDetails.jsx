@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, ArrowBackIcon } from "@chakra-ui/icons";
 
+import { Box, Button, Center, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Product from "./Product.jsx";
@@ -35,9 +36,9 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
     file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
   };
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setIsPending(user == null || user.id == product.owner);
+  useEffect(async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    setIsPending(await BuyApi.existsPurchases({ state: 'Pending', product: product.id }));
     setIsOwner(user == null || user.id == product.owner);
     product.title ? setloading(false) : null;
   }, [product]);
