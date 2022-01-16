@@ -1,20 +1,20 @@
 import Router from 'next/router';
 class UploadApi {
-
+    
     static API_BASE_URL="https://api-reyblacua.cloud.okteto.net/api/v1/asset";
 
     static requestHeaders(){
         return {
-            "Authorization":"Bearer "+localStorage.getItem("token")
+            "Authorization":"Bearer "+token
         }
     }
 
-    static async getAllAssets(){
-        const headers= this.requestHeaders();
-        const user=JSON.parse(localStorage.getItem("user"));
-        const request= new Request(this.API_BASE_URL+"?user="+user.id,{
+    static async getAllAssets(usuario, token){
+        const request= new Request(this.API_BASE_URL+"?user="+usuario.id,{
             method:"GET",
-            headers:headers
+            headers:{
+                "Authorization":"Bearer "+token
+            }
         })
 
         const response= await fetch(request);
@@ -26,12 +26,12 @@ class UploadApi {
         return response.json();
     }
 
-    static async getAsset(id){
-        const headers= this.requestHeaders();
-        const user=JSON.parse(localStorage.getItem("user"));
+    static async getAsset(id,user,token){
         const request= new Request(this.API_BASE_URL+"/"+id,{
             method:"GET",
-            headers:headers
+            headers:{
+                "Authorization":"Bearer "+token
+            }
         })
 
         const response= await fetch(request);
@@ -47,13 +47,13 @@ class UploadApi {
         return response.json();
     }
 
-    static async postAsset(file,name){
-        const headers= this.requestHeaders();
-        const user=JSON.parse(localStorage.getItem("user"));
-        const body=new Blob([JSON.stringify({ "file": file, "name": name, "user":user.id })], { type: "application/json" })
+    static async postAsset(file,name,usuario,token){
+        const body=new Blob([JSON.stringify({ "file": file, "name": name, "user":usuario.id })], { type: "application/json" })
         const request= new Request(this.API_BASE_URL,{
             method:"POST",
-            headers:headers,
+            headers:{
+                "Authorization":"Bearer "+token
+            },
             body: body
         })
 
@@ -65,12 +65,12 @@ class UploadApi {
         return response.json();
     }
 
-    static async updateAsset(id,file,name,userId){
-        const headers= this.requestHeaders();
-        const user=JSON.parse(localStorage.getItem("user"));
+    static async updateAsset(id,file,name,userId,user,token){
         const request= new Request(this.API_BASE_URL+"/"+id,{
             method:"PUT",
-            headers:headers,
+            headers:{
+                "Authorization":"Bearer "+token
+            },
             body: new Blob([JSON.stringify({ "file": file, "name": name, "user":userId })], { type: "application/json" })
         })
 
@@ -82,12 +82,12 @@ class UploadApi {
         return response.json();
     }
 
-    static async deleteAsset(id){
-        const headers= this.requestHeaders();
-        const user=JSON.parse(localStorage.getItem("user"));
+    static async deleteAsset(id,user,token){
         const request= new Request(this.API_BASE_URL+"/"+id,{
             method:"DELETE",
-            headers:headers
+            headers:{
+                "Authorization":"Bearer "+token
+            }
         })
 
         const response= await fetch(request);

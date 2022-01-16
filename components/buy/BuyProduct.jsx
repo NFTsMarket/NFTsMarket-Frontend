@@ -1,7 +1,7 @@
 import { SimpleGrid, Text } from "@chakra-ui/react";
 import ReCAPTCHA from "react-google-recaptcha";
-import BuyApi from '../buy/BuyApi.js';
-import Product from "./Product.jsx";
+import BuyApi from './BuyApi.js';
+import Product from "../catalogue/Product.jsx";
 
 export default function BuyProduct(props) {
   const product = props.product;

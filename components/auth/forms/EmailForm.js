@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { RESET_USER_PASSWORD_MUTATION } from "../../utils/gqlMutations";
+import { RESET_USER_PASSWORD_MUTATION } from "../../../utils/gqlMutations";
 
 function EmailForm() {
   const toast = useToast();

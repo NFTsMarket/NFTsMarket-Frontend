@@ -15,8 +15,8 @@ import {
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
-import { VALIDATE_TOKEN_MUTATION } from "../../utils/gqlMutations";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import { VALIDATE_TOKEN_MUTATION } from "../../../utils/gqlMutations";
 
 function ResetPasswordForm() {
   const router = useRouter();

@@ -23,7 +23,7 @@ import { useAuth } from "../../context/AuthContext";
 import Router from 'next/router';
 
 function Assets(props) {
-    const {isAuthenticated} = useAuth();
+    const {isAuthenticated, user, token} = useAuth();
 
     const [message, setMessage] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,7 +51,7 @@ function Assets(props) {
 
     async function handleCreate(){
       try{
-          const create = await UploadApi.postAsset(imageBase64,assetName);
+          const create = await UploadApi.postAsset(imageBase64,assetName, user, token);
           console.log(create)
           if(create){
             Router.push('/assets/'+create._id);
@@ -72,10 +72,10 @@ function Assets(props) {
     } 
 
     useEffect(()=> {
-      async function getAssets(){
-        if(isAuthenticated || localStorage.getItem("user")!=undefined){
+      async function getAssets(user, token){
+        if(isAuthenticated){
           try{
-            const assets = await UploadApi.getAllAssets();
+            const assets = await UploadApi.getAllAssets(user, token);
             setAssets(assets);
           }catch(error){
             console.log(error);
@@ -85,8 +85,8 @@ function Assets(props) {
           Router.push('/');
         }
       }
-      getAssets();
-    },[isAuthenticated])
+      getAssets(user, token);
+    },[isAuthenticated,user, token])
 
     return (
       <div className="upload-main">
