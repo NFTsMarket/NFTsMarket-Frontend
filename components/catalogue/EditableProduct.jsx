@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BuyProduct from "./BuyProduct.jsx";
+import BuyProduct from "../buy/BuyProduct.jsx";
 import EditProduct from "./EditProduct.jsx";
 import ProductDetails from "./ProductDetails.jsx";
 
