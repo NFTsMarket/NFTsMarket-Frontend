@@ -1,5 +1,5 @@
 import {
-  Button, Container, FormControl, FormErrorMessage, FormLabel, Input, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Table, Tbody, Td, Th, Thead, Tr, useDisclosure
+  Button, Container, Image, Heading, FormControl, FormErrorMessage, FormLabel, Input, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Table, Tbody, Td, Th, Thead, Tr, useDisclosure
 } from '@chakra-ui/react';
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -120,9 +120,12 @@ export default function Sales() {
     </Modal>
 
 
-    <Container maxW='container.md' mt={16} align='center'>
+    <Container maxW='container.xl' mt={16} align='center'>
+      <Heading textAlign="center" size="lg" mb={3} fontWeight="extrabold">
+            Pending sales
+      </Heading>
       <Button colorScheme='orange' onClick={onOpen}>Filter</Button>
-      <Table size='sm' mt={8}>
+      <Table size='md' mt={8}>
         <Thead>
           <Tr>
             <Th>Asset</Th>
@@ -130,6 +133,7 @@ export default function Sales() {
             <Th isNumeric>Amount</Th>
             <Th>Date</Th>
             <Th>Status</Th>
+            <Th> </Th>
             <Th> </Th>
           </Tr>
         </Thead>
@@ -139,7 +143,7 @@ export default function Sales() {
             purchases && purchases.length > 0 ?
               purchases.map(purchase => {
                 return <Tr key={purchase.id}>
-                  <Td><Link href={`/assets/${encodeURIComponent(purchase.productId)}`}>{purchase.productId}</Link></Td>
+                  <Td><Link href={`/assets/${encodeURIComponent(purchase.productId)}`}><Image boxSize='120px' borderRadius='full' src={purchase.imageUrl} alt='Image' /></Link></Td>
                   <Td>{purchase.buyerId}</Td>
                   <Td isNumeric>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(purchase.amount)}</Td>
                   <Td>{new Intl.DateTimeFormat('en-ZA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(purchase.createdAt)}</Td>

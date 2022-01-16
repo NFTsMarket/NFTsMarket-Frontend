@@ -1,3 +1,5 @@
+import UploadApi from '../upload/UploadApi.js';
+
 class BuyApi {
     static API_BASE_URL = "https://api-fis-fersolesp.cloud.okteto.net/api/v1/purchase/";
 
@@ -6,8 +8,15 @@ class BuyApi {
         return { "Authorization": token ? `Bearer ${token}` : "" };
     }
 
-    static processPurchase(purchase) {
+    static async processPurchase(purchase) {
         // Convierte las fechas de un purchase de String a Date
+        try {
+            purchase.imageUrl = (await UploadApi.getAsset(purchase.assetId)).image.baseUrl;
+            // console.log(await UploadApi.getAllAssets());
+        } catch (error) {
+            console.log(error);
+        }
+
         purchase.createdAt = new Date(purchase.createdAt);
         return purchase;
     }
@@ -26,9 +35,9 @@ class BuyApi {
         if (!response.ok)
             throw Error("Response not valid:" + response.status);
 
-        return (await response.json()).map(purchase => {
-            return BuyApi.processPurchase(purchase);
-        });
+        return await Promise.all((await response.json()).map(async purchase => {
+            return await BuyApi.processPurchase(purchase);
+        }));
     }
 
     static async createPurchase(productId, recaptcha) {
