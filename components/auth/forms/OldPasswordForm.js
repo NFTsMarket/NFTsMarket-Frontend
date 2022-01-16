@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import { RESET_SELF_PASSWORD_MUTATION } from "../../../utils/gqlMutations";
+import { UPDATE_SELF_PASSWORD_MUTATION } from "../../../utils/gqlMutations";
 import LoadingSpinner from "../../common/LoadingSpinner";
 
 function OldPasswordForm() {
@@ -23,7 +23,7 @@ function OldPasswordForm() {
   const { isOpen: isOpenNewPW2, onToggle: onToggleNewPW2 } = useDisclosure();
   const toast = useToast();
   const [updatePassword, { loading }] = useMutation(
-    RESET_SELF_PASSWORD_MUTATION
+    UPDATE_SELF_PASSWORD_MUTATION
   );
 
   const {

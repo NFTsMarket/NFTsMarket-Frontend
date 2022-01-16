@@ -50,7 +50,7 @@ export const RESET_USER_PASSWORD_MUTATION = gql`
   }
 `;
 
-export const RESET_SELF_PASSWORD_MUTATION = gql`
+export const UPDATE_SELF_PASSWORD_MUTATION = gql`
   mutation updatePassword($newPassword: String!, $oldPassword: String!) {
     updateSelfPassword(
       input: { newPassword: $newPassword, oldPassword: $oldPassword }
