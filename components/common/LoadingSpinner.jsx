@@ -14,7 +14,7 @@ function LoadingSpinner({ loading }) {
 
   useEffect(() => {
     if (!loading) onClose();
-  }, [loading]);
+  }, [loading, onClose]);
 
   return (
     <Modal

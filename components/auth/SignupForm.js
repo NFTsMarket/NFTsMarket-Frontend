@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Button,
   FormControl,
@@ -16,17 +16,8 @@ import {
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
+import { SIGN_UP_MUTATION } from "../../utils/gqlMutations";
 import LoadingSpinner from "../common/LoadingSpinner";
-
-const SIGN_UP_MUTATION = gql`
-  mutation signUp($email: String!, $name: String!, $password: String!) {
-    signUpUser(input: { email: $email, name: $name, password: $password }) {
-      user {
-        name
-      }
-    }
-  }
-`;
 
 function SignupForm() {
   // next hooks

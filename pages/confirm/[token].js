@@ -1,20 +1,15 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import CenteredText from "../../components/common/CenteredText";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
-
-const CONFIRM_MAIL_MUTATION = gql`
-  mutation confirmAccount($token: String!) {
-    validateToken(input: { origin: "web", token: $token })
-  }
-`;
+import { VALIDATE_TOKEN_MUTATION } from "../../utils/gqlMutations";
 
 function Token() {
   const router = useRouter();
   const toast = useToast();
-  const [confirmAccount, { loading }] = useMutation(CONFIRM_MAIL_MUTATION);
+  const [validateAuthToken, { loading }] = useMutation(VALIDATE_TOKEN_MUTATION);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -23,7 +18,7 @@ function Token() {
       try {
         const {
           data: { validateToken },
-        } = await confirmAccount({
+        } = await validateAuthToken({
           variables: {
             token: router.query.token,
           },
@@ -53,7 +48,7 @@ function Token() {
       }
     }
     getData();
-  }, [router, confirmAccount, toast]);
+  }, [router, validateAuthToken, toast]);
 
   return (
     <>

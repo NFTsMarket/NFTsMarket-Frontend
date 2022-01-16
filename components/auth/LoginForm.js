@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Button,
   Flex,
@@ -15,25 +15,13 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useAuth } from "../../context/AuthContext";
+import { LOG_IN_MUTATION } from "../../utils/gqlMutations";
 import LoadingSpinner from "../common/LoadingSpinner";
-
-const LOG_IN_MUTATION = gql`
-  mutation logIn($email: String!, $password: String!) {
-    signInUser(input: { email: $email, password: $password }) {
-      accessToken
-      user {
-        id
-        email
-        name
-        profilePicture
-      }
-    }
-  }
-`;
 
 function LoginForm() {
   // next hooks
@@ -105,13 +93,15 @@ function LoginForm() {
           <FormControl id="password" isInvalid={!!errors.password}>
             <Flex justify="space-between">
               <FormLabel>Password</FormLabel>
-              <ChakraLink
-                color={textColors}
-                fontWeight="semibold"
-                fontSize="sm"
-              >
-                Forgot Password?
-              </ChakraLink>
+              <Link href="/reset-password" passHref>
+                <ChakraLink
+                  color={textColors}
+                  fontWeight="semibold"
+                  fontSize="sm"
+                >
+                  Forgot Password?
+                </ChakraLink>
+              </Link>
             </Flex>
             <InputGroup size="md">
               <Input
