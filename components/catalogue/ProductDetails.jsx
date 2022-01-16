@@ -33,7 +33,7 @@ export default function ProductDetails(props) {
     setIsEditing(false);
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     setIsPending(await BuyApi.existsPurchases({ state: 'Pending', product: product.id }));
     setIsOwner(user == null || user.id == product.owner);
