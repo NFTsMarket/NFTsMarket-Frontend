@@ -12,7 +12,6 @@ export default function ErrorAlert({ text, description }) {
       <AlertIcon />
       <AlertTitle mr={2}>{text}</AlertTitle>
       <AlertDescription>{description}</AlertDescription>
-      <CloseButton position="absolute" right="8px" top="8px" />
     </Alert>
   );
 }

@@ -10,9 +10,13 @@ import Link from "next/link";
 
 const CategoryTag = ({ category }) => {
   return (
-    <Link href={`/categories/${category.id}`} passHref >
-      <Tag key={category.id} variant="outline" colorScheme="purple">
-        <TagLabel style={{cursor:"pointer"}}>{category.name}</TagLabel>
+    <Link href={`/categories/${category.id}`} passHref>
+      <Tag
+        key={category.id}
+        borderRadius="full"
+        colorScheme="purple"
+      >
+        <TagLabel style={{ cursor: "pointer" }}>{category.name}</TagLabel>
       </Tag>
     </Link>
   );

@@ -24,16 +24,20 @@ import {
   Input,
   useToast,
   FormHelperText,
+  Select,
 } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
-import { getCategories, postProduct } from "./catalogueResource.js";
+import { getAssets, postProduct } from "./catalogueResource.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 
+//TODO quitar asset y descomenbtar
 function NewProduct(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isAuthenticated, user, dispatch } = useAuth();
   const toast = useToast();
   const [allCategories, setAllCategories] = useState(props.categories);
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [allAssets, setAllAssets] = useState([]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -48,6 +52,40 @@ function NewProduct(props) {
 
   useEffect(() => {
     setAllCategories(props.categories);
+    setAllAssets([
+      {
+        id: "id",
+        name: "holiwi",
+        user: "61df2a2b7b793c8a671dd841",
+        file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
+      },
+      {
+        id: "id2",
+        name: "holiwi2",
+        user: "61df2a2b7b793c8a671dd843",
+        file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
+      },
+      {
+        id: "id3",
+        name: "holiwi3",
+        user: "61df2a2b7b793c8a671dd841",
+        file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
+      },
+    ]);
+
+    // getAssets()
+    //   .then((data) => {
+    //     setAllAssets(data);
+    //   })
+    //   .catch((error) => {
+    //     toast({
+    //       title: "There was some error.",
+    //       description: "Couldn't load assets.",
+    //       status: "error",
+    //       duration: 9000,
+    //       isClosable: true,
+    //     });
+    //   });
   }, [isOpen, props.categories]);
 
   function onClick() {
@@ -61,9 +99,10 @@ function NewProduct(props) {
       });
       return false;
     }
+    setLoadingButton(true);
 
     const newProduct = {
-      creator: "creator1",
+      creator: user.name,
       title: title,
       description: description,
       price: price,
@@ -88,6 +127,7 @@ function NewProduct(props) {
             duration: 9000,
             isClosable: true,
           });
+          setLoadingButton(false);
 
           onClose();
         } else {
@@ -95,6 +135,7 @@ function NewProduct(props) {
         }
       })
       .catch((error) => {
+        setLoadingButton(false);
         console.log(error);
         toast({
           title: "There was some error.",
@@ -133,20 +174,44 @@ function NewProduct(props) {
           <ModalCloseButton />
 
           <ModalBody>
-            <FormControl isInvalid={titleError}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                placeholder="Title"
-                name="title"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-              />
-              {!titleError ? (
-                <></>
-              ) : (
-                <FormErrorMessage>Title is required.</FormErrorMessage>
-              )}
-            </FormControl>
+            <Center>
+              <FormControl mr={2} isInvalid={titleError}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  placeholder="Title"
+                  name="title"
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                />
+                {!titleError ? (
+                  <FormHelperText color={"white"}>Product title</FormHelperText>
+                ) : (
+                  <FormErrorMessage>Title is required.</FormErrorMessage>
+                )}
+              </FormControl>
+              <FormControl ml={2} isInvalid={priceError}>
+                <FormLabel>Price</FormLabel>
+                <NumberInput
+                  defaultValue={0.0}
+                  min={0}
+                  precision={2}
+                  onChange={(event) => setPrice(event)}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+                {!priceError ? (
+                  <FormHelperText color={"white"}>Product price</FormHelperText>
+                ) : (
+                  <FormErrorMessage>
+                    A valid price is required.
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </Center>
             <br></br>
             <FormControl isInvalid={descriptionError}>
               <FormLabel>Description</FormLabel>
@@ -160,27 +225,6 @@ function NewProduct(props) {
                 <></>
               ) : (
                 <FormErrorMessage>Description is required.</FormErrorMessage>
-              )}
-            </FormControl>
-            <br></br>
-            <FormControl isInvalid={priceError}>
-              <FormLabel>Price</FormLabel>
-              <NumberInput
-                defaultValue={0.0}
-                min={0}
-                precision={2}
-                onChange={(event) => setPrice(event)}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-              {!pictureError ? (
-                <></>
-              ) : (
-                <FormErrorMessage>A valid price is required.</FormErrorMessage>
               )}
             </FormControl>
             <br></br>
@@ -203,27 +247,38 @@ function NewProduct(props) {
                 </Stack>
               </CheckboxGroup>
 
-              <FormHelperText>Choose between these categories.</FormHelperText>
+              <FormHelperText>
+                {allCategories.length !== 0
+                  ? "Choose between these categories."
+                  : "There was some problem loading categories."}
+              </FormHelperText>
             </FormControl>
             <br></br>
             <FormControl isInvalid={pictureError}>
               <FormLabel>Picture Url</FormLabel>
-              <Input
-                placeholder="Picture"
-                name="picture"
-                value={picture}
-                onChange={(event) => setPicture(event.target.value)}
-              />
-              {!pictureError ? (
-                <></>
-              ) : (
-                <FormErrorMessage>Picture is required.</FormErrorMessage>
-              )}
+              <Select
+                isRequired
+                placeholder="Select option"
+                onChange={(event) => {
+                  setPicture(event.target.value);
+                }}
+              >
+                {user
+                  ? allAssets
+                      .filter((s) => s.user === user.id)
+                      .map((a) => (
+                        <option key={a.id} value={a.id}>
+                          {a.name}
+                        </option>
+                      ))
+                  : null}
+              </Select>
             </FormControl>
           </ModalBody>
 
           <ModalFooter>
             <Button
+              isLoading={loadingButton}
               colorScheme="purple"
               mr={3}
               onClick={onClick}

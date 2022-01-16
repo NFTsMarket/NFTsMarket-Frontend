@@ -18,6 +18,7 @@ import LoadingCircle from "../common/LoadingCircle.jsx";
 import DeleteAlert from "./deleteAlert.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
+//TODO quitar asset
 export default function ProductDetails({ product, onBuy, onEdit }) {
   const { isAuthenticated, user, dispatch } = useAuth();
   const [loading, setloading] = useState(true);
@@ -26,6 +27,13 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
     product.categories === undefined ? [] : product.categories;
   const [isPending, setIsPending] = useState(true);
   const [isOwner, setIsOwner] = useState(true);
+
+  product.picture = {
+    id: "id3",
+    name: "holiwi3",
+    user: "61df2a2b7b793c8a671dd841",
+    file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
+  };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -107,18 +115,16 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
 
               <DeleteAlert id={product.id} owner={product.owner} />
 
-              {!isOwner && (
-                <Button
-                  style={{ marginLeft: "20px", marginRight: "20px" }}
-                  colorScheme="purple"
-                  variant="outline"
-                  // isDisabled={isPending}
-                  disabled={!isAuthenticated}
-                  onClick={() => onBuy(product)}
-                >
-                  Buy
-                </Button>
-              )}
+              <Button
+                style={{ marginLeft: "20px", marginRight: "20px" }}
+                colorScheme="purple"
+                variant="outline"
+                // isDisabled={isPending}
+                disabled={!isAuthenticated}
+                onClick={() => onBuy(product)}
+              >
+                Buy
+              </Button>
 
               <Link href={"/"} passHref>
                 <Button

@@ -19,8 +19,9 @@ import ProductText from "./ProductText";
 import { getCategories, putProduct } from "./catalogueResource";
 
 export default function EditProduct({ product, onCancel, onSave }) {
-  const [allCategories, setAllCategories] = useState([]);
   const toast = useToast();
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [allCategories, setAllCategories] = useState([]);
 
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description);
@@ -32,8 +33,6 @@ export default function EditProduct({ product, onCancel, onSave }) {
         : product.categories.map((data) => data.id)
       : []
   );
-
-  const [picture, setPicture] = useState(product.picture);
 
   useEffect(() => {
     getCategories()
@@ -52,8 +51,19 @@ export default function EditProduct({ product, onCancel, onSave }) {
   }, [product]);
 
   function updateProduct() {
+    if (title === "" || description === "" || price <= 0) {
+      toast({
+        title: "There was some error.",
+        description: "Please, fill all required parameters correctly.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    }
+    setLoadingButton(true);
     const newProduct = {
-      picture: picture,
+      picture: product.picture,
       title: title,
       price: price,
       categories: categoriesId,
@@ -73,12 +83,16 @@ export default function EditProduct({ product, onCancel, onSave }) {
           newProduct.categories = allCategories.filter((c) =>
             categoriesId.some((v) => v === c.id)
           );
+          setLoadingButton(false);
+
           onSave(newProduct);
         } else {
           throw Error("Couldn't update product.", response.status);
         }
       })
       .catch((error) => {
+        setLoadingButton(false);
+
         console.log(error);
         toast({
           title: "There was some error.",
@@ -101,7 +115,7 @@ export default function EditProduct({ product, onCancel, onSave }) {
           color={"#333 "}
         >
           <Flex>
-            <Box w="264px" mx={10}>
+            <Box w="264px" m={10}>
               <Center py={12}>
                 <Box
                   role={"group"}
@@ -133,7 +147,7 @@ export default function EditProduct({ product, onCancel, onSave }) {
                       height={184}
                       width={225}
                       objectFit={"cover"}
-                      src={product.picture}
+                      src={product.picture.file}
                       alt={""}
                     />
                   </Box>
@@ -214,21 +228,12 @@ export default function EditProduct({ product, onCancel, onSave }) {
                   title="Most recent update date"
                   text={product.updatedAt}
                 ></ProductText>
-                <Text lineHeight={8} fontSize="lg">
-                  <b>Picture</b>
-                </Text>
-                <Input
-                  placeholder="Picture"
-                  name="picture"
-                  value={picture}
-                  onChange={(event) => setPicture(event.target.value)}
-                />
-                <br />
               </Text>
             </Center>
           </Flex>
           <Center>
             <Button
+              isLoading={loadingButton}
               style={{ marginRight: "20px" }}
               leftIcon={<CheckIcon />}
               colorScheme="purple"

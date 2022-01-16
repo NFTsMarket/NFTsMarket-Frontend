@@ -5,10 +5,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import LoadingCircle from "../../common/LoadingCircle.jsx";
 import { useAuth } from "../../../context/AuthContext.jsx";
-import { getProductByCategory } from "../catalogueResource.js";
+import { getCategories, getProductByCategory } from "../catalogueResource.js";
 import ErrorAlert from "../errorAlert.jsx";
 import Product from "../Product.jsx";
 import DeleteCategoryAlert from "./deleteCategoryAlert.jsx";
+import ShowCategories from "./ShowCategories.jsx";
 
 export default function CategoryDetails({ category, onEdit }) {
   const { isAuthenticated, user, dispatch } = useAuth();
@@ -16,7 +17,8 @@ export default function CategoryDetails({ category, onEdit }) {
   const [message, setMessage] = useState("");
   const [products, setProducts] = useState([]);
   const [isPending, setIsPending] = useState(true);
-
+  const [categories, setCategories] = useState([]);
+  
   useEffect(() => {
     if (category.name) {
       getProductByCategory(category.id)
@@ -25,6 +27,20 @@ export default function CategoryDetails({ category, onEdit }) {
           setMessage(error);
         })
         .then(() => setloading(false));
+
+      getCategories()
+        .then((data) => {
+          setCategories(data);
+        })
+        .catch((error) => {
+          toast({
+            title: "There was some error.",
+            description: "Couldn't load categories.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        });
     }
 
     const user = JSON.parse(localStorage.getItem("user"));
@@ -81,13 +97,14 @@ export default function CategoryDetails({ category, onEdit }) {
               </Center>
             </SimpleGrid>
           </Center>
-          <Center mx="2em">
+          <ShowCategories categories={categories} />
+          <div mx="2em">
             <SimpleGrid minChildWidth="300px" spacing={2}>
               {products.map((p) => (
                 <Product key={p.id} product={p} displayButton={true} />
               ))}
             </SimpleGrid>
-          </Center>
+          </div>
         </>
       )}
     </div>

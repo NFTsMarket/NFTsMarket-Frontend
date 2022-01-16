@@ -16,6 +16,7 @@ import { useAuth } from "../../../context/AuthContext";
 
 const DeleteCategoryAlert = ({ id }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [loadingButton, setLoadingButton] = React.useState(false);
   const { isAuthenticated, user, dispatch } = useAuth();
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef();
@@ -23,9 +24,10 @@ const DeleteCategoryAlert = ({ id }) => {
   const router = useRouter();
 
   function onDelete() {
+    setLoadingButton(true);
     deleteCategory(id).then((response) => {
       if (response.ok) {
-        onClose();
+        setLoadingButton(false);
         toast({
           title: "Category deleted succesfully.",
           description: "We've deleted your category for you.",
@@ -33,8 +35,10 @@ const DeleteCategoryAlert = ({ id }) => {
           duration: 9000,
           isClosable: true,
         });
+        onClose();
         router.push("/");
       } else {
+        setLoadingButton(false);
         toast({
           title: "There was some error.",
           description: "Couldn't delete the category.",
@@ -79,7 +83,12 @@ const DeleteCategoryAlert = ({ id }) => {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" ml={3} onClick={() => onDelete()}>
+              <Button
+                isLoading={loadingButton}
+                colorScheme="red"
+                ml={3}
+                onClick={() => onDelete()}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>

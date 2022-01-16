@@ -160,18 +160,18 @@ const deleteCategory = async (id) => {
   return response;
 };
 
-const exportedFunctions = {
-  getAllProducts,
-  getProductByID,
-  getProductByCategory,
-  postProduct,
-  putProduct,
-  deleteProduct,
-  getCategories,
-  getCategoryByID,
-  postCategory,
-  putCategory,
-  deleteCategory,
+const getAssets = async () => {
+  return await fetch(`${BASE_API_PATH}/assets`)
+    .then((response) => {
+      if (!response.ok)
+        throw Error(`${response.status}: ${response.statusText}`);
+
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 export {
@@ -186,4 +186,5 @@ export {
   postCategory,
   putCategory,
   deleteCategory,
+  getAssets,
 };

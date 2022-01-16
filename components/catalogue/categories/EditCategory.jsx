@@ -15,8 +15,21 @@ import { putCategory } from "../catalogueResource";
 export default function EditCategory({ category, onCancel, onSave }) {
   const toast = useToast();
   const [name, setName] = useState(category.name);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   function updateCategory() {
+    if (name === "") {
+      toast({
+        title: "There was some error.",
+        description: "Please, fill all required parameters.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    }
+    setLoadingButton(true);
+
     const newCategory = {
       name: name,
     };
@@ -31,6 +44,7 @@ export default function EditCategory({ category, onCancel, onSave }) {
             duration: 9000,
             isClosable: true,
           });
+          setLoadingButton(false);
 
           onSave(newCategory);
         } else {
@@ -38,6 +52,7 @@ export default function EditCategory({ category, onCancel, onSave }) {
         }
       })
       .catch((error) => {
+        setLoadingButton(false);
         console.log(error);
         toast({
           title: "There was some error.",
@@ -78,6 +93,7 @@ export default function EditCategory({ category, onCancel, onSave }) {
           </Flex>
           <Center>
             <Button
+              isLoading={loadingButton}
               style={{ marginRight: "20px" }}
               leftIcon={<CheckIcon />}
               colorScheme="purple"

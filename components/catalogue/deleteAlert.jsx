@@ -16,6 +16,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const DeleteAlert = ({ id, owner }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [loadingButton, setLoadingButton] = React.useState(false);
   const { isAuthenticated, user, dispatch } = useAuth();
   const userName = user ? user.name : null;
   const onClose = () => setIsOpen(false);
@@ -24,9 +25,10 @@ const DeleteAlert = ({ id, owner }) => {
   const router = useRouter();
 
   function onDelete() {
+    setLoadingButton(true);
     deleteProduct(id).then((response) => {
       if (response.ok) {
-        onClose();
+        setLoadingButton(false);
         toast({
           title: "Product deleted succesfully.",
           description: "We've deleted your product for you.",
@@ -34,8 +36,10 @@ const DeleteAlert = ({ id, owner }) => {
           duration: 9000,
           isClosable: true,
         });
+        onClose();
         router.push("/");
       } else {
+        setLoadingButton(false);
         toast({
           title: "There was some error.",
           description: "Couldn't delete the product.",
@@ -56,7 +60,7 @@ const DeleteAlert = ({ id, owner }) => {
         colorScheme="purple"
         variant="outline"
         onClick={() => setIsOpen(true)}
-        disabled={userName!==owner}
+        disabled={userName !== owner}
       >
         Delete
       </Button>
@@ -80,7 +84,12 @@ const DeleteAlert = ({ id, owner }) => {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" ml={3} onClick={() => onDelete()}>
+              <Button
+                isLoading={loadingButton}
+                colorScheme="red"
+                ml={3}
+                onClick={() => onDelete()}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>
