@@ -1,22 +1,14 @@
-import {
-  Box,
-  Heading,
-  Link as ChakraLink,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Head from "next/head";
-import Link from "next/link";
 import AuthCard from "../components/auth/AuthCard";
 import AuthContainer from "../components/auth/AuthContainer";
 import AuthHeader from "../components/auth/AuthHeader";
+import AuthText from "../components/auth/AuthText";
 import DividerWithText from "../components/auth/DividerWithText";
-import LoginForm from "../components/auth/LoginForm";
+import LoginForm from "../components/auth/forms/LoginForm";
 import SocialButtons from "../components/auth/SocialButtons";
 
 function Login() {
-  const textColors = useColorModeValue("purple.500", "purple.200");
-
   return (
     <>
       <Head>
@@ -25,15 +17,12 @@ function Login() {
       <AuthContainer>
         <AuthHeader />
         <Box maxW="md" mx="auto">
-          <Heading textAlign="center" size="xl" fontWeight="extrabold">
-            Log In
-          </Heading>
-          <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
-            <Text as="span">Don&apos;t have an account? </Text>
-            <Link href="/signup" passHref>
-              <ChakraLink color={textColors}>Sign Up!</ChakraLink>
-            </Link>
-          </Text>
+          <AuthText
+            headingText="Log In"
+            helperText="Don't have an account? "
+            linkHref="/signup"
+            linkText="Sign Up!"
+          />
           <AuthCard>
             <LoginForm />
             <DividerWithText mt="5">or continue with</DividerWithText>

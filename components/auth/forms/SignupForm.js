@@ -1,31 +1,34 @@
 import { useMutation } from "@apollo/client";
 import {
   Button,
-  Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Link as ChakraLink,
   Stack,
-  useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import { useAuth } from "../../context/AuthContext";
-import { LOG_IN_MUTATION } from "../../utils/gqlMutations";
-import LoadingSpinner from "../common/LoadingSpinner";
+import { SIGN_UP_MUTATION } from "../../../utils/gqlMutations";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
-function LoginForm() {
+function SignupForm() {
   // next hooks
   const router = useRouter();
+
+  // auth hooks
+  const [signUpUser, { loading }] = useMutation(SIGN_UP_MUTATION);
+
+  // chakra hooks
+  const toast = useToast();
+  const { isOpen, onToggle } = useDisclosure();
 
   // form hooks
   const {
@@ -34,32 +37,23 @@ function LoginForm() {
     formState: { errors },
   } = useForm();
 
-  // auth hooks
-  const { dispatch } = useAuth();
-  const [signInUser, { loading }] = useMutation(LOG_IN_MUTATION);
-
-  // chakra hooks
-  const toast = useToast();
-  const { isOpen, onToggle } = useDisclosure();
-  const textColors = useColorModeValue("purple.500", "purple.200");
-
-  const onSubmit = async ({ email, password }) => {
+  const onSubmit = async ({ email, name, password }) => {
     try {
-      const { data } = await signInUser({
+      const { data } = await signUpUser({
         variables: {
           email,
+          name,
           password,
         },
       });
 
-      router.push("/");
+      router.push("/confirm");
 
-      dispatch({
-        type: "LOGIN",
-        payload: {
-          token: data.signInUser.accessToken,
-          user: data.signInUser.user,
-        },
+      toast({
+        title: `Hey ${data.signUpUser.user.name}! We'll send you a confirmation email shortly ;)`,
+        status: "info",
+        duration: 6000,
+        isClosable: true,
       });
     } catch (error) {
       toast({
@@ -87,29 +81,44 @@ function LoginForm() {
                 pattern: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               })}
             />
-            <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+            {!errors.email ? (
+              <FormHelperText>Enter a valid email address 📧</FormHelperText>
+            ) : (
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+            )}
+          </FormControl>
+
+          <FormControl id="name" isInvalid={!!errors.name}>
+            <FormLabel>Name</FormLabel>
+            <Input
+              autoComplete="name"
+              {...register("name", {
+                required: "Please enter your name",
+                minLength: 3,
+                maxLength: 80,
+              })}
+            />
+            {!errors.name ? (
+              <FormHelperText>Enter your full name 🙏</FormHelperText>
+            ) : (
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl id="password" isInvalid={!!errors.password}>
-            <Flex justify="space-between">
-              <FormLabel>Password</FormLabel>
-              <Link href="/reset-password" passHref>
-                <ChakraLink
-                  color={textColors}
-                  fontWeight="semibold"
-                  fontSize="sm"
-                >
-                  Forgot Password?
-                </ChakraLink>
-              </Link>
-            </Flex>
+            <FormLabel>Password</FormLabel>
             <InputGroup size="md">
               <Input
                 pr="4.5rem"
                 type={isOpen ? "text" : "password"}
-                autoComplete="current-password"
+                autoComplete="new-password"
                 {...register("password", {
                   required: "Please enter a password",
+                  minLength: {
+                    value: 6,
+                    message:
+                      "Your password should be at least 6 characters long",
+                  },
                 })}
               />
               <InputRightElement>
@@ -122,11 +131,15 @@ function LoginForm() {
                 />
               </InputRightElement>
             </InputGroup>
-            <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
+            {!errors.password ? (
+              <FormHelperText>At least 6 characters long pls</FormHelperText>
+            ) : (
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <Button type="submit" colorScheme="purple">
-            Log In
+            Sign Up
           </Button>
         </Stack>
       </form>
@@ -134,4 +147,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default SignupForm;
