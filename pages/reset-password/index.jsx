@@ -18,7 +18,7 @@ function SendEmail() {
             Reset Password
           </Heading>
           <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
-            We'll send you an email to reset your password
+            We&apos;ll send you an email to reset your password
           </Text>
           <AuthCard>
             <EmailForm />
