@@ -16,8 +16,8 @@ import {
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import { SIGN_UP_MUTATION } from "../../utils/gqlMutations";
-import LoadingSpinner from "../common/LoadingSpinner";
+import { SIGN_UP_MUTATION } from "../../../utils/gqlMutations";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
 function SignupForm() {
   // next hooks

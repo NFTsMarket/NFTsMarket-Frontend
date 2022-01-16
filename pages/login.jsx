@@ -11,7 +11,7 @@ import AuthCard from "../components/auth/AuthCard";
 import AuthContainer from "../components/auth/AuthContainer";
 import AuthHeader from "../components/auth/AuthHeader";
 import DividerWithText from "../components/auth/DividerWithText";
-import LoginForm from "../components/auth/LoginForm";
+import LoginForm from "../components/auth/forms/LoginForm";
 import SocialButtons from "../components/auth/SocialButtons";
 
 function Login() {

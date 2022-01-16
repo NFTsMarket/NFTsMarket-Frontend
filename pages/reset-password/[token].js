@@ -3,7 +3,7 @@ import Head from "next/head";
 import AuthCard from "../../components/auth/AuthCard";
 import AuthContainer from "../../components/auth/AuthContainer";
 import AuthHeader from "../../components/auth/AuthHeader";
-import ResetPasswordForm from "../../components/auth/ResetPasswordForm";
+import ResetPasswordForm from "../../components/auth/forms/ResetPasswordForm";
 
 function ResetPassword() {
   return (

@@ -3,7 +3,7 @@ import Head from "next/head";
 import AuthCard from "../../components/auth/AuthCard";
 import AuthContainer from "../../components/auth/AuthContainer";
 import AuthHeader from "../../components/auth/AuthHeader";
-import EmailForm from "../../components/auth/EmailForm";
+import EmailForm from "../../components/auth/forms/EmailForm";
 
 function SendEmail() {
   return (

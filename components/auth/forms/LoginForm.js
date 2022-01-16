@@ -19,9 +19,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import { useAuth } from "../../context/AuthContext";
-import { LOG_IN_MUTATION } from "../../utils/gqlMutations";
-import LoadingSpinner from "../common/LoadingSpinner";
+import { useAuth } from "../../../context/AuthContext";
+import { LOG_IN_MUTATION } from "../../../utils/gqlMutations";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
 function LoginForm() {
   // next hooks
