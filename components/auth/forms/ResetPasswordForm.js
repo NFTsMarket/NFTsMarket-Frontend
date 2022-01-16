@@ -86,6 +86,11 @@ function ResetPasswordForm() {
                 autoComplete="current-password"
                 {...register("password1", {
                   required: "Please enter a password",
+                  minLength: {
+                    value: 6,
+                    message:
+                      "Your password should be at least 6 characters long",
+                  },
                 })}
               />
               <InputRightElement>
