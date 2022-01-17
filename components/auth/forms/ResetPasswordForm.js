@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import LoadingSpinner from "../../../components/common/LoadingSpinner";
 import { VALIDATE_TOKEN_MUTATION } from "../../../utils/gqlMutations";
+import PasswordInput from "../PasswordInput";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -77,57 +78,22 @@ function ResetPasswordForm() {
       {loading && <LoadingSpinner loading={loading} />}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={6}>
-          <FormControl id="password1" isInvalid={!!errors.password1}>
-            <FormLabel>New Password</FormLabel>
-            <InputGroup size="md">
-              <Input
-                pr="4.5rem"
-                type={isOpenPassword1 ? "text" : "password"}
-                autoComplete="current-password"
-                {...register("password1", {
-                  required: "Please enter a password",
-                })}
-              />
-              <InputRightElement>
-                <IconButton
-                  bg="transparent !important"
-                  variant="ghost"
-                  aria-label={
-                    isOpenPassword1 ? "Mask password" : "Reveal password"
-                  }
-                  icon={isOpenPassword1 ? <HiEyeOff /> : <HiEye />}
-                  onClick={onTogglePassword1}
-                />
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{errors?.password1?.message}</FormErrorMessage>
-          </FormControl>
+          <PasswordInput
+            name="password1"
+            requiredMessage="Please enter a password"
+            formLabel="New Password"
+            register={register}
+            error={errors.password1}
+            lenghtValidation
+          />
 
-          <FormControl id="password2" isInvalid={!!errors.password2}>
-            <FormLabel>Repeat Password</FormLabel>
-            <InputGroup size="md">
-              <Input
-                pr="4.5rem"
-                type={isOpenPassword2 ? "text" : "password"}
-                autoComplete="current-password"
-                {...register("password2", {
-                  required: "Please repeat the password",
-                })}
-              />
-              <InputRightElement>
-                <IconButton
-                  bg="transparent !important"
-                  variant="ghost"
-                  aria-label={
-                    isOpenPassword2 ? "Mask password" : "Reveal password"
-                  }
-                  icon={isOpenPassword2 ? <HiEyeOff /> : <HiEye />}
-                  onClick={onTogglePassword2}
-                />
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{errors?.password2?.message}</FormErrorMessage>
-          </FormControl>
+          <PasswordInput
+            name="password2"
+            requiredMessage="Please repeat the password"
+            formLabel="Repeat Password"
+            register={register}
+            error={errors.password2}
+          />
 
           <Button type="submit" colorScheme="purple">
             Reset password

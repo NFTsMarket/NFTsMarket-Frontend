@@ -6,12 +6,23 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 
-function AuthText({ headingText, helperText, linkHref, linkText }) {
+function AuthText({
+  headingText,
+  helperText,
+  linkHref,
+  linkText,
+  ...headingProps
+}) {
   const textColors = useColorModeValue("purple.500", "purple.200");
 
   return (
     <>
-      <Heading textAlign="center" size="xl" fontWeight="extrabold">
+      <Heading
+        textAlign="center"
+        size="xl"
+        fontWeight="extrabold"
+        {...headingProps}
+      >
         {headingText}
       </Heading>
 

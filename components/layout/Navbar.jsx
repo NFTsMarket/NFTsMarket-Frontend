@@ -117,7 +117,11 @@ export default function Navbar(props) {
                   cursor="pointer"
                   minW={0}
                 >
-                  <Avatar size="sm" src={user?.profilePicture} />
+                  <Avatar
+                    size="sm"
+                    src={user?.profilePicture}
+                    name={user?.name}
+                  />
                 </MenuButton>
 
                 <MenuList
@@ -126,7 +130,11 @@ export default function Navbar(props) {
                   color={menuTextColor}
                 >
                   <VStack spacing="4" my="5">
-                    <Avatar size="xl" src={user?.profilePicture} />
+                    <Avatar
+                      size="xl"
+                      src={user?.profilePicture}
+                      name={user?.name}
+                    />
                     <Text>{user.name}</Text>
                   </VStack>
                   <MenuDivider />
