@@ -1,9 +1,10 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Head from "next/head";
 import AuthCard from "../../components/auth/AuthCard";
 import AuthContainer from "../../components/auth/AuthContainer";
 import AuthHeader from "../../components/auth/AuthHeader";
-import ResetPasswordForm from "../../components/auth/ResetPasswordForm";
+import AuthText from "../../components/auth/AuthText";
+import ResetPasswordForm from "../../components/auth/forms/ResetPasswordForm";
 
 function ResetPassword() {
   return (
@@ -14,9 +15,7 @@ function ResetPassword() {
       <AuthContainer>
         <AuthHeader />
         <Box maxW="md" mx="auto">
-          <Heading textAlign="center" size="xl" fontWeight="extrabold">
-            Reset Password
-          </Heading>
+          <AuthText headingText="Reset Password" />
           <AuthCard mt="8">
             <ResetPasswordForm />
           </AuthCard>

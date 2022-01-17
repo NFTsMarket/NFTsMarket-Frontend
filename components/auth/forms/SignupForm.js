@@ -5,32 +5,21 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  IconButton,
   Input,
-  InputGroup,
-  InputRightElement,
   Stack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { HiEye, HiEyeOff } from "react-icons/hi";
-import { SIGN_UP_MUTATION } from "../../utils/gqlMutations";
-import LoadingSpinner from "../common/LoadingSpinner";
+import { SIGN_UP_MUTATION } from "../../../utils/gqlMutations";
+import LoadingSpinner from "../../common/LoadingSpinner";
+import PasswordInput from "../PasswordInput";
 
 function SignupForm() {
-  // next hooks
-  const router = useRouter();
-
-  // auth hooks
   const [signUpUser, { loading }] = useMutation(SIGN_UP_MUTATION);
-
-  // chakra hooks
+  const router = useRouter();
   const toast = useToast();
-  const { isOpen, onToggle } = useDisclosure();
-
-  // form hooks
   const {
     register,
     handleSubmit,
@@ -105,38 +94,16 @@ function SignupForm() {
             )}
           </FormControl>
 
-          <FormControl id="password" isInvalid={!!errors.password}>
-            <FormLabel>Password</FormLabel>
-            <InputGroup size="md">
-              <Input
-                pr="4.5rem"
-                type={isOpen ? "text" : "password"}
-                autoComplete="new-password"
-                {...register("password", {
-                  required: "Please enter a password",
-                  minLength: {
-                    value: 6,
-                    message:
-                      "Your password should be at least 6 characters long",
-                  },
-                })}
-              />
-              <InputRightElement>
-                <IconButton
-                  bg="transparent !important"
-                  variant="ghost"
-                  aria-label={isOpen ? "Mask password" : "Reveal password"}
-                  icon={isOpen ? <HiEyeOff /> : <HiEye />}
-                  onClick={onToggle}
-                />
-              </InputRightElement>
-            </InputGroup>
-            {!errors.password ? (
-              <FormHelperText>At least 6 characters long pls</FormHelperText>
-            ) : (
-              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-            )}
-          </FormControl>
+          <PasswordInput
+            name="password"
+            formLabel="Password"
+            requiredMessage="Please enter a password"
+            autoComplete="new-password"
+            register={register}
+            error={errors.password}
+            formHelperText="At least 6 characters long 🔑"
+            lenghtValidation
+          />
 
           <Button type="submit" colorScheme="purple">
             Sign Up

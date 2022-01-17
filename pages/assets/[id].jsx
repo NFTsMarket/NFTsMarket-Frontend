@@ -18,7 +18,7 @@ import Router from 'next/router';
 import { useAuth } from "../../context/AuthContext";
 
 function ShowAsset(props) {
-    const {isAuthenticated} = useAuth();
+    const {isAuthenticated, user, token} = useAuth();
     const [message, setMessage] = useState(null);
 
     const [asset,setAsset] = useState(null);
@@ -35,7 +35,7 @@ function ShowAsset(props) {
     async function handleDelete(){
       try{
         if(id!=undefined){
-          const deletedAsset = await UploadApi.deleteAsset(id);
+          const deletedAsset = await UploadApi.deleteAsset(id,user,token);
         }
       }catch(error){
         setMessage("Could not contact with the server");
@@ -45,8 +45,8 @@ function ShowAsset(props) {
     async function handleUpdate(){
       try{
         if(id!=undefined){
-          const update = await UploadApi.updateAsset(id,assetFile,assetName,assetUser);
-          const asset = await UploadApi.getAsset(id);
+          const update = await UploadApi.updateAsset(id,assetFile,assetName,assetUser,user,token);
+          const asset = await UploadApi.getAsset(id,user,token);
           setAsset(asset);
           setEditMode(false);
         }
@@ -60,11 +60,11 @@ function ShowAsset(props) {
     }
     useEffect(()=> {
       
-      async function getAsset(){
-        if(isAuthenticated || localStorage.getItem("user")!=undefined){
+      async function getAsset(user,token){
+        if(isAuthenticated){
         try{
           if(id!=undefined){
-            const asset = await UploadApi.getAsset(id);
+            const asset = await UploadApi.getAsset(id,user,token);
             setAsset(asset);
             setAssetFile(asset.file);
             setAssetUser(asset.user.id);
@@ -78,8 +78,8 @@ function ShowAsset(props) {
       }
       }
 
-      getAsset();
-    },[router.query, id,isAuthenticated])
+      getAsset(user,token);
+    },[router.query, id,isAuthenticated,user,token])
     
  return !editMode?(<div className="upload-show">
  <SimpleGrid columns={3}>

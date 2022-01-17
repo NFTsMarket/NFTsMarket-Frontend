@@ -109,13 +109,6 @@ return (
                             </Text>
                         </SimpleGrid>,
                     )}
-                    <Box h="120" w="35%" pt={14}>
-                        <Button h="full" w="full" bg='black' color='white' variant='solid' >
-                            <Text fontSize="2xl">
-                                See more
-                            </Text>
-                        </Button>
-                    </Box>
                 </VStack>
             </Box>
 
