@@ -1,4 +1,5 @@
 import { setContext } from "@apollo/client/link/context";
+import { useAuth } from "../../context/AuthContext";
 
 //var BASE_API_PATH = "https://api-catalogue-juancarlosalonsovalenzuela.cloud.okteto.net/api/v1";
 // var BASE_API_PATH = "http://localhost:4000/api/v1";
@@ -50,7 +51,7 @@ const getProductByCategory = async (id) => {
 };
 
 const postProduct = async (product) => {
-  const token = localStorage.getItem("token");
+  const {token} = useAuth();
   const response = await fetch(`${BASE_API_PATH}/products`, {
     method: "POST",
     headers: {
@@ -65,7 +66,7 @@ const postProduct = async (product) => {
 };
 
 const putProduct = async (id, product) => {
-  const token = localStorage.getItem("token");
+  const {token} = useAuth();
   const response = await fetch(`${BASE_API_PATH}/products/${id}`, {
     method: "PUT",
     headers: {
@@ -80,7 +81,7 @@ const putProduct = async (id, product) => {
 };
 
 const deleteProduct = async (id) => {
-  const token = localStorage.getItem("token");
+  const {token} = useAuth();
   const response = await fetch(`${BASE_API_PATH}/products/${id}`, {
     method: "DELETE",
     headers: {
@@ -122,7 +123,7 @@ const getCategoryByID = async (id) => {
 };
 
 const postCategory = async (category) => {
-  const token = localStorage.getItem("token");
+  const {token} = useAuth();
   const response = await fetch(`${BASE_API_PATH}/categories`, {
     method: "POST",
     headers: {
@@ -137,7 +138,7 @@ const postCategory = async (category) => {
 };
 
 const putCategory = async (id, category) => {
-  const token = localStorage.getItem("token");
+  const {token} = useAuth();
   const response = await fetch(`${BASE_API_PATH}/categories/${id}`, {
     method: "PUT",
     headers: {
@@ -151,7 +152,7 @@ const putCategory = async (id, category) => {
 };
 
 const deleteCategory = async (id) => {
-  const token = localStorage.getItem("token");
+  const {token} = useAuth();
   const response = await fetch(`${BASE_API_PATH}/categories/${id}`, {
     method: "DELETE",
     headers: {
