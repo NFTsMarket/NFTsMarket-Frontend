@@ -1,47 +1,30 @@
 import { useMutation } from "@apollo/client";
 import {
   Button,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  IconButton,
   Input,
-  InputGroup,
-  InputRightElement,
-  Link as ChakraLink,
   Stack,
-  useColorModeValue,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useAuth } from "../../../context/AuthContext";
 import { LOG_IN_MUTATION } from "../../../utils/gqlMutations";
 import LoadingSpinner from "../../common/LoadingSpinner";
+import PasswordInput from "../PasswordInput";
 
 function LoginForm() {
-  // next hooks
+  const [signInUser, { loading }] = useMutation(LOG_IN_MUTATION);
   const router = useRouter();
-
-  // form hooks
+  const toast = useToast();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  // auth hooks
   const { dispatch } = useAuth();
-  const [signInUser, { loading }] = useMutation(LOG_IN_MUTATION);
-
-  // chakra hooks
-  const toast = useToast();
-  const { isOpen, onToggle } = useDisclosure();
-  const textColors = useColorModeValue("purple.500", "purple.200");
 
   const onSubmit = async ({ email, password }) => {
     try {
@@ -90,40 +73,15 @@ function LoginForm() {
             <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl id="password" isInvalid={!!errors.password}>
-            <Flex justify="space-between">
-              <FormLabel>Password</FormLabel>
-              <Link href="/reset-password" passHref>
-                <ChakraLink
-                  color={textColors}
-                  fontWeight="semibold"
-                  fontSize="sm"
-                >
-                  Forgot Password?
-                </ChakraLink>
-              </Link>
-            </Flex>
-            <InputGroup size="md">
-              <Input
-                pr="4.5rem"
-                type={isOpen ? "text" : "password"}
-                autoComplete="current-password"
-                {...register("password", {
-                  required: "Please enter a password",
-                })}
-              />
-              <InputRightElement>
-                <IconButton
-                  bg="transparent !important"
-                  variant="ghost"
-                  aria-label={isOpen ? "Mask password" : "Reveal password"}
-                  icon={isOpen ? <HiEyeOff /> : <HiEye />}
-                  onClick={onToggle}
-                />
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
-          </FormControl>
+          <PasswordInput
+            name="password"
+            requiredMessage="Please enter a password"
+            formLabel="Password"
+            register={register}
+            error={errors.password}
+            linkText="Forgot Password?"
+            linkHref="/reset-password"
+          />
 
           <Button type="submit" colorScheme="purple">
             Log In

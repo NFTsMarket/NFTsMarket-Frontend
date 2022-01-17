@@ -23,6 +23,12 @@ const reducer = (state, action) => {
       localStorage.removeItem("user");
       return initialState;
 
+    case "UPDATE_PICTURE":
+      return {
+        ...state,
+        user: { ...state.user, profilePicture: action.payload.profilePicture },
+      };
+
     default:
       return state;
   }
@@ -32,7 +38,7 @@ export function useProviderAuth() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("token") && localStorage.getItem("user")) {
       dispatch({
         type: "LOGIN",
         payload: {
