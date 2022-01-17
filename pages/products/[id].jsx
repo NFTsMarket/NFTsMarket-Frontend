@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getProductByID } from "../../components/catalogue/catalogueResource.js";
 import { useRouter } from "next/router";
 import ProductDetails from "../../components/catalogue/ProductDetails.jsx";
-import BuyProduct from "../../components/catalogue/BuyProduct.jsx";
+import BuyProduct from "../../components/buy/BuyProduct.jsx";
 import EditProduct from "../../components/catalogue/EditProduct.jsx";
 import ProductError from "../../components/catalogue/ProductError.jsx";
 
