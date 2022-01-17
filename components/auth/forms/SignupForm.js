@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../../context/AuthContext";
 import { SIGN_UP_MUTATION } from "../../../utils/gqlMutations";
 import LoadingSpinner from "../../common/LoadingSpinner";
 import PasswordInput from "../PasswordInput";
@@ -20,6 +21,7 @@ function SignupForm() {
   const [signUpUser, { loading }] = useMutation(SIGN_UP_MUTATION);
   const router = useRouter();
   const toast = useToast();
+  const { dispatch } = useAuth();
   const {
     register,
     handleSubmit,
@@ -36,13 +38,21 @@ function SignupForm() {
         },
       });
 
-      router.push("/confirm");
-
       toast({
         title: `Hey ${data.signUpUser.user.name}! We'll send you a confirmation email shortly ;)`,
         status: "info",
         duration: 6000,
         isClosable: true,
+      });
+
+      router.push("/");
+
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          token: data.signUpUser.accessToken,
+          user: data.signUpUser.user,
+        },
       });
     } catch (error) {
       toast({
