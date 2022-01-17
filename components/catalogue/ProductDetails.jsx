@@ -17,16 +17,29 @@ import ProductText from "./ProductText.jsx";
 import LoadingCircle from "../common/LoadingCircle.jsx";
 import DeleteAlert from "./deleteAlert.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
-
-
+import { BuyApi } from "../buy/BuyApi.js";
 export default function ProductDetails({ product, onBuy, onEdit }) {
   const { isAuthenticated, user } = useAuth();
   const [loading, setloading] = useState(true);
+  const [isPending, setIsPending] = useState(true);
   const userName = user ? user.name : null;
   product.categories =
     product.categories === undefined ? [] : product.categories;
 
+  async function buy() {
+    try {
+      setIsPending(
+        await BuyApi.existsPurchases({ state: "Pending", product: product.id })
+      );
+      console.log(isPending);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
+    buy();
+
     product.title ? setloading(false) : null;
   }, [product]);
 
@@ -107,8 +120,7 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
                 style={{ marginLeft: "20px", marginRight: "20px" }}
                 colorScheme="purple"
                 variant="outline"
-                // isDisabled={isPending}
-                disabled={!isAuthenticated}
+                disabled={!isAuthenticated || isPending}
                 onClick={() => onBuy(product)}
               >
                 Buy
