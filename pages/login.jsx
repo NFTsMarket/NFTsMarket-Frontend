@@ -14,36 +14,8 @@ function Login() {
       <Head>
         <title>Log In | NFTs Market</title>
       </Head>
-      <Box
-        bg={bgColor}
-        minH="100vh"
-        py="12"
-        px={{
-          base: "4",
-          lg: "8",
-        }}
-      >
-        <Flex
-          justify="space-between"
-          mb={{
-            base: "10",
-            md: "20",
-          }}
-        >
-          <Link href="/" passHref>
-            <ChakraLink>
-              <Heading
-                textAlign="center"
-                size="lg"
-                color={textColors}
-                fontWeight="extrabold"
-              >
-                NFTs Market
-              </Heading>
-            </ChakraLink>
-          </Link>
-          <ThemeButton />
-        </Flex>
+      <AuthContainer>
+        <AuthHeader />
         <Box maxW="md" mx="auto">
           <AuthText
             headingText="Log In"
@@ -57,7 +29,7 @@ function Login() {
             <SocialButtons />
           </AuthCard>
         </Box>
-      </Box>
+      </AuthContainer>
     </>
   );
 }
