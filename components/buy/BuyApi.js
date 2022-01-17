@@ -1,7 +1,7 @@
 import UploadApi from '../upload/UploadApi.js';
 
 class BuyApi {
-    static API_BASE_URL = "https://api-fis-fersolesp.cloud.okteto.net/api/v1/purchase/";
+    static API_BASE_URL = `${process.env.NEXT_PUBLIC_API_GATEWAY_DOMAIN}/buy/purchase/`;
 
     static requestHeaders() {
         const token = localStorage.getItem("token");
