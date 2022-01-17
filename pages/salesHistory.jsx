@@ -1,7 +1,8 @@
 import {
-  Button, Heading, Container, Image, FormControl, FormErrorMessage, FormLabel, Input, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Table, Tbody, Td, Th, Thead, Tr, useDisclosure
+  Button, Container, FormControl, FormErrorMessage, FormLabel, Heading, Image, Input, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Table, Tbody, Td, Th, Thead, Tr, useDisclosure
 } from '@chakra-ui/react';
 import Head from "next/head";
+import Router from 'next/router';
 import { useEffect, useState } from "react";
 import BuyApi from '../components/buy/BuyApi.js';
 
@@ -42,7 +43,10 @@ export default function Sales() {
   }
 
   useEffect(() => {
-    updateSales();
+    if (localStorage.getItem("user"))
+      updateSales();
+    else
+      Router.push('/');
   }, []);
 
   return <>
@@ -101,7 +105,7 @@ export default function Sales() {
 
     <Container maxW='container.lg' mt={16} align='center'>
       <Heading textAlign="center" size="lg" mb={3} fontWeight="extrabold">
-          Sales history
+        Sales history
       </Heading>
       <Button colorScheme='orange' onClick={onOpen}>Filter</Button>
       <Table size='md' mt={8}>

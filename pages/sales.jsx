@@ -1,7 +1,8 @@
 import {
-  Button, Container, Image, Heading, FormControl, FormErrorMessage, FormLabel, Input, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Table, Tbody, Td, Th, Thead, Tr, useDisclosure
+  Button, Container, FormControl, FormErrorMessage, FormLabel, Heading, Image, Input, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Table, Tbody, Td, Th, Thead, Tr, useDisclosure
 } from '@chakra-ui/react';
 import Head from "next/head";
+import Router from 'next/router';
 import { useEffect, useState } from "react";
 import BuyApi from '../components/buy/BuyApi.js';
 
@@ -40,9 +41,9 @@ export default function Sales() {
     onClose();
   }
 
-  async function onAccept(purchaseId){
-    if(confirm("Do you want to accept the purchase?")){
-      try{
+  async function onAccept(purchaseId) {
+    if (confirm("Do you want to accept the purchase?")) {
+      try {
         await BuyApi.accceptPurchase(purchaseId);
         updatePurchases();
       } catch (error) {
@@ -51,9 +52,9 @@ export default function Sales() {
     }
   };
 
-  async function onDelete(purchaseId){
-    if(confirm("Do you want to reject the purchase?")){
-      try{
+  async function onDelete(purchaseId) {
+    if (confirm("Do you want to reject the purchase?")) {
+      try {
         await BuyApi.deletePurchase(purchaseId);
         updatePurchases();
       } catch (error) {
@@ -63,7 +64,10 @@ export default function Sales() {
   };
 
   useEffect(() => {
-    updatePurchases();
+    if (localStorage.getItem("user"))
+      updatePurchases();
+    else
+      Router.push('/');
   }, []);
 
   return <>
@@ -122,7 +126,7 @@ export default function Sales() {
 
     <Container maxW='container.xl' mt={16} align='center'>
       <Heading textAlign="center" size="lg" mb={3} fontWeight="extrabold">
-            Pending sales
+        Pending sales
       </Heading>
       <Button colorScheme='orange' onClick={onOpen}>Filter</Button>
       <Table size='md' mt={8}>
@@ -148,12 +152,12 @@ export default function Sales() {
                   <Td isNumeric>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(purchase.amount)}</Td>
                   <Td>{new Intl.DateTimeFormat('en-ZA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(purchase.createdAt)}</Td>
                   <Td style={{ 'font-weight': purchase.state == 'Pending' ? 'bold' : 'normal' }}>{purchase.state}</Td>
-                  <Td><Button colorScheme='green' size="sm" onClick={()=>onAccept(purchase.id)}>Accept</Button></Td>
-                  <Td><Button colorScheme='red' size="sm" onClick={()=>onDelete(purchase.id)}>Reject</Button></Td>
+                  <Td><Button colorScheme='green' size="sm" onClick={() => onAccept(purchase.id)}>Accept</Button></Td>
+                  <Td><Button colorScheme='red' size="sm" onClick={() => onDelete(purchase.id)}>Reject</Button></Td>
                 </Tr>
               }) :
               <Tr>
-                <Td colspan="5" style={{ 'text-align': 'center', 'font-style': 'italic' }}>{purchases ? 'No purchases found.' : 'Loading...'}</Td>
+                <Td colspan="7" style={{ 'text-align': 'center', 'font-style': 'italic' }}>{purchases ? 'No purchases found.' : 'Loading...'}</Td>
               </Tr>
           }
         </Tbody>
