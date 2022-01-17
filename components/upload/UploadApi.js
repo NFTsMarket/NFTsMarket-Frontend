@@ -1,7 +1,7 @@
 import Router from 'next/router';
 class UploadApi {
     
-    static API_BASE_URL="https://api-reyblacua.cloud.okteto.net/api/v1/asset";
+    static API_BASE_URL=`${process.env.NEXT_PUBLIC_API_GATEWAY_DOMAIN}upload/asset`;
 
     static requestHeaders(){
         return {
