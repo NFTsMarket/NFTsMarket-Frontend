@@ -120,7 +120,7 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
                 style={{ marginLeft: "20px", marginRight: "20px" }}
                 colorScheme="purple"
                 variant="outline"
-                disabled={!isAuthenticated || isPending}
+                disabled={!isAuthenticated || isPending ||  userName === product.owner.name}
                 onClick={() => onBuy(product)}
               >
                 Buy
