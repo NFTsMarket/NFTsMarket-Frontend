@@ -1,5 +1,5 @@
 //var BASE_API_PATH = "https://api-catalogue-juancarlosalonsovalenzuela.cloud.okteto.net/api/v1";
-//var BASE_API_PATH = "http://localhost:4000/api/v1";
+// var BASE_API_PATH = "http://localhost:4000/api/v1";
 var BASE_API_PATH = `${process.env.NEXT_PUBLIC_API_GATEWAY_DOMAIN}/catalogue`;
 
 // PRODUCTS CRUD
@@ -49,7 +49,8 @@ const getProductByCategory = async (id) => {
 
 const postProduct = async (product) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${BASE_API_PATH}/products`, {
+
+  return await fetch(`${BASE_API_PATH}/products`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -57,14 +58,24 @@ const postProduct = async (product) => {
       authorization: token ? `Bearer ${token}` : "",
     },
     body: JSON.stringify(product),
-  });
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
 
-  return response;
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 const putProduct = async (id, product) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${BASE_API_PATH}/products/${id}`, {
+
+  return await fetch(`${BASE_API_PATH}/products/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -72,21 +83,37 @@ const putProduct = async (id, product) => {
       authorization: token ? `Bearer ${token}` : "",
     },
     body: JSON.stringify(product),
-  });
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
 
-  return response;
+      return response;
+    })
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 const deleteProduct = async (id) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${BASE_API_PATH}/products/${id}`, {
+  return await fetch(`${BASE_API_PATH}/products/${id}`, {
     method: "DELETE",
     headers: {
       authorization: token ? `Bearer ${token}` : "",
     },
-  });
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
 
-  return response;
+      return response;
+    })
+    .catch((error) => {
+      throw error;
+    });
 };
 
 // CATEGORIES CRUD
@@ -121,7 +148,8 @@ const getCategoryByID = async (id) => {
 
 const postCategory = async (category) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${BASE_API_PATH}/categories`, {
+
+  return await fetch(`${BASE_API_PATH}/categories`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -129,14 +157,23 @@ const postCategory = async (category) => {
       authorization: token ? `Bearer ${token}` : "",
     },
     body: JSON.stringify(category),
-  });
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
 
-  return response;
+      return response;
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 const putCategory = async (id, category) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${BASE_API_PATH}/categories/${id}`, {
+  return await fetch(`${BASE_API_PATH}/categories/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -144,20 +181,37 @@ const putCategory = async (id, category) => {
       authorization: token ? `Bearer ${token}` : "",
     },
     body: JSON.stringify(category),
-  });
-  return response;
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
+
+      return response;
+    })
+    .catch((error) => {
+      throw Error(error);
+    });
 };
 
 const deleteCategory = async (id) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${BASE_API_PATH}/categories/${id}`, {
+  return await fetch(`${BASE_API_PATH}/categories/${id}`, {
     method: "DELETE",
     headers: {
       authorization: token ? `Bearer ${token}` : "",
     },
-  });
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(`${response.status}: ${response.statusText}`);
+      }
 
-  return response;
+      return response;
+    })
+    .catch((error) => {
+      throw error;
+    });
 };
 
 const getAssets = async () => {
