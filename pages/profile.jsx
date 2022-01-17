@@ -75,7 +75,7 @@ export default function Profile() {
           setLoading(false);
 
           onClose();
-        }, 2000);
+        }, 4000);
       }
     }
   };
