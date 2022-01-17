@@ -17,7 +17,7 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
   const { isAuthenticated, user } = useAuth();
   const [loading, setloading] = useState(true);
   const [isPending, setIsPending] = useState(true);
-  const userName = user ? user.name : null;
+  const [userId, setUserId] = useState(null);
   product.categories =
     product.categories === undefined ? [] : product.categories;
 
@@ -30,6 +30,7 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
   }
 
   useEffect(() => {
+    setUserId(user ? user.id : null);
     product.title ? setloading(false) : null;
     updateIsPending();
   }, [product]);
@@ -100,7 +101,7 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
                 leftIcon={<EditIcon />}
                 colorScheme="purple"
                 onClick={() => onEdit(product)}
-                disabled={!isAuthenticated || userName !== product.owner.name}
+                disabled={!isAuthenticated || userId !== product.owner._id}
               >
                 Edit
               </Button>
@@ -111,7 +112,7 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
                 style={{ marginLeft: "20px", marginRight: "20px" }}
                 colorScheme="purple"
                 variant="outline"
-                disabled={!isAuthenticated || isPending ||  userName === product.owner.name}
+                disabled={!isAuthenticated || isPending || userId == product.owner._id}
                 onClick={() => onBuy(product)}
               >
                 Buy
