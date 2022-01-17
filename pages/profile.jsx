@@ -16,6 +16,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
+import { useState } from "react";
 import AuthCard from "../components/auth/AuthCard";
 import AuthText from "../components/auth/AuthText";
 import OldPasswordForm from "../components/auth/forms/OldPasswordForm";
@@ -26,7 +27,8 @@ import { GET_USER } from "../utils/gqlMutations";
 export default function Profile() {
   const { user, token, dispatch } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [getPhotoURL, { loading }] = useLazyQuery(GET_USER, {
+  const [loading, setLoading] = useState(false);
+  const [getPhotoURL] = useLazyQuery(GET_USER, {
     fetchPolicy: "network-only",
   });
 
@@ -53,18 +55,27 @@ export default function Profile() {
       const profileChanged = await response.json();
 
       if (profileChanged) {
-        const {
-          data: {
-            self: { profilePicture },
-          },
-        } = await getPhotoURL();
+        setLoading(true);
 
-        dispatch({
-          type: "UPDATE_PICTURE",
-          payload: {
-            profilePicture: profilePicture,
-          },
-        });
+        // Have to wait 2 seconds till the image is uploaded to GCP
+        setTimeout(async () => {
+          const {
+            data: {
+              self: { profilePicture },
+            },
+          } = await getPhotoURL();
+
+          dispatch({
+            type: "UPDATE_PICTURE",
+            payload: {
+              profilePicture: profilePicture,
+            },
+          });
+
+          setLoading(false);
+
+          onClose();
+        }, 2000);
       }
     }
   };
