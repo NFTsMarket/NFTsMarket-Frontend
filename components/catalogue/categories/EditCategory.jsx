@@ -11,7 +11,6 @@ import { CheckIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { putCategory } from "../catalogueResource";
 
-//TODO createds at
 export default function EditCategory({ category, onCancel, onSave }) {
   const toast = useToast();
   const [name, setName] = useState(category.name);

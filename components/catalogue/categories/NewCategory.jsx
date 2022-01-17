@@ -48,7 +48,8 @@ function NewCategory(props) {
     };
 
     postCategory(newCategory)
-      .then((status) => {
+      .then((response) => {
+        newCategory.id = response._id
         const result = props.onAddCategory(newCategory);
         if (result) {
           setName("");

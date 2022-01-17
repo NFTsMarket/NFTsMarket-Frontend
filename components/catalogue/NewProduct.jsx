@@ -30,7 +30,6 @@ import { SmallAddIcon } from "@chakra-ui/icons";
 import { getAssets, postProduct } from "./catalogueResource.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-//TODO quitar asset y descomenbtar
 function NewProduct(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isAuthenticated, user, dispatch } = useAuth();
@@ -57,7 +56,7 @@ function NewProduct(props) {
         setAllAssets(data);
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         toast({
           title: "There was some error.",
           description: "Couldn't load assets.",
@@ -82,7 +81,7 @@ function NewProduct(props) {
     setLoadingButton(true);
 
     const newProduct = {
-      creator: user.name,
+      creator: user.id,
       title: title,
       description: description,
       price: price,
@@ -91,7 +90,13 @@ function NewProduct(props) {
     };
 
     postProduct(newProduct)
-      .then((status) => {
+      .then((response) => {
+        newProduct.picture = allAssets.filter(
+          (p) => p.id === newProduct.picture
+        )[0];
+
+        newProduct.id = response._id;
+
         const result = props.onAddProduct(newProduct);
         if (result) {
           setTitle("");
@@ -235,7 +240,7 @@ function NewProduct(props) {
             </FormControl>
             <br></br>
             <FormControl isInvalid={pictureError}>
-              <FormLabel>Picture Url</FormLabel>
+              <FormLabel>Picture</FormLabel>
               <Select
                 isRequired
                 placeholder="Select option"

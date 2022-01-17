@@ -63,13 +63,14 @@ export default function EditProduct({ product, onCancel, onSave }) {
     }
     setLoadingButton(true);
     const newProduct = {
-      picture: product.picture,
+      picture: product.picture._id,
       title: title,
       price: price,
       categories: categoriesId,
       description: description,
     };
-
+    console.log(product.id)
+    console.log((product.id, newProduct))
     putProduct(product.id, newProduct)
       .then((response) => {
         if (response.ok) {
@@ -184,11 +185,11 @@ export default function EditProduct({ product, onCancel, onSave }) {
               <Text center py={5} width={700}>
                 <ProductText
                   title="Created By"
-                  text={product.creator}
+                  text={product.creator.name}
                 ></ProductText>
                 <ProductText
                   title="Current owner"
-                  text={product.owner}
+                  text={product.owner.name}
                 ></ProductText>
                 <Text lineHeight={8} fontSize="lg">
                   <b>Description</b>

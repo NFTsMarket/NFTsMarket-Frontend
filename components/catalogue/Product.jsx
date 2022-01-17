@@ -12,15 +12,9 @@ import {
 import { InfoIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 
-//TODO quitar asset
 export default function Product({ product, displayButton }) {
   const { id, title, picture, price } = product;
-  picture = {
-    id: "id3",
-    name: "holiwi3",
-    user: "61df2a2b7b793c8a671dd841",
-    file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
-  };
+  
   return (
     <Center py={12}>
       <Box

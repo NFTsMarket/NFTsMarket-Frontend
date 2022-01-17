@@ -18,21 +18,13 @@ import LoadingCircle from "../common/LoadingCircle.jsx";
 import DeleteAlert from "./deleteAlert.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-//TODO quitar asset
+
 export default function ProductDetails({ product, onBuy, onEdit }) {
   const { isAuthenticated, user } = useAuth();
   const [loading, setloading] = useState(true);
   const userName = user ? user.name : null;
   product.categories =
     product.categories === undefined ? [] : product.categories;
-
-
-  product.picture = {
-    id: "id3",
-    name: "holiwi3",
-    user: "61df2a2b7b793c8a671dd841",
-    file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
-  };
 
   useEffect(() => {
     product.title ? setloading(false) : null;
@@ -65,11 +57,11 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
                 <Text center py={5} width={700}>
                   <ProductText
                     title="Created By"
-                    text={product.creator}
+                    text={product.creator.name}
                   ></ProductText>
                   <ProductText
                     title="Current owner"
-                    text={product.owner}
+                    text={product.owner.name}
                   ></ProductText>
                   <ProductText
                     title="Description"
@@ -104,12 +96,12 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
                 leftIcon={<EditIcon />}
                 colorScheme="purple"
                 onClick={() => onEdit(product)}
-                disabled={!isAuthenticated || userName !== product.owner}
+                disabled={!isAuthenticated || userName !== product.owner.name}
               >
                 Edit
               </Button>
 
-              <DeleteAlert id={product.id} owner={product.owner} />
+              <DeleteAlert id={product.id} owner={product.owner.name} />
 
               <Button
                 style={{ marginLeft: "20px", marginRight: "20px" }}
