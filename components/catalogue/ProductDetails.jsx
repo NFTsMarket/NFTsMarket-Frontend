@@ -1,23 +1,18 @@
+import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
 import {
-  Text,
-  Button,
+  Box, Button,
   Center,
-  Flex,
-  Box,
-  SimpleGrid,
-  UnorderedList,
-  ListItem,
+  Flex, ListItem, SimpleGrid, Text, UnorderedList
 } from "@chakra-ui/react";
-import { EditIcon, ArrowBackIcon } from "@chakra-ui/icons";
-
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Product from "./Product.jsx";
-import ProductText from "./ProductText.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+import BuyApi from "../buy/BuyApi.js";
 import LoadingCircle from "../common/LoadingCircle.jsx";
 import DeleteAlert from "./deleteAlert.jsx";
-import { useAuth } from "../../context/AuthContext.jsx";
-import { BuyApi } from "../buy/BuyApi.js";
+import Product from "./Product.jsx";
+import ProductText from "./ProductText.jsx";
+
 export default function ProductDetails({ product, onBuy, onEdit }) {
   const { isAuthenticated, user } = useAuth();
   const [loading, setloading] = useState(true);
@@ -26,21 +21,17 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
   product.categories =
     product.categories === undefined ? [] : product.categories;
 
-  async function buy() {
+  async function updateIsPending() {
     try {
       setIsPending(
         await BuyApi.existsPurchases({ state: "Pending", product: product.id })
       );
-      console.log(isPending);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch { }
   }
 
   useEffect(() => {
-    buy();
-
     product.title ? setloading(false) : null;
+    updateIsPending();
   }, [product]);
 
   return (

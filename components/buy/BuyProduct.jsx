@@ -1,14 +1,26 @@
-import { SimpleGrid, Text } from "@chakra-ui/react";
+import { SimpleGrid, Text, useToast } from "@chakra-ui/react";
 import ReCAPTCHA from "react-google-recaptcha";
-import BuyApi from './BuyApi.js';
 import Product from "../catalogue/Product.jsx";
+import BuyApi from './BuyApi.js';
 
 export default function BuyProduct(props) {
   const product = props.product;
+  const recaptchaRef = React.createRef();
+  const toast = useToast();
 
   async function onCaptcha(value) {
     if (await BuyApi.createPurchase(product.id, value))
       Router.push('/');
+    else {
+      recaptchaRef.current.reset();
+      toast({
+        name: "There was some error.",
+        description: "Please, check that you have enough funds in your wallet.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
   }
 
   return (
@@ -27,6 +39,7 @@ export default function BuyProduct(props) {
           }}
         >
           <ReCAPTCHA
+            ref={recaptchaRef}
             sitekey="6Leg7agdAAAAAKZqXGYJkFDoaSLEd6VnikUIefgE"
             onChange={onCaptcha}
           />
