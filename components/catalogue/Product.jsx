@@ -12,9 +12,15 @@ import {
 import { InfoIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 
-export default function Product(props) {
-  const { id, title, picture, price } = props.product;
-
+//TODO quitar asset
+export default function Product({ product, displayButton }) {
+  const { id, title, picture, price } = product;
+  picture = {
+    id: "id3",
+    name: "holiwi3",
+    user: "61df2a2b7b793c8a671dd841",
+    file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
+  };
   return (
     <Center py={12}>
       <Box
@@ -47,7 +53,7 @@ export default function Product(props) {
             height={184}
             width={225}
             objectFit={"cover"}
-            src={picture}
+            src={picture.file}
             alt={""}
           />
         </Box>
@@ -61,7 +67,7 @@ export default function Product(props) {
             </Text>
           </Stack>
 
-          {props.displayButton && (
+          {displayButton && (
             <div>
               <Divider h="4" borderColor="#d1d1e0" />
               <Stack spacing={2} direction="row" pt={5} align={"center"}>

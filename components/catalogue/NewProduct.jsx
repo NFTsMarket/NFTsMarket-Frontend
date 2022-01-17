@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -22,26 +22,67 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
+  useToast,
   FormHelperText,
+  Select,
 } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
+import { getAssets, postProduct } from "./catalogueResource.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 
+//TODO quitar asset y descomenbtar
 function NewProduct(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isAuthenticated, user, dispatch } = useAuth();
+  const toast = useToast();
+  const [allCategories, setAllCategories] = useState(props.categories);
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [allAssets, setAllAssets] = useState([]);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0.00);
+  const [price, setPrice] = useState(0.0);
   const [categories, setCategories] = useState([]);
   const [picture, setPicture] = useState("");
 
   const titleError = title === "";
   const descriptionError = description === "";
-  const priceError = price <= 0.00;
-  const categoriesError = categories.length === 0;
+  const priceError = price <= 0.0;
   const pictureError = picture === "";
 
+  useEffect(() => {
+    setAllCategories(props.categories);
+    getAssets()
+      .then((data) => {
+        setAllAssets(data);
+      })
+      .catch((error) => {
+        console.log(error)
+        toast({
+          title: "There was some error.",
+          description: "Couldn't load assets.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+  }, [isOpen, props.categories]);
+
   function onClick() {
+    if (title === "" || description === "" || price <= 0 || picture === "") {
+      toast({
+        title: "There was some error.",
+        description: "Please, fill all required parameters.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    }
+    setLoadingButton(true);
+
     const newProduct = {
+      creator: user.name,
       title: title,
       description: description,
       price: price,
@@ -49,25 +90,52 @@ function NewProduct(props) {
       picture: picture,
     };
 
-    const result = props.onAddProduct(newProduct);
+    postProduct(newProduct)
+      .then((status) => {
+        const result = props.onAddProduct(newProduct);
+        if (result) {
+          setTitle("");
+          setDescription("");
+          setPrice("");
+          setCategories("");
+          setPicture("");
 
-    if (result) {
-      setTitle("");
-      setDescription("");
-      setPrice("");
-      setCategories("");
-      setPicture("");
-      onClose();
-    }
+          toast({
+            title: "Product created succesfully.",
+            description: "We've created your product.",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+          setLoadingButton(false);
+
+          onClose();
+        } else {
+          throw Error("Couldn't create product on fron-end.");
+        }
+      })
+      .catch((error) => {
+        setLoadingButton(false);
+        console.log(error);
+        toast({
+          title: "There was some error.",
+          description: "Couldn't create product.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
   }
 
   return (
     <>
       <Center h="100px">
         <Button
+          mx={"10px"}
           onClick={onOpen}
           leftIcon={<SmallAddIcon />}
           colorScheme="purple"
+          disabled={!isAuthenticated}
         >
           Create Product
         </Button>
@@ -86,20 +154,44 @@ function NewProduct(props) {
           <ModalCloseButton />
 
           <ModalBody>
-            <FormControl isInvalid={titleError}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                placeholder="Title"
-                name="title"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-              />
-              {!titleError ? (
-                <></>
-              ) : (
-                <FormErrorMessage>Title is required.</FormErrorMessage>
-              )}
-            </FormControl>
+            <Center>
+              <FormControl mr={2} isInvalid={titleError}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  placeholder="Title"
+                  name="title"
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                />
+                {!titleError ? (
+                  <FormHelperText color={"white"}>Product title</FormHelperText>
+                ) : (
+                  <FormErrorMessage>Title is required.</FormErrorMessage>
+                )}
+              </FormControl>
+              <FormControl ml={2} isInvalid={priceError}>
+                <FormLabel>Price</FormLabel>
+                <NumberInput
+                  defaultValue={0.0}
+                  min={0}
+                  precision={2}
+                  onChange={(event) => setPrice(event)}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+                {!priceError ? (
+                  <FormHelperText color={"white"}>Product price</FormHelperText>
+                ) : (
+                  <FormErrorMessage>
+                    A valid price is required.
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </Center>
             <br></br>
             <FormControl isInvalid={descriptionError}>
               <FormLabel>Description</FormLabel>
@@ -116,28 +208,7 @@ function NewProduct(props) {
               )}
             </FormControl>
             <br></br>
-            <FormControl isInvalid={priceError}>
-              <FormLabel>Price</FormLabel>
-              <NumberInput
-                defaultValue={0.0}
-                min={0}
-                precision={2}
-                onChange={(event) => setPrice(event)}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-              {!pictureError ? (
-                <></>
-              ) : (
-                <FormErrorMessage>A valid price is required.</FormErrorMessage>
-              )}
-            </FormControl>
-            <br></br>
-            <FormControl isInvalid={categoriesError}>
+            <FormControl>
               <FormLabel>Categories</FormLabel>
               <CheckboxGroup
                 colorScheme="purple"
@@ -148,40 +219,46 @@ function NewProduct(props) {
                 }}
               >
                 <Stack spacing={[1, 5]} direction={["column", "row"]}>
-                  <Checkbox value="funny">Funny</Checkbox>
-                  <Checkbox value="classic">Classic</Checkbox>
-                  <Checkbox value="retro">Retro</Checkbox>
+                  {allCategories.map((c) => (
+                    <Checkbox key={c.id} value={c.id}>
+                      {c.name}
+                    </Checkbox>
+                  ))}
                 </Stack>
               </CheckboxGroup>
-              {!categoriesError ? (
-                <FormHelperText>
-                  Choose between these categories.
-                </FormHelperText>
-              ) : (
-                <FormErrorMessage>
-                  At least one category is required.
-                </FormErrorMessage>
-              )}
+
+              <FormHelperText>
+                {allCategories.length !== 0
+                  ? "Choose between these categories."
+                  : "There was some problem loading categories."}
+              </FormHelperText>
             </FormControl>
             <br></br>
             <FormControl isInvalid={pictureError}>
               <FormLabel>Picture Url</FormLabel>
-              <Input
-                placeholder="Picture"
-                name="picture"
-                value={picture}
-                onChange={(event) => setPicture(event.target.value)}
-              />
-              {!pictureError ? (
-                <></>
-              ) : (
-                <FormErrorMessage>Picture is required.</FormErrorMessage>
-              )}
+              <Select
+                isRequired
+                placeholder="Select option"
+                onChange={(event) => {
+                  setPicture(event.target.value);
+                }}
+              >
+                {user
+                  ? allAssets
+                      .filter((s) => s.user === user.id)
+                      .map((a) => (
+                        <option key={a.id} value={a.id}>
+                          {a.name}
+                        </option>
+                      ))
+                  : null}
+              </Select>
             </FormControl>
           </ModalBody>
 
           <ModalFooter>
             <Button
+              isLoading={loadingButton}
               colorScheme="purple"
               mr={3}
               onClick={onClick}
