@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import { forwardRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ThemeButton from "../common/ThemeButton";
+import styles from "../../styles/Navbar.module.css";
 
 const ActiveThemedLink = forwardRef(({ children, href, ...props }, ref) => {
   const router = useRouter();
@@ -140,22 +141,22 @@ export default function Navbar(props) {
                   <MenuDivider />
                   <MenuItem>
                     <Link href="/profile" passHref>
-                      My profile
+                      <a className={styles.fullwidth}>My profile</a>
                     </Link>
                   </MenuItem>
                   <MenuItem>
                     <Link href="/wallet" passHref>
-                      My wallet
+                      <a className={styles.fullwidth}>My wallet</a>
                     </Link>
                   </MenuItem>
                   <MenuItem>
                     <Link href="/purchases" passHref>
-                      Purchases history
+                      <a className={styles.fullwidth}>Purchases history</a>
                     </Link>
                   </MenuItem>
                   <MenuItem>
                     <Link href="/salesHistory" passHref>
-                      Sales history
+                      <a className={styles.fullwidth}>Sales history</a>
                     </Link>
                   </MenuItem>
                   <MenuDivider />
