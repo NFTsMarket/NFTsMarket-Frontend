@@ -69,8 +69,7 @@ export default function EditProduct({ product, onCancel, onSave }) {
       categories: categoriesId,
       description: description,
     };
-    console.log(product.id)
-    console.log((product.id, newProduct))
+
     putProduct(product.id, newProduct)
       .then((response) => {
         if (response.ok) {
@@ -81,6 +80,7 @@ export default function EditProduct({ product, onCancel, onSave }) {
             duration: 9000,
             isClosable: true,
           });
+          newProduct.picture = product.picture;
           newProduct.categories = allCategories.filter((c) =>
             categoriesId.some((v) => v === c.id)
           );
