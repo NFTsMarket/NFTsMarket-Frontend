@@ -1,4 +1,4 @@
-const uri = "http://localhost:3001/api/v1";
+const uri = "https://api-fis-wallet-d-rhym.cloud.okteto.net/api/v1";
 
 function requestHeaders(){
     return {
