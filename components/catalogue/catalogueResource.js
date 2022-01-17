@@ -1,7 +1,6 @@
-
 //var BASE_API_PATH = "https://api-catalogue-juancarlosalonsovalenzuela.cloud.okteto.net/api/v1";
-var BASE_API_PATH = "http://localhost:4000/api/v1";
-//var BASE_API_PATH = `${process.env.NEXT_PUBLIC_API_GATEWAY_DOMAIN}/catalogue`;
+//var BASE_API_PATH = "http://localhost:4000/api/v1";
+var BASE_API_PATH = `${process.env.NEXT_PUBLIC_API_GATEWAY_DOMAIN}/catalogue`;
 
 // PRODUCTS CRUD
 const getAllProducts = async () => {

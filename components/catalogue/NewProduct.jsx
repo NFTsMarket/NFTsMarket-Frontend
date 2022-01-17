@@ -52,40 +52,20 @@ function NewProduct(props) {
 
   useEffect(() => {
     setAllCategories(props.categories);
-    setAllAssets([
-      {
-        id: "id",
-        name: "holiwi",
-        user: "61df2a2b7b793c8a671dd841",
-        file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
-      },
-      {
-        id: "id2",
-        name: "holiwi2",
-        user: "61df2a2b7b793c8a671dd843",
-        file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
-      },
-      {
-        id: "id3",
-        name: "holiwi3",
-        user: "61df2a2b7b793c8a671dd841",
-        file: "https://imgk.timesnownews.com/story/monkey.png?tr=w-1200,h-900",
-      },
-    ]);
-
-    // getAssets()
-    //   .then((data) => {
-    //     setAllAssets(data);
-    //   })
-    //   .catch((error) => {
-    //     toast({
-    //       title: "There was some error.",
-    //       description: "Couldn't load assets.",
-    //       status: "error",
-    //       duration: 9000,
-    //       isClosable: true,
-    //     });
-    //   });
+    getAssets()
+      .then((data) => {
+        setAllAssets(data);
+      })
+      .catch((error) => {
+        console.log(error)
+        toast({
+          title: "There was some error.",
+          description: "Couldn't load assets.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
   }, [isOpen, props.categories]);
 
   function onClick() {

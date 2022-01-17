@@ -60,7 +60,7 @@ const DeleteAlert = ({ id, owner }) => {
         colorScheme="purple"
         variant="outline"
         onClick={() => setIsOpen(true)}
-        disabled={userName !== owner}
+        disabled={!isAuthenticated || userName !== owner}
       >
         Delete
       </Button>

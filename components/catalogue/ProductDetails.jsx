@@ -20,13 +20,12 @@ import { useAuth } from "../../context/AuthContext.jsx";
 
 //TODO quitar asset
 export default function ProductDetails({ product, onBuy, onEdit }) {
-  const { isAuthenticated, user, dispatch } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [loading, setloading] = useState(true);
   const userName = user ? user.name : null;
   product.categories =
     product.categories === undefined ? [] : product.categories;
-  const [isPending, setIsPending] = useState(true);
-  const [isOwner, setIsOwner] = useState(true);
+
 
   product.picture = {
     id: "id3",
@@ -36,9 +35,6 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setIsPending(user == null || user.id == product.owner);
-    setIsOwner(user == null || user.id == product.owner);
     product.title ? setloading(false) : null;
   }, [product]);
 
@@ -108,7 +104,7 @@ export default function ProductDetails({ product, onBuy, onEdit }) {
                 leftIcon={<EditIcon />}
                 colorScheme="purple"
                 onClick={() => onEdit(product)}
-                disabled={userName !== product.owner}
+                disabled={!isAuthenticated || userName !== product.owner}
               >
                 Edit
               </Button>
