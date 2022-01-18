@@ -11,8 +11,7 @@ class BuyApi {
     static async processPurchase(purchase) {
         // Convierte las fechas de un purchase de String a Date
         try {
-            purchase.imageUrl = (await UploadApi.getAsset(purchase.assetId)).image.baseUrl;
-            // console.log(await UploadApi.getAllAssets());
+            purchase.imageUrl = (await UploadApi.getAsset(purchase.assetId, null, localStorage.getItem("token"))).image.baseUrl;
         } catch (error) {
             console.log(error);
         }
@@ -21,7 +20,7 @@ class BuyApi {
         return purchase;
     }
 
-    static async getAllPurchases(filters) {
+    static async getAllPurchases(filters, process = true) {
         let url = this.API_BASE_URL + '?';
         for (const [key, value] of Object.entries(filters))
             if (value)
@@ -36,12 +35,12 @@ class BuyApi {
             throw Error("Response not valid:" + response.status);
 
         return await Promise.all((await response.json()).map(async purchase => {
-            return await BuyApi.processPurchase(purchase);
+            return process ? await BuyApi.processPurchase(purchase) : purchase;
         }));
     }
 
     static async existsPurchases(filters) {
-        return await this.getAllPurchases(filters).length > 0;
+        return await this.getAllPurchases(filters, process = false).length > 0;
     }
 
     static async createPurchase(productId, recaptcha) {
