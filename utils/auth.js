@@ -24,9 +24,14 @@ const reducer = (state, action) => {
       return initialState;
 
     case "UPDATE_PICTURE":
+      const updatedUser = {
+        ...state.user,
+        profilePicture: action.payload.profilePicture,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
       return {
         ...state,
-        user: { ...state.user, profilePicture: action.payload.profilePicture },
+        user: updatedUser,
       };
 
     default:
