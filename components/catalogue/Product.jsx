@@ -15,16 +15,28 @@ import Link from "next/link";
 import UploadApi from "../upload/UploadApi";
 
 export default function Product({ product, displayButton }) {
-  const { id, title, picture, price } = product;
+  const { id, title, price } = product;
+  const [picture, setPicture] = useState(product.picture);
 
-  useEffect( async () => {
+  useEffect(async () => {
     try {
-      picture.file = (await UploadApi.getAsset(picture._id, null, process.env.NEXT_PUBLIC_JWT_TOKEN)).image.baseUrl;
+      UploadApi.getAsset(
+        picture._id,
+        null,
+        process.env.NEXT_PUBLIC_JWT_TOKEN
+      ).then((data) => {
+
+        const file = data.image.baseUrl;
+        setPicture({
+          _id: picture._id,
+          file: file,
+        });
+      });
+
     } catch (error) {
-        console.log(error);
+
     }
   }, [product]);
-
   return (
     <Center py={12}>
       <Box
@@ -67,7 +79,7 @@ export default function Product({ product, displayButton }) {
           </Heading>
           <Stack direction={"row"} align={"center"}>
             <Text fontWeight={800} fontSize={"xl"}>
-            € {price} 
+              € {price}
             </Text>
           </Stack>
 

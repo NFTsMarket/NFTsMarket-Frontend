@@ -90,18 +90,22 @@ function NewProduct(props) {
     };
 
     postProduct(newProduct)
-      .then( async (response) => {
-
-
+      .then(async (response) => {
         // newProduct.picture = allAssets.filter(
         //   (p) => p.id === newProduct.picture
         // )[0];
-        
-        try {
-          newProduct.picture = (await UploadApi.getAsset(newProduct.picture, null, localStorage.getItem("token"))).image.baseUrl;
-        } catch (error) {
-            console.log(error);
-        }
+        console.log(newProduct.picture);
+
+        // newProduct.picture = (
+        //   await UploadApi.getAsset(
+        //     newProduct.picture,
+        //     null,
+        //     process.env.NEXT_PUBLIC_JWT_TOKEN
+        //   )
+        // ).image.baseUrl;
+        newProduct.picture = { _id: newProduct.picture };
+
+        console.log("aqui",newProduct.picture);
 
         newProduct.id = response._id;
 
@@ -142,8 +146,8 @@ function NewProduct(props) {
 
   return (
     <>
-      {isAuthenticated &&       
-        (<Center h="100px">
+      {isAuthenticated && (
+        <Center h="100px">
           <Button
             mx={"10px"}
             onClick={onOpen}
@@ -152,8 +156,8 @@ function NewProduct(props) {
           >
             Create Product
           </Button>
-        </Center>)}
-
+        </Center>
+      )}
 
       <Modal
         isCentered
