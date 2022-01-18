@@ -27,24 +27,26 @@ class UploadApi {
     }
 
     static async getAsset(id,user,token){
-        const request= new Request(this.API_BASE_URL+"/"+id,{
-            method:"GET",
-            headers:{
-                "Authorization":"Bearer "+token
-            }
-        })
+        if (id != null){
+            const request= new Request(this.API_BASE_URL+"/"+id,{
+                method:"GET",
+                headers:{
+                    "Authorization":"Bearer "+token
+                }
+            })
 
-        const response= await fetch(request);
+            const response= await fetch(request);
 
-        if(!response.ok){
-            if(response.status==404){
-                Router.push('/');
-            }else{
-                throw Error("Response not valid:"+ response.status);
+            if(!response.ok){
+                if(response.status==404){
+                    Router.push('/');
+                }else{
+                    throw Error("Response not valid:"+ response.status);
+                }
             }
+
+            return response.json();
         }
-
-        return response.json();
     }
 
     static async postAsset(file,name,usuario,token){
