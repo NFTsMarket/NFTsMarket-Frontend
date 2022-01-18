@@ -14,7 +14,16 @@ import Link from "next/link";
 
 export default function Product({ product, displayButton }) {
   const { id, title, picture, price } = product;
-  
+
+  useEffect(() => {
+    UploadApi.getAsset(picture.id).then((res) => {
+      if (!res) {
+        throw Error("Couldn't get asset on fron-end.");
+      }
+      picture.file = res.image.baseUrl;
+    });
+  }, [product]);
+
   return (
     <Center py={12}>
       <Box
