@@ -244,7 +244,7 @@ function NewProduct(props) {
               <FormHelperText>
                 {allCategories.length !== 0
                   ? "Choose between these categories."
-                  : "There was some problem loading categories."}
+                  : "No existen categorías."}
               </FormHelperText>
             </FormControl>
             <br></br>
