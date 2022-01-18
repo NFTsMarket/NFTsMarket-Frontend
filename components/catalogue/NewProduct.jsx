@@ -29,7 +29,7 @@ import {
 import { SmallAddIcon } from "@chakra-ui/icons";
 import { getAssets, postProduct } from "./catalogueResource.js";
 import { useAuth } from "../../context/AuthContext.jsx";
-
+import UploadApi from "../upload/UploadApi.js";
 function NewProduct(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isAuthenticated, user, dispatch } = useAuth();
@@ -91,33 +91,40 @@ function NewProduct(props) {
 
     postProduct(newProduct)
       .then((response) => {
-        newProduct.picture = allAssets.filter(
-          (p) => p.id === newProduct.picture
-        )[0];
+        //newProduct.picture = allAssets.filter(
+        //  (p) => p.id === newProduct.picture
+        //)[0];
 
-        newProduct.id = response._id;
+        UploadApi.getAsset(newProduct.picture).then((res) => {
+          if (!res) {
+            throw Error("Couldn't get asset on fron-end.");
+          }
+          newProduct.picture = res.image.baseUrl;
 
-        const result = props.onAddProduct(newProduct);
-        if (result) {
-          setTitle("");
-          setDescription("");
-          setPrice("");
-          setCategories("");
-          setPicture("");
+          newProduct.id = response._id;
 
-          toast({
-            title: "Product created succesfully.",
-            description: "We've created your product.",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-          });
-          setLoadingButton(false);
+          const result = props.onAddProduct(newProduct);
+          if (result) {
+            setTitle("");
+            setDescription("");
+            setPrice("");
+            setCategories("");
+            setPicture("");
 
-          onClose();
-        } else {
-          throw Error("Couldn't create product on fron-end.");
-        }
+            toast({
+              title: "Product created succesfully.",
+              description: "We've created your product.",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+            setLoadingButton(false);
+
+            onClose();
+          } else {
+            throw Error("Couldn't create product on fron-end.");
+          }
+        });
       })
       .catch((error) => {
         setLoadingButton(false);
