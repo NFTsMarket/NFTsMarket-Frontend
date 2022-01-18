@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Box,
   Center,
@@ -11,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import UploadApi from "../upload/UploadApi";
 
 export default function Product({ product, displayButton }) {
   const { id, title, picture, price } = product;
