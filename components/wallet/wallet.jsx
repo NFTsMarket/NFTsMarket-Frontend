@@ -56,7 +56,7 @@ return (
                     py={4}
                     borderBottomRadius={'xl'}>
                     <Text fontSize="4xl" fontWeight="900">
-                        {fund}€
+                        € {fund}
                     </Text>
                     <Box h="120" w="60%" pt={14}>
                         <Button h="full" w="full" colorScheme='blue' variant="solid" onClick={() => router.push('/wallet/addFund')}>
@@ -92,10 +92,10 @@ return (
                     
                         <SimpleGrid columns={2} spacing={10} key={index}>
                             <Text fontSize="2xl" pr='10'>
-                                {arrayInverse[index]}€
+                             € {arrayInverse[index]}
                             </Text>
                             <Text fontSize="2xl" pl='20'>
-                                {transaction}€   
+                             € {transaction}  
                             </Text>
                         </SimpleGrid>,
                     )}

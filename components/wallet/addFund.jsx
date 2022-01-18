@@ -110,7 +110,7 @@ export default function AddFund(props) {
                         py={4}
                         borderBottomRadius={'xl'}>
                         <Text fontSize="4xl" fontWeight="900">
-                            {fund}€
+                            € {fund}
                         </Text>
                         <Box h="120" w="60%" pt={14}>
                             <Button h="full" w="full" colorScheme='blue' variant="solid" onClick={() => router.push('/wallet/addFund')}>

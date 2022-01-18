@@ -81,17 +81,18 @@ function NewCategory(props) {
 
   return (
     <>
-      <Center h="100px">
-        <Button
-          mx={"10px"}
-          onClick={onOpen}
-          leftIcon={<SmallAddIcon />}
-          colorScheme="purple"
-          disabled={!isAuthenticated}
-        >
-          Create Category
-        </Button>
-      </Center>
+      {isAuthenticated && (
+        <Center h="100px">
+          <Button
+            mx={"10px"}
+            onClick={onOpen}
+            leftIcon={<SmallAddIcon />}
+            colorScheme="purple"
+          >
+            Create Category
+          </Button>
+        </Center>
+      )}
 
       <Modal
         isCentered
