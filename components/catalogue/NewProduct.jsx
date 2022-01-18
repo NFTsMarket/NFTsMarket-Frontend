@@ -90,10 +90,18 @@ function NewProduct(props) {
     };
 
     postProduct(newProduct)
-      .then((response) => {
-        newProduct.picture = allAssets.filter(
-          (p) => p.id === newProduct.picture
-        )[0];
+      .then( async (response) => {
+
+
+        // newProduct.picture = allAssets.filter(
+        //   (p) => p.id === newProduct.picture
+        // )[0];
+        
+        try {
+          newProduct.picture = (await UploadApi.getAsset(newProduct.picture, null, localStorage.getItem("token"))).image.baseUrl;
+        } catch (error) {
+            console.log(error);
+        }
 
         newProduct.id = response._id;
 
