@@ -1,39 +1,29 @@
-import { ReactNode } from 'react';
 import {
     Box,
-    Container,
     Stack,
-    HStack,
-    Flex,
-    Illustration,
-    Heading,
     Text,
     StackDivider,
     VStack,
     useColorModeValue,
-    List,
-    Divider,
-    ListItem,
-    ListIcon,
     Button,
     SimpleGrid,
-    Center,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router'
-import { FaCheckCircle } from 'react-icons/fa';
 
 export default function Wallet(props) {
     var fund = props.wallet.fund;
     const lastTransactions = props.wallet.lastTransactions;
     var temporalFund = [fund];
     const router = useRouter();
+    
+    const arrayInverse = lastTransactions.map(transaction => transaction).reverse();
 
     for (var i = 0; i < Math.min(3, lastTransactions.length); i++) {
         if (lastTransactions[i] >= 0) {
-            temporalFund = [...temporalFund, temporalFund[i] +- lastTransactions[i]];
+            temporalFund = [...temporalFund, temporalFund[i] - arrayInverse[i]];
         }
         else {
-            temporalFund = [...temporalFund, temporalFund[i] - lastTransactions[i]];
+            temporalFund = [...temporalFund, temporalFund[i] + arrayInverse[i]];
         }
     }
 
@@ -98,14 +88,14 @@ return (
                             borderColor={useColorModeValue('gray.500', 'gray.600')}
                         />
                     }>
-                    {lastTransactions.map((transaction, index) =>
+                    {temporalFund.map((transaction, index) =>
                     
                         <SimpleGrid columns={2} spacing={10} key={index}>
                             <Text fontSize="2xl" pr='10'>
-                                {transaction.toFixed(2)}€
+                                {arrayInverse[index]}€
                             </Text>
                             <Text fontSize="2xl" pl='20'>
-                                {temporalFund[index].toFixed(2)}€
+                                {transaction}€   
                             </Text>
                         </SimpleGrid>,
                     )}
