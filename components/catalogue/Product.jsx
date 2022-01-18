@@ -16,16 +16,14 @@ import UploadApi from "../upload/UploadApi";
 
 export default function Product({ product, displayButton }) {
   const { id, title, picture, price } = product;
-  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGYyYTJiN2I3OTNjOGE2NzFkZDg0MSIsImVtYWlsIjoibW9ua2V5bWFuQG1vbmtleS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjQyNDE2NDc5LCJleHAiOjE2NDM2NTEwNDZ9.gCbLaZlUNMUBvdcGge2j4Qr8P0_v2vY8m9tO6pUxFEw"
 
-  // useEffect(() => {
-  //   UploadApi.getAsset(picture.id,"user",token).then((res) => {
-  //     if (!res) {
-  //       throw Error("Couldn't get asset on fron-end.");
-  //     }
-  //     picture.file = res.image.baseUrl;
-  //   });
-  // }, [product]);
+  useEffect( async () => {
+    try {
+      picture.file = (await UploadApi.getAsset(picture._id, null, process.env.NEXT_PUBLIC_JWT_TOKEN)).image.baseUrl;
+    } catch (error) {
+        console.log(error);
+    }
+  }, [product]);
 
   return (
     <Center py={12}>
