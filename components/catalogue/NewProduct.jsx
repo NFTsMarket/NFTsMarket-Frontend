@@ -142,17 +142,18 @@ function NewProduct(props) {
 
   return (
     <>
-      <Center h="100px">
-        <Button
-          mx={"10px"}
-          onClick={onOpen}
-          leftIcon={<SmallAddIcon />}
-          colorScheme="purple"
-          disabled={!isAuthenticated}
-        >
-          Create Product
-        </Button>
-      </Center>
+      {isAuthenticated &&       
+        (<Center h="100px">
+          <Button
+            mx={"10px"}
+            onClick={onOpen}
+            leftIcon={<SmallAddIcon />}
+            colorScheme="purple"
+          >
+            Create Product
+          </Button>
+        </Center>)}
+
 
       <Modal
         isCentered
