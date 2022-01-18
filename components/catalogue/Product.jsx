@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Box,
   Center,
@@ -11,10 +12,21 @@ import {
 } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import UploadApi from "../upload/UploadApi";
 
 export default function Product({ product, displayButton }) {
   const { id, title, picture, price } = product;
-  
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGYyYTJiN2I3OTNjOGE2NzFkZDg0MSIsImVtYWlsIjoibW9ua2V5bWFuQG1vbmtleS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjQyNDE2NDc5LCJleHAiOjE2NDM2NTEwNDZ9.gCbLaZlUNMUBvdcGge2j4Qr8P0_v2vY8m9tO6pUxFEw"
+
+  // useEffect(() => {
+  //   UploadApi.getAsset(picture.id,"user",token).then((res) => {
+  //     if (!res) {
+  //       throw Error("Couldn't get asset on fron-end.");
+  //     }
+  //     picture.file = res.image.baseUrl;
+  //   });
+  // }, [product]);
+
   return (
     <Center py={12}>
       <Box
