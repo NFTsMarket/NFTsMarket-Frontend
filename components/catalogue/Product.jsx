@@ -67,7 +67,7 @@ export default function Product({ product, displayButton }) {
           </Heading>
           <Stack direction={"row"} align={"center"}>
             <Text fontWeight={800} fontSize={"xl"}>
-              {price} $
+            € {price} 
             </Text>
           </Stack>
 
